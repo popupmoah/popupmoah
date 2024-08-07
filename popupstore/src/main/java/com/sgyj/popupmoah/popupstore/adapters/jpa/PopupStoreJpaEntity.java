@@ -1,0 +1,61 @@
+package com.sgyj.popupmoah.popupstore.adapters.jpa;
+
+import com.sgyj.popupmoah.core.entity.UpdatedEntity;
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.time.LocalDateTime;
+
+/**
+ * 팝업스토어 JPA 엔티티
+ * 데이터베이스 매핑을 위한 인프라스트럭처 엔티티
+ */
+@Entity
+@Table(name = "popup_stores")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class PopupStoreJpaEntity extends UpdatedEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "name", nullable = false, length = 200)
+    private String name;
+
+    @Column(name = "description", columnDefinition = "TEXT")
+    private String description;
+
+    @Column(name = "image_url", length = 500)
+    private String imageUrl;
+
+    @Column(name = "source_url", length = 500)
+    private String sourceUrl;
+
+    @Column(name = "category", length = 100)
+    private String category;
+
+    @Column(name = "start_date")
+    private LocalDateTime startDate;
+
+    @Column(name = "end_date")
+    private LocalDateTime endDate;
+
+    @Column(name = "location", length = 200)
+    private String location;
+
+    @Column(name = "active", nullable = false)
+    @Builder.Default
+    private Boolean active = true;
+
+    @Column(name = "view_count")
+    @Builder.Default
+    private Long viewCount = 0L;
+
+    @Column(name = "like_count")
+    @Builder.Default
+    private Long likeCount = 0L;
+} 
