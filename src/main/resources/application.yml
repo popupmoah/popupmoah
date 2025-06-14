@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: popupmoa
+server:
+  port: 5032
