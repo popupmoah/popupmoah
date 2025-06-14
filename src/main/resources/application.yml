@@ -1,5 +1,7 @@
 spring:
   application:
-    name: popupmoa
+    name: popupmoah
+
 server:
   port: 5032
+

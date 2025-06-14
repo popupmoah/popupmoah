@@ -1,4 +1,4 @@
-package com.sgyj.popupmoa;
+package com.sgyj.popupmoah;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Import;
 
 @Import(TestcontainersConfiguration.class)
 @SpringBootTest
-class PopupmoaApplicationTests {
+class PopupmoahApplicationTests {
 
     @Test
     void contextLoads() {
