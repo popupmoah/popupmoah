@@ -1,5 +1,11 @@
 spring:
   application:
-    name: popupmoa
+    name: popupmoah
+  profiles:
+    include: local
 server:
   port: 5032
+jasypt:
+  encryptor:
+    password: ${JASYPT_ENCRYPTOR_PASSWORD:defaultPassword}
+
