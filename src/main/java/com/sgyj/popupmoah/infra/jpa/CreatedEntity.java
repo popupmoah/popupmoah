@@ -14,6 +14,11 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class)
 public abstract class CreatedEntity {
 
+    /**
+     * 삭제 여부 ( 엔티티 공통으로 사용되는 변수로 CreatedEntity 는 항상 쓰이기 때문에 해당 클래스에 선언 )
+     */
+    private boolean deleted;
+
     @CreatedBy
     private Long createdBy;
 
