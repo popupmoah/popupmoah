@@ -25,4 +25,8 @@ public abstract class CreatedEntity {
     @CreatedDate
     private LocalDateTime createdAt;
 
+    public void delete() {
+        this.deleted = true;
+    }
+
 }
