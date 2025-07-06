@@ -6,8 +6,10 @@ import lombok.Getter;
 @Getter
 public class PopupStoreSearchedResponse extends PopupStoreDefaultResponse {
 
+
     public static PopupStoreSearchedResponse fromDto(PopupStoreDto popupStore) {
-        return fromDto(popupStore);
+        PopupStoreSearchedResponse response = new PopupStoreSearchedResponse();
+        return (PopupStoreSearchedResponse) getPopupStoreDefaultResponse(popupStore, response);
     }
 
 }

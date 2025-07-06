@@ -1,7 +1,9 @@
 package com.sgyj.popupmoah.module.popupstore.controller.rseponse;
 
 import com.sgyj.popupmoah.module.popupstore.dto.PopupStoreDto;
+import lombok.Getter;
 
+@Getter
 public class PopupStoreDefaultResponse {
 
     protected Long id;
@@ -11,8 +13,8 @@ public class PopupStoreDefaultResponse {
     protected String endDate;
     protected String reservationDate;
 
-    public static PopupStoreDefaultResponse fromDto(PopupStoreDto popupStore) {
-        PopupStoreDefaultResponse response = new PopupStoreDefaultResponse();
+
+    static PopupStoreDefaultResponse getPopupStoreDefaultResponse(PopupStoreDto popupStore, PopupStoreDefaultResponse response) {
         response.id = popupStore.getId();
         response.name = popupStore.getName();
         response.description = popupStore.getDescription();
