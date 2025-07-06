@@ -32,7 +32,8 @@ class PopupStoreControllerTest {
         String json = """
         {
             "name": "Test Popup Store",
-            "location": "Test Location"
+            "latitude": 37.7749,
+            "longitude": -122.4194
         }
         """;
         HttpHeaders headers = new HttpHeaders();
