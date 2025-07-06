@@ -1,5 +1,6 @@
-package com.sgyj.popupmoah.module.popupstore.controller.request;
+package com.sgyj.popupmoah.module.popupstore.controller;
 
+import com.sgyj.popupmoah.module.popupstore.controller.request.CreatePopupStoreRequest;
 import com.sgyj.popupmoah.module.popupstore.controller.rseponse.PopupStoreCreatedResponse;
 import com.sgyj.popupmoah.module.popupstore.service.PopupStoreService;
 import lombok.RequiredArgsConstructor;
