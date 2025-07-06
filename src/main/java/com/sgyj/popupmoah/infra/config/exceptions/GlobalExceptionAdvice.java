@@ -12,4 +12,8 @@ public class GlobalExceptionAdvice {
         return ResponseEntity.badRequest().body(e.getMessage());
     }
 
+    @ExceptionHandler(value = AlreadyExistInfoException.class)
+    public ResponseEntity handleAlreadyExistInfoException(AlreadyExistInfoException e) {
+        return ResponseEntity.badRequest().body(e.getMessage());
+    }
 }

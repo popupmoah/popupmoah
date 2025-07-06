@@ -2,8 +2,10 @@ package com.sgyj.popupmoah.infra.config.security;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+@Getter
 @Builder
 @AllArgsConstructor
 @RequiredArgsConstructor
