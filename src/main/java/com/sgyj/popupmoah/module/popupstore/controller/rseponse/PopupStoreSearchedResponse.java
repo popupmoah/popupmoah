@@ -4,9 +4,9 @@ import com.sgyj.popupmoah.module.popupstore.dto.PopupStoreDto;
 import lombok.Getter;
 
 @Getter
-public class PopupStoreCreatedResponse {
+public class PopupStoreSearchedResponse extends PopupStoreDefaultResponse {
 
-    public static PopupStoreCreatedResponse fromDto(PopupStoreDto popupStore) {
+    public static PopupStoreSearchedResponse fromDto(PopupStoreDto popupStore) {
         return fromDto(popupStore);
     }
 
