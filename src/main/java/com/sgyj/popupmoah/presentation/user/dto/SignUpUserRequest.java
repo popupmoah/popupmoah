@@ -15,6 +15,8 @@ public class SignUpUserRequest {
     @NotNull
     private String firstName;
     @NotNull
+    private String userId;
+    @NotNull
     private String password;
     @NotNull
     private String confirmPassword;

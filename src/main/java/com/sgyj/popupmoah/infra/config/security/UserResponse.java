@@ -1,12 +1,18 @@
 package com.sgyj.popupmoah.infra.config.security;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.RequiredArgsConstructor;
 
 @Builder
+@AllArgsConstructor
+@RequiredArgsConstructor
 public class UserResponse {
 
     private String userId;
-    private String userName;
+    private String username;
+    private String lastName;
+    private String firstName;
     private String password;
     private String email;
     private String phone;

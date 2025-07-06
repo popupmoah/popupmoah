@@ -35,13 +35,13 @@ public class SecurityConfig {
 
         http.authorizeHttpRequests(auth ->
                 auth.requestMatchers("/api/v1/account/naver/*",
+                                "/api/v1/account/register",
                                 "/api/v1/account/kakao/*")
                         .permitAll()
                         .anyRequest().authenticated()
         );
 
         http.oauth2Login(oauth2 -> oauth2.failureUrl("/login?error=true"));
-
         return http.build();
     }
 

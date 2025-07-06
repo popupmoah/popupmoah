@@ -45,7 +45,7 @@ public class UserController {
     public ResponseEntity<UserResponse> login(@AuthenticationPrincipal OidcUser user) {
         OidcUserInfo userInfo = user.getUserInfo();
         return ResponseEntity.ok(UserResponse.builder()
-                .userName(userInfo.getFullName())
+                .username(userInfo.getFullName())
                 .email(userInfo.getEmail())
                 .phone(userInfo.getPhoneNumber())
                 .build());
