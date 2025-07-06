@@ -16,4 +16,13 @@ public class Location {
         location.longitude = longitude;
         return location;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if(o instanceof Location l){
+            return l.latitude == this.latitude && l.longitude == this.longitude;
+        }
+        return false;
+    }
+    
 }
