@@ -7,13 +7,13 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionAdvice {
 
-    @ExceptionHandler(value = UserException.class)
-    public ResponseEntity handleUserException(UserException e) {
+    @ExceptionHandler(value = AlreadyExistInfoException.class)
+    public ResponseEntity handleAlreadyExistInfoException(AlreadyExistInfoException e) {
         return ResponseEntity.badRequest().body(e.getMessage());
     }
 
-    @ExceptionHandler(value = AlreadyExistInfoException.class)
-    public ResponseEntity handleAlreadyExistInfoException(AlreadyExistInfoException e) {
+    @ExceptionHandler(value = UserException.class)
+    public ResponseEntity handleUserException(UserException e) {
         return ResponseEntity.badRequest().body(e.getMessage());
     }
 }
