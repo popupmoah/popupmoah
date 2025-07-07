@@ -20,6 +20,7 @@ public class SignUpUserRequest {
     private String password;
     @NotNull
     private String confirmPassword;
+    @NotNull
     @Email
     private String email;
     @NotNull
