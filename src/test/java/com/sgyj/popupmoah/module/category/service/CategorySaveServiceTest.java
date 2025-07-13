@@ -37,8 +37,8 @@ class CategorySaveServiceTest {
     @BeforeEach
     void setUp() {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        Validator validator = factory.getValidator();
-        categorySaveService = new CategorySaveService(categoryRepository, validator);
+        Validator localValidator = factory.getValidator();
+        categorySaveService = new CategorySaveService(categoryRepository, localValidator);
     }
 
     @Test
