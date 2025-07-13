@@ -4,15 +4,17 @@ import com.sgyj.popupmoah.module.category.repository.CategoryRepository;
 import com.sgyj.popupmoah.module.category.controller.response.RegisteredCategory;
 import com.sgyj.popupmoah.module.category.entity.Category;
 import org.springframework.stereotype.Service;
+import jakarta.validation.Validator;
+import lombok.RequiredArgsConstructor;
+import jakarta.validation.ConstraintViolation;
+import java.util.Set;
 
 @Service
+@RequiredArgsConstructor
 public class CategorySaveService {
 
     private final CategoryRepository categoryRepository;
-
-    public CategorySaveService(CategoryRepository categoryRepository) {
-        this.categoryRepository = categoryRepository;
-    }
+    private final Validator validator;
 
     /**
      * 카테고리를 저장하는 메서드
@@ -21,6 +23,11 @@ public class CategorySaveService {
      * @return 저장된 카테고리 정보
      */
     public RegisteredCategory saveCategory(CategorySaveCommand command) {
+        // 유효성 검사
+        Set<ConstraintViolation<CategorySaveCommand>> violations = validator.validate(command);
+        if (!violations.isEmpty()) {
+            throw new IllegalArgumentException(violations.iterator().next().getMessage());
+        }
         Category category = Category.of(command.getName(), command.getDescription(), command.getSortOrder(), command.isActive());
         Category savedCategory = categoryRepository.save(category);
         return RegisteredCategory.of(savedCategory.getId(), savedCategory.getName(), savedCategory.getDescription(), savedCategory.getSortOrder(), savedCategory.isActive());

@@ -1,5 +1,6 @@
 package com.sgyj.popupmoah.module.category.service;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -10,6 +11,7 @@ public class CategorySaveCommand {
     /**
      * 카테고리 이름
      */
+    @NotNull(message = "카테고리 이름은 필수입니다.")
     private final String name;
     /**
      * 카테고리 설명
