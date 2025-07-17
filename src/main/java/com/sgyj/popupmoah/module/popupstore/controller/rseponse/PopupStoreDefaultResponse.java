@@ -1,4 +1,4 @@
-package com.sgyj.popupmoah.module.popupstore.controller.response;
+package com.sgyj.popupmoah.module.popupstore.controller.rseponse;
 
 import com.sgyj.popupmoah.module.popupstore.dto.PopupStoreDto;
 import lombok.Getter;

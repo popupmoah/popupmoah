@@ -42,4 +42,14 @@ public class Category extends UpdatedEntity {
         category.active = active;
         return category;
     }
+
+    /**
+     * 카테고리 정보를 수정하는 메서드
+     */
+    public void update(String name, String description, float sortOrder, boolean active) {
+        this.name = name;
+        this.description = description;
+        this.sortOrder = sortOrder;
+        this.active = active;
+    }
 }
