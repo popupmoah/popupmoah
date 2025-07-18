@@ -39,6 +39,8 @@ public class ReviewService {
 
     @Transactional
     public void deleteReview(Long reviewId) {
+        reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 후기입니다."));
         reviewRepository.deleteById(reviewId);
     }
 
