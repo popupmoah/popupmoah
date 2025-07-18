@@ -11,10 +11,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface CommentRepository extends JpaRepository<Comment, Long> {
+    @Query("select c from Comment c where c.popupStore.id = :popupStoreId and c.deleted = false")
     List<Comment> findByPopupStoreId(Long popupStoreId);
+    @Query("select c from Comment c where c.popupStore.id = :popupStoreId and c.parent is null and c.deleted = false")
     List<Comment> findByPopupStoreIdAndParentIsNull(Long popupStoreId);
+    @Query("select c from Comment c where c.parent.id = :parentId and c.deleted = false")
     List<Comment> findByParentId(Long parentId);
+    @Query("select c from Comment c where c.popupStore.id = :popupStoreId and c.deleted = false")
     List<Comment> findAllByPopupStoreId(Long popupStoreId);
+    @Query("select c from Comment c where c.popupStore.id = :popupStoreId and c.parent is null and c.deleted = false")
     Page<Comment> findByPopupStoreIdAndParentIsNull(Long popupStoreId, Pageable pageable);
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
