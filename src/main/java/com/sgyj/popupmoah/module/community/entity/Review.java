@@ -2,7 +2,7 @@ package com.sgyj.popupmoah.module.community.entity;
 
 import com.sgyj.popupmoah.module.popupstore.entity.PopupStore;
 import lombok.*;
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity

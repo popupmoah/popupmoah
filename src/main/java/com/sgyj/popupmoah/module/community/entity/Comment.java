@@ -2,7 +2,7 @@ package com.sgyj.popupmoah.module.community.entity;
 
 import com.sgyj.popupmoah.module.popupstore.entity.PopupStore;
 import lombok.*;
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
@@ -37,6 +37,9 @@ public class Comment {
     @Column
     private LocalDateTime updatedAt;
 
+    @Column(nullable = false)
+    private boolean deleted = false;
+
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
@@ -45,5 +48,9 @@ public class Comment {
     public void updateContent(String newContent) {
         this.content = newContent;
         this.updatedAt = LocalDateTime.now();
+    }
+
+    public void softDelete() {
+        this.deleted = true;
     }
 } 
