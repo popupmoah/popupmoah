@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @Service
 @RequiredArgsConstructor
@@ -95,5 +97,18 @@ public class CommentService {
                 .content(content)
                 .build();
         return commentRepository.save(reply);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<Comment> getCommentTreeByPopupStoreWithPaging(Long popupStoreId, Pageable pageable) {
+        Page<Comment> parentPage = commentRepository.findByPopupStoreIdAndParentIsNull(popupStoreId, pageable);
+        List<Comment> allComments = commentRepository.findAllByPopupStoreId(popupStoreId);
+        java.util.Map<Long, List<Comment>> parentMap = new java.util.HashMap<>();
+        for (Comment c : allComments) {
+            Long parentId = c.getParent() == null ? null : c.getParent().getId();
+            parentMap.computeIfAbsent(parentId, k -> new java.util.ArrayList<>()).add(c);
+        }
+        // 부모 댓글만 페이징, 각 부모의 자식 트리 변환은 컨트롤러에서 처리
+        return parentPage;
     }
 } 

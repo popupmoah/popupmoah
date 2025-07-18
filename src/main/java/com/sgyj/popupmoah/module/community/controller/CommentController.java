@@ -11,6 +11,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 @RestController
 @RequestMapping("/api/comments")
@@ -69,6 +72,17 @@ public class CommentController {
         List<Comment> parents = commentService.getCommentTreeByPopupStore(popupStoreId);
         List<CommentResponse> responses = parents.stream().map(parent -> toTreeResponse(parent)).collect(Collectors.toList());
         return ResponseEntity.ok(responses);
+    }
+
+    @GetMapping("/popup/{popupStoreId}/tree/paged")
+    public ResponseEntity<Page<CommentResponse>> getCommentTreeByPopupStoreWithPaging(
+            @PathVariable Long popupStoreId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Comment> parentPage = commentService.getCommentTreeByPopupStoreWithPaging(popupStoreId, pageable);
+        Page<CommentResponse> responsePage = parentPage.map(parent -> toTreeResponse(parent));
+        return ResponseEntity.ok(responsePage);
     }
 
     private CommentResponse toTreeResponse(Comment comment) {
