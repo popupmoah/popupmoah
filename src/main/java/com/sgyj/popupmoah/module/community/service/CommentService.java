@@ -60,11 +60,18 @@ public class CommentService {
 
     @Transactional(readOnly = true)
     public List<Comment> getCommentTreeByPopupStore(Long popupStoreId) {
-        List<Comment> parents = commentRepository.findByPopupStoreIdAndParentIsNull(popupStoreId);
-        for (Comment parent : parents) {
-            loadChildrenRecursive(parent);
+        List<Comment> allComments = commentRepository.findAllByPopupStoreId(popupStoreId);
+        // parentId -> List<Comment> 맵핑
+        java.util.Map<Long, List<Comment>> parentMap = new java.util.HashMap<>();
+        for (Comment c : allComments) {
+            Long parentId = c.getParent() == null ? null : c.getParent().getId();
+            parentMap.computeIfAbsent(parentId, k -> new java.util.ArrayList<>()).add(c);
         }
-        return parents;
+        // 최상위(부모) 댓글만 추출
+        List<Comment> roots = parentMap.get(null);
+        if (roots == null) return java.util.Collections.emptyList();
+        // 자식 댓글을 재귀적으로 연결 (엔티티에 직접 children 필드가 없으므로, 컨트롤러에서 변환)
+        return roots;
     }
 
     private void loadChildrenRecursive(Comment parent) {
