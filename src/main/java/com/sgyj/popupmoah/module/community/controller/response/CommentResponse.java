@@ -23,9 +23,10 @@ public class CommentResponse {
                 .id(comment.getId())
                 .popupStoreId(comment.getPopupStore().getId())
                 .author(comment.getAuthor())
-                .content(comment.getContent())
+                .content(comment.isDeleted() ? "삭제된 댓글입니다" : comment.getContent())
                 .createdAt(comment.getCreatedAt())
                 .updatedAt(comment.getUpdatedAt())
+                .children(null)
                 .build();
     }
 
@@ -34,7 +35,7 @@ public class CommentResponse {
                 .id(comment.getId())
                 .popupStoreId(comment.getPopupStore().getId())
                 .author(comment.getAuthor())
-                .content(comment.getContent())
+                .content(comment.isDeleted() ? "삭제된 댓글입니다" : comment.getContent())
                 .createdAt(comment.getCreatedAt())
                 .updatedAt(comment.getUpdatedAt())
                 .children(children)

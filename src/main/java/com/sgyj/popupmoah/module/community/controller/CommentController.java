@@ -14,6 +14,8 @@ import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @RestController
 @RequestMapping("/api/comments")
@@ -35,15 +37,23 @@ public class CommentController {
     }
 
     @PutMapping("/{commentId}")
-    public ResponseEntity<CommentResponse> updateComment(@PathVariable Long commentId, @RequestBody UpdateCommentRequest request) {
-        Comment comment = commentService.updateComment(commentId, request.getContent());
-        return ResponseEntity.ok(CommentResponse.from(comment));
+    public ResponseEntity<CommentResponse> updateComment(@PathVariable Long commentId, @RequestBody UpdateCommentRequest request, @AuthenticationPrincipal UserDetails userDetails) {
+        try {
+            Comment comment = commentService.updateComment(commentId, request.getContent(), userDetails.getUsername());
+            return ResponseEntity.ok(CommentResponse.from(comment));
+        } catch (SecurityException e) {
+            return ResponseEntity.status(403).build();
+        }
     }
 
     @DeleteMapping("/{commentId}")
-    public ResponseEntity<Void> deleteComment(@PathVariable Long commentId) {
-        commentService.deleteComment(commentId);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<Void> deleteComment(@PathVariable Long commentId, @AuthenticationPrincipal UserDetails userDetails) {
+        try {
+            commentService.deleteComment(commentId, userDetails.getUsername());
+            return ResponseEntity.noContent().build();
+        } catch (SecurityException e) {
+            return ResponseEntity.status(403).build();
+        }
     }
 
     @GetMapping("/popup/{popupStoreId}")

@@ -31,18 +31,27 @@ public class CommentService {
     }
 
     @Transactional
-    public Comment updateComment(Long commentId, String newContent) {
+    public Comment updateComment(Long commentId, String newContent, String currentUser) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 댓글입니다."));
+        if (!comment.getAuthor().equals(currentUser)) {
+            throw new SecurityException("수정 권한이 없습니다.");
+        }
         comment.updateContent(newContent);
         return comment;
     }
 
     @Transactional
-    public void deleteComment(Long commentId) {
-        commentRepository.findById(commentId)
+    public void deleteComment(Long commentId, String currentUser) {
+        Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 댓글입니다."));
-        commentRepository.deleteById(commentId);
+        if (!comment.getAuthor().equals(currentUser)) {
+            throw new SecurityException("삭제 권한이 없습니다.");
+        }
+        if (comment.isDeleted()) {
+            throw new IllegalStateException("이미 삭제된 댓글입니다.");
+        }
+        comment.softDelete();
     }
 
     @Transactional(readOnly = true)

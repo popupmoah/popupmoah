@@ -53,4 +53,8 @@ public class Comment {
     public void softDelete() {
         this.deleted = true;
     }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
 } 
