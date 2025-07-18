@@ -85,4 +85,33 @@ class CommentServiceTest {
         assertThat(comments).hasSize(1);
         assertThat(comments.get(0).getAuthor()).isEqualTo("작성자");
     }
+
+    @Test
+    void 팝업별_댓글_트리_조회() {
+        // 부모 댓글 1, 2
+        Comment parent1 = Comment.builder().id(1L).popupStore(popupStore).author("부모1").content("내용1").build();
+        Comment parent2 = Comment.builder().id(2L).popupStore(popupStore).author("부모2").content("내용2").build();
+        // 대댓글(자식)
+        Comment child1 = Comment.builder().id(3L).popupStore(popupStore).author("자식1").content("대댓글1").parent(parent1).build();
+        Comment child2 = Comment.builder().id(4L).popupStore(popupStore).author("자식2").content("대댓글2").parent(parent1).build();
+        Comment child3 = Comment.builder().id(5L).popupStore(popupStore).author("자식3").content("대댓글3").parent(parent2).build();
+
+        // 부모 댓글만 반환
+        when(commentRepository.findByPopupStoreIdAndParentIsNull(1L)).thenReturn(Arrays.asList(parent1, parent2));
+        // 각 부모별 자식 댓글 반환
+        when(commentRepository.findByParentId(1L)).thenReturn(Arrays.asList(child1, child2));
+        when(commentRepository.findByParentId(2L)).thenReturn(Arrays.asList(child3));
+        when(commentRepository.findByParentId(3L)).thenReturn(Arrays.asList());
+        when(commentRepository.findByParentId(4L)).thenReturn(Arrays.asList());
+        when(commentRepository.findByParentId(5L)).thenReturn(Arrays.asList());
+
+        List<Comment> tree = commentService.getCommentTreeByPopupStore(1L);
+        assertThat(tree).hasSize(2);
+        // 부모1의 자식 확인
+        assertThat(tree.get(0).getId()).isEqualTo(1L);
+        // 실제 자식은 엔티티에 저장하지 않으므로, 자식 조회는 별도 서비스 메서드로 검증
+        List<Comment> childrenOfParent1 = commentService.getRepliesByParent(1L);
+        assertThat(childrenOfParent1).hasSize(2);
+        assertThat(childrenOfParent1.get(0).getParent().getId()).isEqualTo(1L);
+    }
 } 

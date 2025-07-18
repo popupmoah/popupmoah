@@ -21,6 +21,10 @@ public class Comment {
     @JoinColumn(name = "popup_store_id", nullable = false)
     private PopupStore popupStore;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_id")
+    private Comment parent;
+
     @Column(nullable = false, length = 1000)
     private String content;
 
