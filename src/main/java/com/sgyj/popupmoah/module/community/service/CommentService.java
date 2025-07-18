@@ -79,7 +79,7 @@ public class CommentService {
     public Comment createReply(Long popupStoreId, Long parentCommentId, String author, String content) {
         PopupStore popupStore = popupStoreRepository.findById(popupStoreId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 팝업스토어입니다."));
-        Comment parent = commentRepository.findById(parentCommentId)
+        Comment parent = commentRepository.findByIdForUpdate(parentCommentId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 부모 댓글입니다."));
         Comment reply = Comment.builder()
                 .popupStore(popupStore)
