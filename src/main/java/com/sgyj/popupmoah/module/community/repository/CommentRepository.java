@@ -12,6 +12,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     List<Comment> findByPopupStoreId(Long popupStoreId);
     List<Comment> findByPopupStoreIdAndParentIsNull(Long popupStoreId);
     List<Comment> findByParentId(Long parentId);
+    List<Comment> findAllByPopupStoreId(Long popupStoreId);
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("select c from Comment c where c.id = :id")
