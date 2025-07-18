@@ -7,12 +7,15 @@ import org.springframework.data.jpa.repository.Query;
 import jakarta.persistence.LockModeType;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface CommentRepository extends JpaRepository<Comment, Long> {
     List<Comment> findByPopupStoreId(Long popupStoreId);
     List<Comment> findByPopupStoreIdAndParentIsNull(Long popupStoreId);
     List<Comment> findByParentId(Long parentId);
     List<Comment> findAllByPopupStoreId(Long popupStoreId);
+    Page<Comment> findByPopupStoreIdAndParentIsNull(Long popupStoreId, Pageable pageable);
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("select c from Comment c where c.id = :id")
