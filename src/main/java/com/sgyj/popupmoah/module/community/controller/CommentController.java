@@ -16,6 +16,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import com.sgyj.popupmoah.module.community.security.JwtAuthentication;
 
 @RestController
 @RequestMapping("/api/comments")
@@ -37,9 +38,9 @@ public class CommentController {
     }
 
     @PutMapping("/{commentId}")
-    public ResponseEntity<CommentResponse> updateComment(@PathVariable Long commentId, @RequestBody UpdateCommentRequest request, @AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<CommentResponse> updateComment(@PathVariable Long commentId, @RequestBody UpdateCommentRequest request, @AuthenticationPrincipal JwtAuthentication auth) {
         try {
-            Comment comment = commentService.updateComment(commentId, request.getContent(), userDetails.getUsername());
+            Comment comment = commentService.updateComment(commentId, request.getContent(), auth.getUsername());
             return ResponseEntity.ok(CommentResponse.from(comment));
         } catch (SecurityException e) {
             return ResponseEntity.status(403).build();
@@ -47,9 +48,9 @@ public class CommentController {
     }
 
     @DeleteMapping("/{commentId}")
-    public ResponseEntity<Void> deleteComment(@PathVariable Long commentId, @AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<Void> deleteComment(@PathVariable Long commentId, @AuthenticationPrincipal JwtAuthentication auth) {
         try {
-            commentService.deleteComment(commentId, userDetails.getUsername());
+            commentService.deleteComment(commentId, auth.getUsername());
             return ResponseEntity.noContent().build();
         } catch (SecurityException e) {
             return ResponseEntity.status(403).build();

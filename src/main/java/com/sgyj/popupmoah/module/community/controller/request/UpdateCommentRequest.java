@@ -9,5 +9,4 @@ import jakarta.validation.constraints.NotBlank;
 public class UpdateCommentRequest {
     @NotBlank
     private String content;
-    private String currentUser;
 } 

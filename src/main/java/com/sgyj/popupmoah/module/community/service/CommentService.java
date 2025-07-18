@@ -11,6 +11,10 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+/**
+ * 댓글(Comment) 관련 비즈니스 로직을 처리하는 서비스.
+ * 작성, 수정, 삭제, 트리 조회, 권한 체크, soft delete 등 포함.
+ */
 @Service
 @RequiredArgsConstructor
 public class CommentService {
@@ -18,6 +22,13 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final PopupStoreRepository popupStoreRepository;
 
+    /**
+     * 댓글을 작성한다.
+     * @param popupStoreId 팝업스토어 ID
+     * @param author 작성자
+     * @param content 내용
+     * @return 저장된 댓글
+     */
     @Transactional
     public Comment createComment(Long popupStoreId, String author, String content) {
         PopupStore popupStore = popupStoreRepository.findById(popupStoreId)
@@ -30,6 +41,14 @@ public class CommentService {
         return commentRepository.save(comment);
     }
 
+    /**
+     * 댓글을 수정한다. (권한 체크)
+     * @param commentId 댓글 ID
+     * @param newContent 수정 내용
+     * @param currentUser 현재 사용자명
+     * @return 수정된 댓글
+     * @throws SecurityException 권한 없음
+     */
     @Transactional
     public Comment updateComment(Long commentId, String newContent, String currentUser) {
         Comment comment = commentRepository.findById(commentId)
@@ -41,6 +60,12 @@ public class CommentService {
         return comment;
     }
 
+    /**
+     * 댓글을 soft delete 한다. (권한 체크)
+     * @param commentId 댓글 ID
+     * @param currentUser 현재 사용자명
+     * @throws SecurityException 권한 없음
+     */
     @Transactional
     public void deleteComment(Long commentId, String currentUser) {
         Comment comment = commentRepository.findById(commentId)
@@ -54,6 +79,9 @@ public class CommentService {
         comment.softDelete();
     }
 
+    /**
+     * 팝업스토어의 모든 댓글(soft delete 제외)을 조회한다.
+     */
     @Transactional(readOnly = true)
     public List<Comment> getCommentsByPopupStore(Long popupStoreId) {
         return commentRepository.findByPopupStoreId(popupStoreId);
@@ -85,14 +113,6 @@ public class CommentService {
         return roots;
     }
 
-    private void loadChildrenRecursive(Comment parent) {
-        List<Comment> children = commentRepository.findByParentId(parent.getId());
-        for (Comment child : children) {
-            loadChildrenRecursive(child);
-        }
-        // 자식 댓글을 엔티티에 직접 저장하지 않고, 응답 DTO에서 처리
-    }
-
     @Transactional
     public Comment createReply(Long popupStoreId, Long parentCommentId, String author, String content) {
         PopupStore popupStore = popupStoreRepository.findById(popupStoreId)
@@ -108,6 +128,9 @@ public class CommentService {
         return commentRepository.save(reply);
     }
 
+    /**
+     * 부모 댓글만 페이징하여 트리 구조로 반환한다.
+     */
     @Transactional(readOnly = true)
     public Page<Comment> getCommentTreeByPopupStoreWithPaging(Long popupStoreId, Pageable pageable) {
         Page<Comment> parentPage = commentRepository.findByPopupStoreIdAndParentIsNull(popupStoreId, pageable);

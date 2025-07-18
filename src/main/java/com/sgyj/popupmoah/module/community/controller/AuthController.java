@@ -8,6 +8,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+/**
+ * 인증/회원가입/로그인/JWT 토큰 발급 관련 API 컨트롤러.
+ */
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
@@ -17,6 +20,9 @@ public class AuthController {
     private final MemberRepository memberRepository;
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
+    /**
+     * JWT 로그인(토큰 발급) API. username, password 검증 후 JWT 반환.
+     */
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestParam String username, @RequestParam String password) {
         Member member = memberRepository.findByUsername(username)
@@ -28,6 +34,9 @@ public class AuthController {
         return ResponseEntity.ok(token);
     }
 
+    /**
+     * 회원가입 API. username 중복 체크, 비밀번호 암호화 후 저장.
+     */
     @PostMapping("/signup")
     public ResponseEntity<String> signup(@RequestParam String username, @RequestParam String password) {
         if (memberRepository.findByUsername(username).isPresent()) {
