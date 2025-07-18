@@ -103,42 +103,46 @@ class CommentControllerTest {
     }
 
     @Test
-    @DisplayName("댓글 수정 성공")
-    void 댓글_수정_성공() throws Exception {
+    @DisplayName("댓글 수정 성공 - 본인")
+    void 댓글_수정_성공_본인() throws Exception {
         Comment comment = Comment.builder().id(1L).author("작성자").content("수정된 내용").build();
-        Mockito.when(commentService.updateComment(Mockito.anyLong(), Mockito.anyString())).thenReturn(comment);
+        Mockito.when(commentService.updateComment(Mockito.eq(1L), Mockito.eq("수정된 내용"), Mockito.eq("작성자"))).thenReturn(comment);
         mockMvc.perform(org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put("/api/comments/1")
                 .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
-                .content("{\"content\":\"수정된 내용\"}"))
+                .content("{\"content\":\"수정된 내용\",\"currentUser\":\"작성자\"}"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1L))
                 .andExpect(jsonPath("$.content").value("수정된 내용"));
     }
 
     @Test
-    @DisplayName("댓글 수정 실패 - 댓글 없음")
-    void 댓글_수정_실패_댓글없음() throws Exception {
-        Mockito.when(commentService.updateComment(Mockito.anyLong(), Mockito.anyString()))
-                .thenThrow(new IllegalArgumentException("존재하지 않는 댓글입니다."));
+    @DisplayName("댓글 수정 실패 - 권한 없음")
+    void 댓글_수정_실패_권한없음() throws Exception {
+        Mockito.when(commentService.updateComment(Mockito.eq(1L), Mockito.eq("수정된 내용"), Mockito.eq("다른사람")))
+                .thenThrow(new SecurityException("수정 권한이 없습니다."));
         mockMvc.perform(org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put("/api/comments/1")
                 .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
-                .content("{\"content\":\"수정된 내용\"}"))
-                .andExpect(status().isBadRequest());
+                .content("{\"content\":\"수정된 내용\",\"currentUser\":\"다른사람\"}"))
+                .andExpect(status().isForbidden());
     }
 
     @Test
-    @DisplayName("댓글 삭제 성공")
-    void 댓글_삭제_성공() throws Exception {
-        Mockito.doNothing().when(commentService).deleteComment(Mockito.anyLong());
-        mockMvc.perform(org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete("/api/comments/1"))
+    @DisplayName("댓글 삭제 성공 - 본인")
+    void 댓글_삭제_성공_본인() throws Exception {
+        Mockito.doNothing().when(commentService).deleteComment(Mockito.eq(1L), Mockito.eq("작성자"));
+        mockMvc.perform(org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete("/api/comments/1")
+                .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
+                .content("{\"currentUser\":\"작성자\"}"))
                 .andExpect(status().isNoContent());
     }
 
     @Test
-    @DisplayName("댓글 삭제 실패 - 댓글 없음")
-    void 댓글_삭제_실패_댓글없음() throws Exception {
-        Mockito.doThrow(new IllegalArgumentException("존재하지 않는 댓글입니다.")).when(commentService).deleteComment(Mockito.anyLong());
-        mockMvc.perform(org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete("/api/comments/1"))
-                .andExpect(status().isBadRequest());
+    @DisplayName("댓글 삭제 실패 - 권한 없음")
+    void 댓글_삭제_실패_권한없음() throws Exception {
+        Mockito.doThrow(new SecurityException("삭제 권한이 없습니다.")).when(commentService).deleteComment(Mockito.eq(1L), Mockito.eq("다른사람"));
+        mockMvc.perform(org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete("/api/comments/1")
+                .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
+                .content("{\"currentUser\":\"다른사람\"}"))
+                .andExpect(status().isForbidden());
     }
 } 
