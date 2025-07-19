@@ -4,10 +4,13 @@ spring:
   profiles:
     include: local
   datasource:
-    url: jdbc:postgresql://localhost:5432/popupmoah
-    username: postgres
-    password: postgres
-    driver-class-name: org.postgresql.Driver
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driver-class-name: com.p6spy.engine.spy.P6SpyDriver
+    username: sa
+    password:
+  h2:
+    console:
+      enabled: true
   jpa:
     hibernate:
       ddl-auto: update
