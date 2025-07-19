@@ -8,6 +8,8 @@ import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
 import jakarta.validation.ConstraintViolation;
 import java.util.Set;
+import org.springframework.cache.annotation.Cacheable; // 캐시 어노테이션
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -57,5 +59,13 @@ public class CategorySaveService {
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 카테고리가 존재하지 않습니다. id=" + categoryId));
         categoryRepository.delete(category);
+    }
+
+    /**
+     * 모든 카테고리 조회 (캐시 적용 예시)
+     */
+    @Cacheable(value = "categories")
+    public List<Category> getAllCategories() {
+        return categoryRepository.findAll();
     }
 }
