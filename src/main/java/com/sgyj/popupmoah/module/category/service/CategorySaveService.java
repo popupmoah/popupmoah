@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import jakarta.validation.ConstraintViolation;
 import java.util.Set;
 import org.springframework.cache.annotation.Cacheable; // 캐시 어노테이션
+import org.springframework.cache.annotation.CacheEvict; // 캐시 무효화 어노테이션
 import java.util.List;
 
 @Service
@@ -20,10 +21,9 @@ public class CategorySaveService {
 
     /**
      * 카테고리를 저장하는 메서드
-     *
-     * @param command 카테고리 저장 명령 객체
-     * @return 저장된 카테고리 정보
+     * 저장 시 categories 캐시 전체 무효화
      */
+    @CacheEvict(value = "categories", allEntries = true)
     public RegisteredCategory saveCategory(CategorySaveCommand command) {
         // 유효성 검사
         Set<ConstraintViolation<CategorySaveCommand>> violations = validator.validate(command);
@@ -37,11 +37,9 @@ public class CategorySaveService {
 
     /**
      * 카테고리를 수정하는 메서드
-     *
-     * @param categoryId 수정할 카테고리 ID
-     * @param command 수정할 정보가 담긴 명령 객체
-     * @return 수정된 카테고리 정보
+     * 수정 시 categories 캐시 전체 무효화
      */
+    @CacheEvict(value = "categories", allEntries = true)
     public RegisteredCategory updateCategory(Long categoryId, CategorySaveCommand command) {
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 카테고리가 존재하지 않습니다. id=" + categoryId));
@@ -52,9 +50,9 @@ public class CategorySaveService {
 
     /**
      * 카테고리를 삭제하는 메서드
-     *
-     * @param categoryId 삭제할 카테고리 ID
+     * 삭제 시 categories 캐시 전체 무효화
      */
+    @CacheEvict(value = "categories", allEntries = true)
     public void deleteCategory(Long categoryId) {
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 카테고리가 존재하지 않습니다. id=" + categoryId));
