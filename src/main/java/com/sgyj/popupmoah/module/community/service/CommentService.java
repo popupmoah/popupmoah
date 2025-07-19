@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Async; // 비동기 어노테이션
 
 /**
  * 댓글(Comment) 관련 비즈니스 로직을 처리하는 서비스.
@@ -142,5 +143,15 @@ public class CommentService {
         }
         // 부모 댓글만 페이징, 각 부모의 자식 트리 변환은 컨트롤러에서 처리
         return parentPage;
+    }
+
+    /**
+     * 댓글 등록 시 비동기로 알림 전송 (예시)
+     */
+    @Async
+    public void sendCommentNotification(String to, String message) {
+        // 실제로는 이메일, SMS, 푸시 등 외부 연동
+        System.out.println("[비동기 알림] " + to + ": " + message);
+        // 예시: Thread.sleep(1000); // 실제 외부 연동 대기 시
     }
 } 

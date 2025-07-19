@@ -66,4 +66,15 @@ public class CategorySaveService {
     public List<Category> getAllCategories() {
         return categoryRepository.findAll();
     }
+
+    /**
+     * 활성/비활성 상태별 카테고리 목록 조회 (조건부 캐싱, 커스텀 키)
+     * active 값에 따라 별도 캐시, 결과가 null이면 캐싱하지 않음
+     */
+    @Cacheable(value = "categories", key = "#active", unless = "#result == null")
+    public List<Category> getAllCategoriesByActive(Boolean active) {
+        return categoryRepository.findAll().stream()
+                .filter(c -> active == null || c.isActive() == active)
+                .toList();
+    }
 }
