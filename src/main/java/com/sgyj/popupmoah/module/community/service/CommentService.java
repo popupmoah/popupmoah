@@ -2,6 +2,7 @@ package com.sgyj.popupmoah.module.community.service;
 
 import com.sgyj.popupmoah.module.community.entity.Comment;
 import com.sgyj.popupmoah.module.community.repository.CommentRepository;
+import com.sgyj.popupmoah.module.community.event.CommentCreatedEvent;
 import com.sgyj.popupmoah.module.popupstore.entity.PopupStore;
 import com.sgyj.popupmoah.module.popupstore.repository.PopupStoreRepository;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,7 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Async; // 비동기 어노테이션
+import org.springframework.context.ApplicationEventPublisher;
 
 /**
  * 댓글(Comment) 관련 비즈니스 로직을 처리하는 서비스.
@@ -22,6 +24,7 @@ public class CommentService {
 
     private final CommentRepository commentRepository;
     private final PopupStoreRepository popupStoreRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
     /**
      * 댓글을 작성한다.
@@ -39,6 +42,8 @@ public class CommentService {
                 .author(author)
                 .content(content)
                 .build();
+        // 댓글 생성 이벤트 발행
+        eventPublisher.publishEvent(new CommentCreatedEvent(comment.getId(), author, content));
         return commentRepository.save(comment);
     }
 
