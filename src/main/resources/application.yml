@@ -3,9 +3,38 @@ spring:
     name: popupmoah
   profiles:
     include: local
+  datasource:
+    url: jdbc:postgresql://localhost:5432/popupmoah
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
 server:
   port: 5032
 jasypt:
   encryptor:
     password: ${JASYPT_ENCRYPTOR_PASSWORD:defaultPassword}
+
+# Actuator 설정
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,env,beans,threaddump,httptrace
+  endpoint:
+    health:
+      show-details: always
+
+# 로그 설정
+logging:
+  level:
+    root: INFO
+    org.springframework.web: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  file:
+    name: logs/popupmoah.log
 
