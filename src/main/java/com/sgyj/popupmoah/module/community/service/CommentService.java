@@ -6,6 +6,8 @@ import com.sgyj.popupmoah.module.community.event.CommentCreatedEvent;
 import com.sgyj.popupmoah.module.popupstore.entity.PopupStore;
 import com.sgyj.popupmoah.module.popupstore.repository.PopupStoreRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
@@ -18,6 +20,7 @@ import org.springframework.context.ApplicationEventPublisher;
  * 댓글(Comment) 관련 비즈니스 로직을 처리하는 서비스.
  * 작성, 수정, 삭제, 트리 조회, 권한 체크, soft delete 등 포함.
  */
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class CommentService {
@@ -156,7 +159,7 @@ public class CommentService {
     @Async
     public void sendCommentNotification(String to, String message) {
         // 실제로는 이메일, SMS, 푸시 등 외부 연동
-        logger.info("[비동기 알림] {}: {}", to, message);
+        log.info("[비동기 알림] {}: {}", to, message);
         // 예시: Thread.sleep(1000); // 실제 외부 연동 대기 시
     }
 } 
