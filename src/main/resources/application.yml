@@ -15,9 +15,10 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
-  redis:
-    host: localhost
-    port: 6379
+  data:
+    redis:
+      host: localhost
+      port: 6379
 server:
   port: 5032
 jasypt:
@@ -38,9 +39,20 @@ management:
 logging:
   level:
     root: INFO
-    org.springframework.web: DEBUG
+    org:
+      springframework:
+        web: DEBUG
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
   file:
     name: logs/popupmoah.log
 
+cloud:
+  aws:
+    s3:
+      bucket: your-bucket-name
+    credentials:
+      access-key: ${AWS_ACCESS_KEY}
+      secret-key: ${AWS_SECRET_KEY}
+    region:
+      static: ap-northeast-2
