@@ -11,10 +11,16 @@ import java.util.Date;
  */
 @Component
 public class JwtUtil {
-    private final String SECRET_KEY = "mysecretkeymysecretkeymysecretkeymysecretkey"; // 32+ chars
+    private final String SECRET_KEY = System.getenv("JWT_SECRET_KEY");
     private final long EXPIRATION = 1000 * 60 * 60; // 1시간
-    private final Key key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
+    private final Key key;
 
+    public JwtUtil() {
+        if (SECRET_KEY == null || SECRET_KEY.isEmpty()) {
+            throw new IllegalStateException("JWT_SECRET_KEY environment variable is not set or is empty.");
+        }
+        this.key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
+    }
     /**
      * username을 subject로 JWT 토큰을 생성한다.
      * @param username 사용자명
