@@ -51,8 +51,9 @@ cloud:
   aws:
     s3:
       bucket: your-bucket-name
-    credentials:
-      access-key: ${AWS_ACCESS_KEY}
-      secret-key: ${AWS_SECRET_KEY}
-    region:
-      static: ap-northeast-2
+      access-key: ${AWS_ACCESS_KEY:1234}
+      secret-key: ${AWS_SECRET_KEY:1234}
+      region: ap-northeast-2
+
+jwt:
+  secret-key: ${JWT_SECURITY_KEY:your-secret-key-here-default-text-nice}

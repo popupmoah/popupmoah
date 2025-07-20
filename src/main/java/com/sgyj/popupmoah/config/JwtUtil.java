@@ -1,25 +1,31 @@
 package com.sgyj.popupmoah.config;
 
-import io.jsonwebtoken.*;
-import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import jakarta.annotation.PostConstruct;
 import java.security.Key;
 import java.util.Date;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.security.Keys;
 
 /**
  * JWT 토큰 생성/파싱/검증 유틸리티.
  */
 @Component
 public class JwtUtil {
-    private final String SECRET_KEY = System.getenv("JWT_SECRET_KEY");
+    @Value("${jwt.secret-key}")
+    private String secretKey;
     private final long EXPIRATION = 1000 * 60 * 60; // 1시간
-    private final Key key;
+    private Key key;
 
-    public JwtUtil() {
-        if (SECRET_KEY == null || SECRET_KEY.isEmpty()) {
-            throw new IllegalStateException("JWT_SECRET_KEY environment variable is not set or is empty.");
+    @PostConstruct
+    public void init() {
+        if (secretKey == null || secretKey.isEmpty()) {
+            throw new IllegalStateException("jwt.secret-key property is not set or is empty.");
         }
-        this.key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
+        this.key = Keys.hmacShaKeyFor(secretKey.getBytes());
     }
     /**
      * username을 subject로 JWT 토큰을 생성한다.

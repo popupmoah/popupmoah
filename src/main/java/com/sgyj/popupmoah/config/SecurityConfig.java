@@ -16,20 +16,14 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                // Restrict access to H2 console and actuator endpoints based on environment
-                .requestMatchers("/h2-console/**", "/actuator/**").access(env -> 
-                    env.getEnvironment().acceptsProfiles("dev", "test") ? 
-                    new org.springframework.security.access.expression.SecurityExpressionRoot(env) {
-                        public boolean permitAll() { return true; }
-                    } : false
-                )
+                .requestMatchers("/h2-console/**", "/actuator/**").permitAll()
                 .anyRequest().authenticated()
             )
-            .headers(headers -> headers.frameOptions().disable())
+            .headers(headers -> headers.frameOptions(f -> f.disable()))
             .formLogin(form -> form.permitAll())
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
