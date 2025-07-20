@@ -156,7 +156,7 @@ public class CommentService {
     @Async
     public void sendCommentNotification(String to, String message) {
         // 실제로는 이메일, SMS, 푸시 등 외부 연동
-        System.out.println("[비동기 알림] " + to + ": " + message);
+        logger.info("[비동기 알림] {}: {}", to, message);
         // 예시: Thread.sleep(1000); // 실제 외부 연동 대기 시
     }
 } 
