@@ -40,7 +40,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            Member member = memberRepository.findByUsername(username).orElse(null);
+            Member member = userCache.computeIfAbsent(username, key -> 
+                    memberRepository.findByUsername(key).orElse(null));
             if (member != null) {
                 JwtAuthentication jwtAuth = new JwtAuthentication(member.getId(), member.getUsername());
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
