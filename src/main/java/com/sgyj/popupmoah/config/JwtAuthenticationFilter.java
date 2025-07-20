@@ -3,6 +3,7 @@ package com.sgyj.popupmoah.config;
 import com.sgyj.popupmoah.module.community.entity.Member;
 import com.sgyj.popupmoah.module.community.repository.MemberRepository;
 import com.sgyj.popupmoah.module.community.security.JwtAuthentication;
+import com.sgyj.popupmoah.module.community.service.UserCacheService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -13,30 +14,23 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
-import org.springframework.cache.annotation.Cacheable;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
-    private final MemberRepository memberRepository;
-    // Removed userCache field, will use @Cacheable instead
+    private final UserCacheService userCacheService;
 
-    public JwtAuthenticationFilter(JwtUtil jwtUtil, MemberRepository memberRepository) {
+    public JwtAuthenticationFilter(JwtUtil jwtUtil, UserCacheService userCacheService) {
         this.jwtUtil = jwtUtil;
-        this.memberRepository = memberRepository;
-    }
-
-    @Cacheable(value = "userCache", key = "#username")
-    public Member getMemberByUsername(String username) {
-        return memberRepository.findByUsername(username).orElse(null);
+        this.userCacheService = userCacheService;
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         String authHeader = request.getHeader("Authorization");
-        String token = null;
+        String token;
         String username = null;
 
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
@@ -47,7 +41,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            Member member = getMemberByUsername(username);
+            Member member = userCacheService.getMemberByUsername(username);
             if (member != null) {
                 JwtAuthentication jwtAuth = new JwtAuthentication(member.getId(), member.getUsername());
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
