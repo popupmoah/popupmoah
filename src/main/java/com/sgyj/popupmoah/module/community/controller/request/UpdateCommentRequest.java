@@ -2,7 +2,8 @@ package com.sgyj.popupmoah.module.community.controller.request;
 
 import lombok.Getter;
 import lombok.Setter;
-import javax.validation.constraints.NotBlank;
+// javax.validation → jakarta.validation 으로 변경 (Java 21/Spring Boot 3.x)
+import jakarta.validation.constraints.NotBlank;
 
 @Getter
 @Setter

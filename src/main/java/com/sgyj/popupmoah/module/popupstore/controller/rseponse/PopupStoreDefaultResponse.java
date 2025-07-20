@@ -14,7 +14,7 @@ public class PopupStoreDefaultResponse {
     protected String reservationDate;
 
 
-    static PopupStoreDefaultResponse getPopupStoreDefaultResponse(PopupStoreDto popupStore, PopupStoreDefaultResponse response) {
+    public static PopupStoreDefaultResponse getPopupStoreDefaultResponse(PopupStoreDto popupStore, PopupStoreDefaultResponse response) {
         response.id = popupStore.getId();
         response.name = popupStore.getName();
         response.description = popupStore.getDescription();
