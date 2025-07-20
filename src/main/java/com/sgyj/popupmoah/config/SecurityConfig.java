@@ -20,8 +20,13 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                // H2 콘솔과 actuator 엔드포인트는 모두 허용
-                .requestMatchers("/h2-console/**", "/actuator/**").permitAll()
+                // Restrict access to H2 console and actuator endpoints based on environment
+                .requestMatchers("/h2-console/**", "/actuator/**").access(env -> 
+                    env.getEnvironment().acceptsProfiles("dev", "test") ? 
+                    new org.springframework.security.access.expression.SecurityExpressionRoot(env) {
+                        public boolean permitAll() { return true; }
+                    } : false
+                )
                 .anyRequest().authenticated()
             )
             .headers(headers -> headers.frameOptions().disable())
