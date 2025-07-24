@@ -58,4 +58,19 @@ public class PopupStore extends UpdatedEntity {
      */
     private String website;
 
+    /**
+     * 팝업스토어 대표 이미지 URL
+     */
+    private String imageUrl;
+
+    /**
+     * 팝업스토어 정보 출처(원본 게시글 링크)
+     */
+    private String sourceUrl;
+
+    /**
+     * 팝업스토어 카테고리/태그
+     */
+    private String category;
+
 }
