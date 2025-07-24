@@ -10,4 +10,6 @@ SITE_CONFIGS = [
         "parser": "parse_othersite"
     }
     # 필요한 만큼 사이트 추가
-] 
+]
+
+# [중요] 크롤러는 startDate, endDate(yyyy-MM-dd 또는 yyyy-MM-dd HH:mm:ss) 컬럼을 반드시 포함해야 함 

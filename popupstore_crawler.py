@@ -3,13 +3,14 @@ from bs4 import BeautifulSoup
 import csv
 import time
 from site_configs import SITE_CONFIGS
+from datetime import datetime
 
 # ----------------------
 # 사이트별 파서 함수 정의
 # ----------------------
 def parse_thehyundaiblog(base_url):
     """
-    현대백화점 블로그 팝업스토어 정보 파싱
+    현대백화점 블로그 팝업스토어 정보 파싱 (startDate, endDate 컬럼 포함)
     """
     results = []
     headers = {
@@ -17,7 +18,6 @@ def parse_thehyundaiblog(base_url):
     }
     res = requests.get(base_url, headers=headers)
     soup = BeautifulSoup(res.text, "html.parser")
-    # 실제 구조에 맞게 a 태그 선택자 수정 필요
     links = []
     for a in soup.select(".post-item a"):  # 예시: .post-item a
         href = a.get("href")
@@ -36,12 +36,24 @@ def parse_thehyundaiblog(base_url):
             image_url = img["src"] if img and img.has_attr("src") else ""
             cat = detail_soup.select_one(".category")
             category = cat.text.strip() if cat else "POP-UP"
+            # 날짜 추출 예시 (실제 구조에 맞게 수정 필요)
+            # 예: "2024.07.01 ~ 2024.07.15" 형태의 텍스트에서 추출
+            date_text = detail_soup.text
+            start_date, end_date = "", ""
+            import re
+            m = re.search(r"(20\\d{2}\\.\\d{2}\\.\\d{2}) ?~ ?(20\\d{2}\\.\\d{2}\\.\\d{2})", date_text)
+            if m:
+                # yyyy.MM.dd -> yyyy-MM-dd 변환
+                start_date = m.group(1).replace(".", "-")
+                end_date = m.group(2).replace(".", "-")
             results.append({
                 "name": name,
                 "description": description,
                 "imageUrl": image_url,
                 "sourceUrl": link,
-                "category": category
+                "category": category,
+                "startDate": start_date,
+                "endDate": end_date
             })
             time.sleep(1)
         except Exception as e:
@@ -50,12 +62,11 @@ def parse_thehyundaiblog(base_url):
 
 def parse_othersite(base_url):
     """
-    다른 사이트 예시 파서 (구현 필요)
+    다른 사이트 예시 파서 (startDate, endDate 포함, 실제 구조에 맞게 구현 필요)
     """
     # TODO: 실제 사이트 구조에 맞게 구현
     return []
 
-# 파서 함수 매핑
 PARSERS = {
     "parse_thehyundaiblog": parse_thehyundaiblog,
     "parse_othersite": parse_othersite
@@ -68,7 +79,7 @@ def main():
         parser_func = PARSERS[site["parser"]]
         results = parser_func(site["base_url"])
         all_results.extend(results)
-    # 결과가 있으면 CSV로 저장
+    # 결과가 있으면 CSV로 저장 (startDate, endDate 포함)
     if all_results:
         with open("popupstores.csv", "w", newline="", encoding="utf-8") as f:
             writer = csv.DictWriter(f, fieldnames=all_results[0].keys())
