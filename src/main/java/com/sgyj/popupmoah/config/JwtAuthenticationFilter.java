@@ -13,12 +13,15 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
     private final MemberRepository memberRepository;
+    private final Map<String, Member> userCache = new ConcurrentHashMap<>();
 
     public JwtAuthenticationFilter(JwtUtil jwtUtil, MemberRepository memberRepository) {
         this.jwtUtil = jwtUtil;

@@ -2,9 +2,11 @@ package com.sgyj.popupmoah.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.authorization.AuthorizationDecision;
 
 @Configuration
 public class SecurityConfig {
@@ -19,17 +21,21 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .csrf(csrf -> csrf.disable())
-            .authorizeHttpRequests(auth -> auth
-                // Restrict access to H2 console and actuator endpoints based on environment
-                .requestMatchers("/h2-console/**", "/actuator/**").access(env -> 
-                    env.getEnvironment().acceptsProfiles("dev", "test") ? 
-                    new org.springframework.security.access.expression.SecurityExpressionRoot(env) {
-                        public boolean permitAll() { return true; }
-                    } : false
-                )
-                .anyRequest().authenticated()
-            )
-            .headers(headers -> headers.frameOptions().disable())
+            .authorizeHttpRequests(auth -> {
+                auth.requestMatchers("/h2-console/**", "/actuator/**")
+                    .access((authentication, context) -> {
+                        String[] activeProfiles = context.getRequest().getServletContext()
+                            .getInitParameter("spring.profiles.active").split(",");
+                        for (String profile : activeProfiles) {
+                            if (profile.trim().equals("dev") || profile.trim().equals("test")) {
+                                return new AuthorizationDecision(true); // 허용
+                            }
+                        }
+                        return new AuthorizationDecision(false); // 거부
+                    });
+                auth.anyRequest().authenticated();
+            })
+            .headers(headers -> headers.frameOptions(c -> c.disable()))
             .formLogin(form -> form.permitAll())
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
