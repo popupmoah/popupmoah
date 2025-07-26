@@ -41,7 +41,7 @@ def parse_thehyundaiblog(base_url):
             date_text = detail_soup.text
             start_date, end_date = "", ""
             import re
-            m = re.search(r"(20\\d{2}\\.\\d{2}\\.\\d{2}) ?~ ?(20\\d{2}\\.\\d{2}\\.\\d{2})", date_text)
+            m = re.search(r"(20\d{2}\.\d{2}\.\d{2}) ?~ ?(20\d{2}\.\d{2}\.\d{2})", date_text)
             if m:
                 # yyyy.MM.dd -> yyyy-MM-dd 변환
                 start_date = m.group(1).replace(".", "-")
