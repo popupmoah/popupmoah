@@ -2,6 +2,7 @@ package com.sgyj.popupmoah.config;
 
 import com.sgyj.popupmoah.module.community.entity.Member;
 import com.sgyj.popupmoah.module.community.repository.MemberRepository;
+import com.sgyj.popupmoah.TestSupportConfig;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -20,7 +22,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
+@SpringBootTest(classes = TestSupportConfig.class)
 @AutoConfigureMockMvc
 @Transactional
 @ActiveProfiles("test")
@@ -33,27 +35,7 @@ class JwtAuthenticationFilterTest {
     @Autowired
     private MemberRepository memberRepository;
 
-    // 시큐리티 우회용 MockUser 적용
-    @BeforeEach
-    void setup() {
-        // 필요한 경우 테스트 데이터 자동 주입
-    }
-
-    // 테스트 환경용 JwtUtil Bean 등록
-    @TestConfiguration
-    static class JwtUtilTestConfig {
-        @Bean
-        public JwtUtil jwtUtil() {
-            return new JwtUtil("testtesttesttesttesttesttesttest12");
-        }
-    }
-    @TestConfiguration
-    static class SecurityConfig {
-        @Bean
-        public WebSecurityCustomizer webSecurityCustomizer() {
-            return (web) -> web.ignoring().requestMatchers("/**");
-        }
-    }
+    // 중복 TestConfiguration, SecurityConfig, JwtUtilTestConfig, @BeforeEach 등 모두 제거
 
     @Test
     @DisplayName("JWT 토큰이 없으면 인증 실패(401)")
