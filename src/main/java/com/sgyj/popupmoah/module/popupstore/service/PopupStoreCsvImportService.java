@@ -79,7 +79,7 @@ public class PopupStoreCsvImportService {
                 popupStoreRepository.save(popupStore);
             }
         } catch (Exception e) {
-            throw new RuntimeException("CSV import 실패", e);
+            throw new RuntimeException("CSV import failed for file: " + csvFilePath + ": " + e.getMessage(), e);
         }
     }
 
