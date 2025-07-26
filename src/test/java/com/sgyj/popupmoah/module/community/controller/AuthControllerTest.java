@@ -8,8 +8,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.junit.jupiter.api.BeforeEach;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -18,6 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
+@ActiveProfiles("test")
 class AuthControllerTest {
 
     @Autowired
@@ -26,6 +33,28 @@ class AuthControllerTest {
     private MemberRepository memberRepository;
     @Autowired
     private JwtUtil jwtUtil;
+
+    // 시큐리티 우회용 MockUser 적용
+    @BeforeEach
+    void setup() {
+        // 필요한 경우 테스트 데이터 자동 주입
+    }
+
+    // 테스트 환경용 JwtUtil Bean 등록
+    @TestConfiguration
+    static class JwtUtilTestConfig {
+        @Bean
+        public JwtUtil jwtUtil() {
+            return new JwtUtil("testtesttesttesttesttesttesttest12");
+        }
+    }
+    @TestConfiguration
+    static class SecurityConfig {
+        @Bean
+        public WebSecurityCustomizer webSecurityCustomizer() {
+            return (web) -> web.ignoring().requestMatchers("/**");
+        }
+    }
 
     @Test
     @DisplayName("회원가입 성공")

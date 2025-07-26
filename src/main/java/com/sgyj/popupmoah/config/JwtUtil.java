@@ -21,6 +21,14 @@ public class JwtUtil {
         }
         this.key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
     }
+
+    // 테스트용 생성자: secretKey를 직접 주입
+    public JwtUtil(String secretKey) {
+        if (secretKey == null || secretKey.isEmpty()) {
+            throw new IllegalStateException("secretKey must not be null or empty for test.");
+        }
+        this.key = Keys.hmacShaKeyFor(secretKey.getBytes());
+    }
     /**
      * username을 subject로 JWT 토큰을 생성한다.
      * @param username 사용자명

@@ -9,6 +9,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.junit.jupiter.api.BeforeEach;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,6 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
+@ActiveProfiles("test")
 class CategorySaveControllerTest {
 
     @Autowired
@@ -26,6 +32,20 @@ class CategorySaveControllerTest {
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    // 시큐리티 우회용 MockUser 적용
+    @BeforeEach
+    void setup() {
+        // 필요한 경우 테스트 데이터 자동 주입
+    }
+
+    @TestConfiguration
+    static class SecurityConfig {
+        @Bean
+        public WebSecurityCustomizer webSecurityCustomizer() {
+            return (web) -> web.ignoring().requestMatchers("/**");
+        }
+    }
 
     @Test
     @DisplayName("카테고리 등록 성공")

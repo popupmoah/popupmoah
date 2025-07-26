@@ -6,7 +6,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class JwtUtilTest {
 
-    private final JwtUtil jwtUtil = new JwtUtil();
+    // 테스트용 시크릿 키 (HS256은 32바이트 이상 필요)
+    private final JwtUtil jwtUtil = new JwtUtil("testtesttesttesttesttesttesttest12");
 
     @Test
     @DisplayName("JWT 토큰 생성 및 파싱, 검증")
