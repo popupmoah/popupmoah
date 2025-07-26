@@ -89,6 +89,6 @@ public class PopupStoreCsvImportService {
      */
     @Scheduled(cron = "0 0 23 L * ?")
     public void scheduledImport() {
-        importFromCsv("popupstores.csv");
+        importFromCsv(csvFilePath);
     }
 } 
