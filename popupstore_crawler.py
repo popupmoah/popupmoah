@@ -80,9 +80,11 @@ def main():
         results = parser_func(site["base_url"])
         all_results.extend(results)
     # 결과가 있으면 CSV로 저장 (startDate, endDate 포함)
+    # Define fallback fieldnames for CSV
+    fieldnames = ["name", "description", "imageUrl", "sourceUrl", "category", "startDate", "endDate"]
     if all_results:
         with open("popupstores.csv", "w", newline="", encoding="utf-8") as f:
-            writer = csv.DictWriter(f, fieldnames=all_results[0].keys())
+            writer = csv.DictWriter(f, fieldnames=all_results[0].keys() if all_results else fieldnames)
             writer.writeheader()
             writer.writerows(all_results)
         print("popupstores.csv 파일로 저장 완료!")
