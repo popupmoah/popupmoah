@@ -38,6 +38,7 @@ public class Comment {
     private LocalDateTime updatedAt;
 
     @Column(nullable = false)
+    @Builder.Default
     private boolean deleted = false;
 
     @PrePersist
