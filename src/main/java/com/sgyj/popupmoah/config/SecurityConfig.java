@@ -24,8 +24,9 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> {
                 auth.requestMatchers("/h2-console/**", "/actuator/**")
                     .access((authentication, context) -> {
-                        String[] activeProfiles = context.getRequest().getServletContext()
-                            .getInitParameter("spring.profiles.active").split(",");
+                        String profilesParam = context.getRequest().getServletContext()
+                            .getInitParameter("spring.profiles.active");
+                        String[] activeProfiles = profilesParam != null ? profilesParam.split(",") : new String[0];
                         for (String profile : activeProfiles) {
                             if (profile.trim().equals("dev") || profile.trim().equals("test")) {
                                 return new AuthorizationDecision(true); // 허용
