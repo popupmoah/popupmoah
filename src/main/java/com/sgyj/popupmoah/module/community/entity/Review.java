@@ -1,16 +1,17 @@
 package com.sgyj.popupmoah.module.community.entity;
 
+import com.sgyj.popupmoah.infra.jpa.UpdatedEntity;
 import com.sgyj.popupmoah.module.popupstore.entity.PopupStore;
 import lombok.*;
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "review")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-public class Review {
+public class Review extends UpdatedEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,29 +21,28 @@ public class Review {
     @JoinColumn(name = "popup_store_id", nullable = false)
     private PopupStore popupStore;
 
-    @Column(nullable = false, length = 1000)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id", nullable = false)
+    private Member member;
+
+    @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
 
     @Column(nullable = false)
-    private String author;
+    private Integer rating;
 
-    @Column(nullable = false)
-    private int rating;
-
-    @Column(nullable = false)
-    private LocalDateTime createdAt;
-
-    @Column
-    private LocalDateTime updatedAt;
-
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
-    }
-
-    public void updateReview(String newContent, int newRating) {
+    /**
+     * 리뷰 업데이트
+     */
+    public void updateReview(String newContent, Integer newRating) {
         this.content = newContent;
         this.rating = newRating;
-        this.updatedAt = LocalDateTime.now();
+    }
+
+    /**
+     * 평점 유효성 검사
+     */
+    public boolean isValidRating() {
+        return rating != null && rating >= 1 && rating <= 5;
     }
 } 
