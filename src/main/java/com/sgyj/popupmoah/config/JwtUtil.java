@@ -11,13 +11,18 @@ import java.util.Date;
  */
 @Component
 public class JwtUtil {
-    private final String SECRET_KEY = System.getenv("JWT_SECRET_KEY");
+    private final String SECRET_KEY;
     private final long EXPIRATION = 1000 * 60 * 60; // 1시간
     private final Key key;
 
     public JwtUtil() {
-        if (SECRET_KEY == null || SECRET_KEY.isEmpty()) {
-            throw new IllegalStateException("JWT_SECRET_KEY environment variable is not set or is empty.");
+        // 개발 환경에서는 기본값 사용, 운영 환경에서는 환경 변수 사용
+        String envSecretKey = System.getenv("JWT_SECRET_KEY");
+        if (envSecretKey == null || envSecretKey.isEmpty()) {
+            // 개발 환경용 기본 시크릿 키 (운영 환경에서는 반드시 환경 변수로 설정)
+            this.SECRET_KEY = "dev-secret-key-for-jwt-token-generation-2024-popupmoah";
+        } else {
+            this.SECRET_KEY = envSecretKey;
         }
         this.key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
     }
