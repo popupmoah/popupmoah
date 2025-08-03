@@ -1,6 +1,7 @@
 package com.sgyj.popupmoah.module.community.service;
 
 import com.sgyj.popupmoah.module.community.entity.Comment;
+import com.sgyj.popupmoah.module.community.entity.Member;
 import com.sgyj.popupmoah.module.community.repository.CommentRepository;
 import com.sgyj.popupmoah.module.community.event.CommentCreatedEvent;
 import com.sgyj.popupmoah.module.popupstore.entity.PopupStore;
@@ -40,9 +41,10 @@ public class CommentService {
     public Comment createComment(Long popupStoreId, String author, String content) {
         PopupStore popupStore = popupStoreRepository.findById(popupStoreId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 팝업스토어입니다."));
+        // TODO: 실제 Member 엔티티를 사용하도록 수정 필요
         Comment comment = Comment.builder()
                 .popupStore(popupStore)
-                .author(author)
+                .member(null) // 임시로 null 설정
                 .content(content)
                 .build();
         // 댓글 생성 이벤트 발행
@@ -62,7 +64,7 @@ public class CommentService {
     public Comment updateComment(Long commentId, String newContent, String currentUser) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 댓글입니다."));
-        if (!comment.getAuthor().equals(currentUser)) {
+        if (!comment.getMember().getUsername().equals(currentUser)) {
             throw new SecurityException("수정 권한이 없습니다.");
         }
         comment.updateContent(newContent);
@@ -79,7 +81,7 @@ public class CommentService {
     public void deleteComment(Long commentId, String currentUser) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 댓글입니다."));
-        if (!comment.getAuthor().equals(currentUser)) {
+        if (!comment.getMember().getUsername().equals(currentUser)) {
             throw new SecurityException("삭제 권한이 없습니다.");
         }
         if (comment.isDeleted()) {
@@ -128,10 +130,11 @@ public class CommentService {
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 팝업스토어입니다."));
         Comment parent = commentRepository.findByIdForUpdate(parentCommentId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 부모 댓글입니다."));
+        // TODO: 실제 Member 엔티티를 사용하도록 수정 필요
         Comment reply = Comment.builder()
                 .popupStore(popupStore)
                 .parent(parent)
-                .author(author)
+                .member(null) // 임시로 null 설정
                 .content(content)
                 .build();
         return commentRepository.save(reply);

@@ -30,9 +30,14 @@ public class CategorySaveService {
         if (!violations.isEmpty()) {
             throw new IllegalArgumentException(violations.iterator().next().getMessage());
         }
-        Category category = Category.of(command.getName(), command.getDescription(), command.getSortOrder(), command.isActive());
+        Category category = Category.builder()
+                .name(command.getName())
+                .description(command.getDescription())
+                .sortOrder(command.getSortOrder())
+                .active(command.getActive())
+                .build();
         Category savedCategory = categoryRepository.save(category);
-        return RegisteredCategory.of(savedCategory.getId(), savedCategory.getName(), savedCategory.getDescription(), savedCategory.getSortOrder(), savedCategory.isActive());
+        return RegisteredCategory.of(savedCategory.getId(), savedCategory.getName(), savedCategory.getDescription(), savedCategory.getSortOrder(), savedCategory.getActive());
     }
 
     /**
@@ -43,9 +48,9 @@ public class CategorySaveService {
     public RegisteredCategory updateCategory(Long categoryId, CategorySaveCommand command) {
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 카테고리가 존재하지 않습니다. id=" + categoryId));
-        category.update(command.getName(), command.getDescription(), command.getSortOrder(), command.isActive());
+        category.update(command.getName(), command.getDescription(), command.getSortOrder(), command.getActive());
         Category updatedCategory = categoryRepository.save(category);
-        return RegisteredCategory.of(updatedCategory.getId(), updatedCategory.getName(), updatedCategory.getDescription(), updatedCategory.getSortOrder(), updatedCategory.isActive());
+        return RegisteredCategory.of(updatedCategory.getId(), updatedCategory.getName(), updatedCategory.getDescription(), updatedCategory.getSortOrder(), updatedCategory.getActive());
     }
 
     /**
@@ -74,7 +79,7 @@ public class CategorySaveService {
     @Cacheable(value = "categories", key = "#active", unless = "#result == null")
     public List<Category> getAllCategoriesByActive(Boolean active) {
         return categoryRepository.findAll().stream()
-                .filter(c -> active == null || c.isActive() == active)
+                .filter(c -> active == null || c.getActive() == active)
                 .toList();
     }
 }

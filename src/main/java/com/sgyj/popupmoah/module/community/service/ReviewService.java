@@ -17,12 +17,13 @@ public class ReviewService {
     private final PopupStoreRepository popupStoreRepository;
 
     @Transactional
-    public Review createReview(Long popupStoreId, String author, String content, int rating) {
+    public Review createReview(Long popupStoreId, String author, String content, Integer rating) {
         PopupStore popupStore = popupStoreRepository.findById(popupStoreId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 팝업스토어입니다."));
+        // TODO: 실제 Member 엔티티를 사용하도록 수정 필요
         Review review = Review.builder()
                 .popupStore(popupStore)
-                .author(author)
+                .member(null) // 임시로 null 설정
                 .content(content)
                 .rating(rating)
                 .build();

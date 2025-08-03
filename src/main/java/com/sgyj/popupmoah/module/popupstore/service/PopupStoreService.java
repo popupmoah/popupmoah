@@ -3,7 +3,9 @@ package com.sgyj.popupmoah.module.popupstore.service;
 import com.sgyj.popupmoah.module.popupstore.controller.request.CreatePopupStoreRequest;
 import com.sgyj.popupmoah.module.popupstore.dto.PopupStoreDto;
 import com.sgyj.popupmoah.module.popupstore.entity.PopupStore;
+import com.sgyj.popupmoah.module.popupstore.entity.PopupStoreImage;
 import com.sgyj.popupmoah.module.popupstore.repository.PopupStoreRepository;
+import com.sgyj.popupmoah.module.popupstore.repository.PopupStoreImageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,7 @@ import java.util.List;
 public class PopupStoreService {
 
     private final PopupStoreRepository popupStoreRepository;
+    private final PopupStoreImageRepository popupStoreImageRepository;
 
     /**
      * 팝업 스토어 등록

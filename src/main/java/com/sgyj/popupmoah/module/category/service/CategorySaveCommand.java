@@ -21,12 +21,12 @@ public class CategorySaveCommand {
     /**
      * 카테고리 정렬 순서
      */
-    private final float sortOrder;
+    private final Double sortOrder;
 
     /**
      * 카테고리 활성화 상태
      */
-    private final boolean active;
+    private final Boolean active;
 
     /**
      * 카테고리 저장 명령 객체 생성 팩토리 메서드
@@ -37,11 +37,11 @@ public class CategorySaveCommand {
      * @param active      카테고리 활성화 상태
      * @return CategorySaveCommand 객체
      */
-    public static CategorySaveCommand of(String name, String description, Float sortOrder, Boolean active) {
+    public static CategorySaveCommand of(String name, String description, Double sortOrder, Boolean active) {
         return CategorySaveCommand.builder()
                 .name(name)
                 .description(description)
-                .sortOrder(sortOrder != null ? sortOrder : 1.0f) // 기본 정렬 순서
+                .sortOrder(sortOrder != null ? sortOrder : 1.0) // 기본 정렬 순서
                 .active(active != null ? active : true) // 기본 활성화 상태
                 .build();
     }
