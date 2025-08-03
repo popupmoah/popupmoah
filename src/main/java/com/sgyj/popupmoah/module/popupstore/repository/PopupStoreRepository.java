@@ -20,5 +20,4 @@ public interface PopupStoreRepository extends JpaRepository<PopupStore, Long> {
      */
     Optional<PopupStore> findByName(String name);
     
-
 }
