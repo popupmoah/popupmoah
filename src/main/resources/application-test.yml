@@ -1,0 +1,48 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  h2:
+    console:
+      enabled: false
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+        format_sql: false
+  flyway:
+    enabled: false
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      timeout: 2000ms
+
+server:
+  port: 0
+
+# 테스트 환경에서는 로깅 레벨을 낮춤
+logging:
+  level:
+    root: WARN
+    com.sgyj.popupmoah: DEBUG
+  pattern:
+    console: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+
+# 테스트 환경에서는 AWS S3 비활성화
+cloud:
+  aws:
+    s3:
+      bucket: test-bucket
+      access-key: test-key
+      secret-key: test-secret
+      region: ap-northeast-2
+
+# 테스트용 JWT 설정
+jwt:
+  secret-key: test-secret-key-for-testing-purposes-only 
