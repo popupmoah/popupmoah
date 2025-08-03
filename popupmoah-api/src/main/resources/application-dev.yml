@@ -1,0 +1,16 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/popupmoah_dev
+    username: postgres
+    password: postgres
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+  flyway:
+    enabled: true
+    clean-disabled: false
+
+logging:
+  level:
+    com.sgyj.popupmoah: DEBUG
