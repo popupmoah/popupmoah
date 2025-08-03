@@ -60,7 +60,7 @@ class CommentServiceTest {
     @Test
     void 댓글_수정_성공() {
         when(commentRepository.findById(1L)).thenReturn(Optional.of(comment));
-        Comment updated = commentService.updateComment(1L, "수정된 내용");
+        Comment updated = commentService.updateComment(1L, "수정된 내용", "작성자");
         assertThat(updated.getContent()).isEqualTo("수정된 내용");
         assertThat(updated.getUpdatedAt()).isNotNull();
     }
@@ -68,14 +68,14 @@ class CommentServiceTest {
     @Test
     void 댓글_수정_실패_존재하지_않는_댓글() {
         when(commentRepository.findById(1L)).thenReturn(Optional.empty());
-        assertThrows(IllegalArgumentException.class, () -> commentService.updateComment(1L, "수정된 내용"));
+        assertThrows(IllegalArgumentException.class, () -> commentService.updateComment(1L, "수정된 내용", "작성자"));
     }
 
     @Test
     void 댓글_삭제_성공() {
-        doNothing().when(commentRepository).deleteById(1L);
-        commentService.deleteComment(1L);
-        verify(commentRepository, times(1)).deleteById(1L);
+        when(commentRepository.findById(1L)).thenReturn(Optional.of(comment));
+        commentService.deleteComment(1L, "작성자");
+        verify(commentRepository, times(1)).save(any(Comment.class));
     }
 
     @Test
