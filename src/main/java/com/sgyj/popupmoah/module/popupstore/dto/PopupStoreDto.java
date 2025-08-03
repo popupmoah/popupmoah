@@ -3,6 +3,8 @@ package com.sgyj.popupmoah.module.popupstore.dto;
 import com.sgyj.popupmoah.module.popupstore.entity.PopupStore;
 import lombok.Getter;
 
+import java.util.List;
+
 @Getter
 public class PopupStoreDto {
 
@@ -17,6 +19,8 @@ public class PopupStoreDto {
     private String storeNumber;
     private String email;
     private String website;
+    private String representativeImageUrl;
+    private List<String> imageUrls;
 
     // Getters and Setters
 
@@ -28,8 +32,8 @@ public class PopupStoreDto {
         dto.startDate = popupStore.getStartDate().toString();
         dto.endDate = popupStore.getEndDate().toString();
         dto.reservationDate = popupStore.getReservationDate().toString();
-        dto.latitude = popupStore.getLocation().getLatitude();
-        dto.longitude = popupStore.getLocation().getLongitude();
+        dto.latitude = popupStore.getLatitude();
+        dto.longitude = popupStore.getLongitude();
         dto.storeNumber = popupStore.getStoreNumber();
         dto.email = popupStore.getEmail();
         dto.website = popupStore.getWebsite();

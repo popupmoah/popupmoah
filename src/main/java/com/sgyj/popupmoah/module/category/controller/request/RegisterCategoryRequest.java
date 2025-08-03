@@ -31,7 +31,7 @@ public class RegisterCategoryRequest {
         return CategorySaveCommand.builder()
                 .name(name)
                 .description(description)
-                .sortOrder(sortOrder != null ? sortOrder : 0.0f) // 기본값 설정
+                .sortOrder(sortOrder != null ? sortOrder : 0.0) // 기본값 설정
                 .active(active != null ? active : true) // 기본값 설정
                 .build();
     }

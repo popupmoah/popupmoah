@@ -23,18 +23,18 @@ public class RegisteredCategory {
     /**
      * 카테고리 정렬 순서
      */
-    private final float sortOrder;
+    private final Double sortOrder;
 
     /**
      * 카테고리 활성화 상태
      */
-    private final boolean active;
+    private final Boolean active;
 
-    public static RegisteredCategory of(Long id, String name, String description, float sortOrder, boolean active) {
+    public static RegisteredCategory of(Long id, String name, String description, Double sortOrder, Boolean active) {
         return new RegisteredCategory(id, name, description, sortOrder, active);
     }
 
-    private RegisteredCategory(Long id, String name, String description, float sortOrder, boolean active) {
+    private RegisteredCategory(Long id, String name, String description, Double sortOrder, Boolean active) {
         this.id = id;
         this.name = name;
         this.description = description;

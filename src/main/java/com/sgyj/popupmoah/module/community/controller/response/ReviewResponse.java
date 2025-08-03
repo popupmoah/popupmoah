@@ -20,7 +20,7 @@ public class ReviewResponse {
         return ReviewResponse.builder()
                 .id(review.getId())
                 .popupStoreId(review.getPopupStore().getId())
-                .author(review.getAuthor())
+                .author(review.getMember().getUsername())
                 .content(review.getContent())
                 .rating(review.getRating())
                 .createdAt(review.getCreatedAt())

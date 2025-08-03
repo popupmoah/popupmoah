@@ -1,6 +1,5 @@
 package com.sgyj.popupmoah.module.popupstore.controller.request;
 
-import com.sgyj.popupmoah.infra.jpa.Location;
 import com.sgyj.popupmoah.module.popupstore.entity.PopupStore;
 import lombok.Getter;
 
@@ -59,7 +58,8 @@ public class CreatePopupStoreRequest {
                 .startDate(startDate)
                 .endDate(endDate)
                 .reservationDate(reservationDate)
-                .location(Location.of(latitude, longitude))
+                .latitude(latitude)
+                .longitude(longitude)
                 .storeNumber(storeNumber)
                 .email(email)
                 .website(website)
