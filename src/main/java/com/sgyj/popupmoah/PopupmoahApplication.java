@@ -11,7 +11,7 @@ import org.springframework.scheduling.annotation.EnableAsync; // 비동기 활�
 @EnableJpaAuditing
 @EnableCaching // 스프링 캐시 활성화
 @EnableAsync // 스프링 비동기 활성화
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "com.sgyj.popupmoah")
 @EnableEncryptableProperties
 public class PopupmoahApplication {
 

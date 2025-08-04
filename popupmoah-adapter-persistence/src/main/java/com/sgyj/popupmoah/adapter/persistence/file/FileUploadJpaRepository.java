@@ -116,4 +116,11 @@ public interface FileUploadJpaRepository extends JpaRepository<FileUpload, Long>
      */
     @Query("SELECT f FROM FileUpload f WHERE f.uploadType = 'IMAGE' AND f.optimizedUrl IS NOT NULL")
     List<FileUpload> findImageFilesWithOptimized();
+
+    /**
+     * ID로 파일을 비활성화
+     */
+    @Modifying
+    @Query("UPDATE FileUpload f SET f.active = false WHERE f.id = :id")
+    void deactivateById(@Param("id") Long id);
 } 
