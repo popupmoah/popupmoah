@@ -3,9 +3,11 @@ package com.sgyj.popupmoah.infra.config.properties;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 
 @Getter
 @NoArgsConstructor
+@Component
 @ConfigurationProperties("spring.security.oauth2.client.registration")
 public class NaverRegistrationProperties {
 
