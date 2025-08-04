@@ -147,4 +147,51 @@ public class FileUpload extends CreatedEntity {
         this.imageWidth = width;
         this.imageHeight = height;
     }
+
+    /**
+     * 파일이 활성화되어 있는지 확인
+     */
+    public boolean isActive() {
+        return active != null && active;
+    }
+
+    /**
+     * 파일이 삭제되었는지 확인
+     */
+    public boolean isDeleted() {
+        return !isActive();
+    }
+
+    /**
+     * 파일 확장자가 이미지인지 확인
+     */
+    public boolean isImageExtension() {
+        if (fileExtension == null) {
+            return false;
+        }
+        String ext = fileExtension.toLowerCase();
+        return ext.equals("jpg") || ext.equals("jpeg") || ext.equals("png") || 
+               ext.equals("gif") || ext.equals("bmp") || ext.equals("webp");
+    }
+
+    /**
+     * 파일이 비디오인지 확인
+     */
+    public boolean isVideo() {
+        return uploadType == UploadType.VIDEO;
+    }
+
+    /**
+     * 파일이 오디오인지 확인
+     */
+    public boolean isAudio() {
+        return uploadType == UploadType.AUDIO;
+    }
+
+    /**
+     * 파일이 문서인지 확인
+     */
+    public boolean isDocument() {
+        return uploadType == UploadType.DOCUMENT;
+    }
 } 

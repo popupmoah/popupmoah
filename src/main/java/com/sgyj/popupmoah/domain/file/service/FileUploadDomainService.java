@@ -169,6 +169,15 @@ public class FileUploadDomainService implements FileUploadServicePort {
     public byte[] optimizeImageQuality(byte[] imageData, float quality) throws IOException {
         return imageOptimizationService.optimizeImage(imageData, quality);
     }
+
+    @Override
+    public byte[] resizeImage(String filePath, int width, int height) throws IOException {
+        // S3에서 파일 다운로드
+        byte[] imageData = s3FileService.downloadFile(filePath);
+        
+        // 이미지 리사이징
+        return imageOptimizationService.resizeImage(imageData, width, height);
+    }
     
     // Private helper methods
     

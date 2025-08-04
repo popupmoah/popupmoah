@@ -66,6 +66,11 @@ public interface FileUploadServicePort {
     byte[] resizeImage(String filePath, int width, int height) throws IOException;
     
     /**
+     * 이미지 리사이징을 수행합니다 (바이트 배열 기반).
+     */
+    byte[] resizeImage(byte[] imageData, int width, int height) throws IOException;
+    
+    /**
      * 썸네일을 생성합니다.
      */
     byte[] generateThumbnail(byte[] imageData, int width, int height) throws IOException;
