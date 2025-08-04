@@ -6,7 +6,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class JwtUtilTest {
 
-    private final JwtUtil jwtUtil = new JwtUtil();
+    private final JwtUtil jwtUtil = new JwtUtil("test-jwt-secret-key-for-testing-purposes-12345678901234567890");
 
     @Test
     @DisplayName("JWT 토큰 생성 및 파싱, 검증")

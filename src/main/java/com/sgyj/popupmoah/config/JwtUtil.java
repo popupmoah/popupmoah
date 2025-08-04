@@ -2,6 +2,7 @@ package com.sgyj.popupmoah.config;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import java.security.Key;
 import java.util.Date;
@@ -11,14 +12,19 @@ import java.util.Date;
  */
 @Component
 public class JwtUtil {
-    private final String SECRET_KEY = System.getenv("JWT_SECRET_KEY");
+    private final String SECRET_KEY;
     private final long EXPIRATION = 1000 * 60 * 60; // 1시간
     private final Key key;
 
-    public JwtUtil() {
-        if (SECRET_KEY == null || SECRET_KEY.isEmpty()) {
-            throw new IllegalStateException("JWT_SECRET_KEY environment variable is not set or is empty.");
+    public JwtUtil(@Value("${test.jwt.secret-key:test-jwt-secret-key-for-testing-purposes-12345678901234567890}") String testSecretKey) {
+        // 테스트 환경에서는 설정 파일의 값을 우선 사용, 그 외에는 환경 변수 사용
+        String secretKey = testSecretKey != null && !testSecretKey.isEmpty() ? testSecretKey : System.getenv("JWT_SECRET_KEY");
+        
+        if (secretKey == null || secretKey.isEmpty()) {
+            throw new IllegalStateException("JWT_SECRET_KEY environment variable or test.jwt.secret-key property is not set or is empty.");
         }
+        
+        this.SECRET_KEY = secretKey;
         this.key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
     }
     /**

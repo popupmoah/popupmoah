@@ -13,6 +13,7 @@ import org.springframework.scheduling.annotation.EnableAsync; // 비동기 활�
 @EnableAsync // 스프링 비동기 활성화
 @SpringBootApplication
 @EnableEncryptableProperties
+@ConfigurationPropertiesScan
 public class PopupmoahApplication {
 
     public static void main(String[] args) {
