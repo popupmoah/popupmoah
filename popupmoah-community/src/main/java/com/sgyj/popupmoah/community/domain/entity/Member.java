@@ -1,6 +1,6 @@
 package com.sgyj.popupmoah.domain.community.entity;
 
-import com.sgyj.popupmoah.domain.common.UpdatedEntity;
+import com.sgyj.popupmoah.shared.entity.UpdatedEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
