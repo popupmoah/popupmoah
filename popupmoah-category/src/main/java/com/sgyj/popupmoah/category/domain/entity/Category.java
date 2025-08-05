@@ -44,7 +44,7 @@ public class Category extends UpdatedEntity {
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     @Builder.Default
-    private List<com.sgyj.popupmoah.domain.popupstore.entity.PopupStore> popupStores = new ArrayList<>();
+    private List<PopupStore> popupStores = new ArrayList<>();
 
     public void update(String name, String description, Double sortOrder, Boolean active) {
         this.name = name;
