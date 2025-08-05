@@ -1,7 +1,7 @@
 package com.sgyj.popupmoah.common.exception;
 
 import com.sgyj.popupmoah.common.response.ApiResponse;
-import com.sgyj.popupmoah.core.exception.BusinessException;
+import com.sgyj.popupmoah.shared.exception.BusinessException;
 import com.sgyj.popupmoah.core.exception.ResourceNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
