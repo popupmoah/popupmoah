@@ -98,6 +98,15 @@
                     <span class="text-gray-700">{{ store.latitude }}, {{ store.longitude }}</span>
                   </div>
                 </div>
+
+                <!-- 지도 컴포넌트 추가 -->
+                <div v-if="store.latitude && store.longitude" class="mt-4">
+                  <PopupStoreMap :store="store" :height="300" :show-controls="true" :zoom="16" />
+                </div>
+                <div v-else class="mt-4 p-4 bg-gray-50 rounded-lg text-center">
+                  <q-icon name="map" size="2rem" color="grey-4" />
+                  <p class="text-gray-500 mt-2">위치 정보가 없습니다</p>
+                </div>
               </q-card-section>
             </q-card>
           </div>
@@ -222,12 +231,15 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useQuasar } from 'quasar'
 import { usePopupStore } from '@/stores/popupStore'
 import type { PopupStore } from '@/types'
+import PopupStoreMap from '@/components/popupstore/PopupStoreMap.vue'
 
 const route = useRoute()
 const router = useRouter()
 const popupStore = usePopupStore()
+const $q = useQuasar()
 
 const store = computed(() => popupStore.currentStore)
 const loading = computed(() => popupStore.loading)
@@ -243,6 +255,11 @@ const fetchStore = async () => {
       await popupStore.fetchStoreById(storeId)
     } catch (error) {
       console.error('Failed to fetch store:', error)
+      $q.notify({
+        type: 'negative',
+        message: '팝업스토어 정보를 불러오는데 실패했습니다.',
+        position: 'top',
+      })
     }
   }
 }
@@ -279,9 +296,21 @@ const deleteStore = async () => {
     try {
       await popupStore.deleteStore(store.value.id)
       showDeleteDialog.value = false
+
+      $q.notify({
+        type: 'positive',
+        message: '팝업스토어가 성공적으로 삭제되었습니다.',
+        position: 'top',
+      })
+
       router.push('/popupstores')
     } catch (error) {
       console.error('Failed to delete store:', error)
+      $q.notify({
+        type: 'negative',
+        message: '팝업스토어 삭제에 실패했습니다.',
+        position: 'top',
+      })
     }
   }
 }
@@ -301,20 +330,34 @@ const shareStore = () => {
   } else {
     // Fallback: copy URL to clipboard
     navigator.clipboard.writeText(window.location.href)
-    // Show notification
-    // You can use Quasar's Notify plugin here
+    $q.notify({
+      type: 'positive',
+      message: '링크가 클립보드에 복사되었습니다.',
+      position: 'top',
+    })
   }
 }
 
 const toggleFavorite = () => {
   // TODO: Implement favorite functionality
   console.log('Toggle favorite')
+  $q.notify({
+    type: 'info',
+    message: '찜하기 기능은 준비 중입니다.',
+    position: 'top',
+  })
 }
 
 const openDirections = () => {
   if (store.value?.latitude && store.value?.longitude) {
     const url = `https://www.google.com/maps/dir/?api=1&destination=${store.value.latitude},${store.value.longitude}`
     window.open(url, '_blank')
+  } else {
+    $q.notify({
+      type: 'warning',
+      message: '위치 정보가 없어 길찾기를 사용할 수 없습니다.',
+      position: 'top',
+    })
   }
 }
 

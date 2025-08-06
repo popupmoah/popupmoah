@@ -72,6 +72,32 @@
         />
       </div>
 
+      <!-- Pagination -->
+      <div v-if="pagination.totalPages > 1" class="flex justify-center mt-8">
+        <q-pagination
+          v-model="pagination.currentPage"
+          :max="pagination.totalPages"
+          :max-pages="5"
+          boundary-numbers
+          @update:model-value="handlePageChange"
+        />
+      </div>
+
+      <!-- Page Size Selector -->
+      <div class="flex justify-between items-center mt-4">
+        <div class="text-sm text-gray-600">총 {{ pagination.totalElements }}개의 팝업스토어</div>
+        <div class="flex items-center space-x-2">
+          <span class="text-sm text-gray-600">페이지당:</span>
+          <q-select
+            v-model="pagination.size"
+            :options="[6, 12, 24, 48]"
+            dense
+            outlined
+            @update:model-value="handlePageSizeChange"
+          />
+        </div>
+      </div>
+
       <!-- Empty State -->
       <div v-if="filteredStores.length === 0 && !loading.isLoading" class="text-center py-12">
         <q-icon name="store" size="4rem" color="grey-4" />
@@ -97,7 +123,7 @@ import PopupStoreCard from '@/components/popupstore/PopupStoreCard.vue'
 const router = useRouter()
 const popupStore = usePopupStore()
 
-const { stores, loading, fetchStores } = popupStore
+const { stores, loading, fetchStores, pagination, changePage, changePageSize } = popupStore
 
 // Filters
 const selectedCategory = ref('')
@@ -143,6 +169,14 @@ const filteredStores = computed(() => {
 
 const viewStore = (id: number) => {
   router.push(`/popupstores/${id}`)
+}
+
+const handlePageChange = (page: number) => {
+  changePage(page)
+}
+
+const handlePageSizeChange = (size: number) => {
+  changePageSize(size)
 }
 
 onMounted(() => {
