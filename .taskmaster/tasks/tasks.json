@@ -210,16 +210,106 @@
         "id": 8,
         "title": "팝업스토어 관리 화면 구현 (Vue3 + Tailwind CSS)",
         "description": "팝업스토어 목록, 상세, 등록, 수정 페이지 및 컴포넌트 구현",
-        "status": "in-progress",
-        "priority": "high",
+        "status": "done",
         "dependencies": [
           "3",
           "7"
         ],
-        "details": "팝업스토어 CRUD 화면, 이미지 업로드 기능, 반응형 디자인, 사용자 친화적 UI/UX 구현",
-        "testStrategy": "컴포넌트 렌더링 테스트, 사용자 인터랙션 테스트, 반응형 디자인 검증",
-        "createdAt": "2024-01-01T00:00:00Z",
-        "updatedAt": "2024-01-01T00:00:00Z"
+        "priority": "high",
+        "details": "팝업스토어 CRUD 화면, 이미지 업로드 기능, 반응형 디자인, 사용자 친화적 UI/UX 구현. 주요 컴포넌트로 PopupStoresView.vue, PopupStoreDetailView.vue, PopupStoreFormView.vue, PopupStoreCard.vue가 있으며, Pinia 스토어(popupStore.ts)와 타입 정의(types/index.ts)가 구현되어 있음.",
+        "testStrategy": "컴포넌트 렌더링 테스트, 사용자 인터랙션 테스트, 반응형 디자인 검증, 이미지 업로드 기능 테스트, 페이지네이션 기능 테스트, 지도 연동 기능 테스트",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "기본 컴포넌트 구현",
+            "description": "팝업스토어 목록, 상세, 등록/수정 화면 및 카드 컴포넌트 구현",
+            "status": "done",
+            "dependencies": [],
+            "details": "",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Pinia 스토어 및 타입 정의",
+            "description": "팝업스토어 관련 Pinia 스토어(popupStore.ts) 및 타입 정의(types/index.ts) 구현",
+            "status": "done",
+            "dependencies": [],
+            "details": "",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "CRUD 기능 구현",
+            "description": "팝업스토어 생성, 조회, 수정, 삭제 기능 구현",
+            "status": "done",
+            "dependencies": [],
+            "details": "",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "검색 및 필터링 기능",
+            "description": "카테고리, 상태별 검색 및 필터링 기능 구현",
+            "status": "done",
+            "dependencies": [],
+            "details": "",
+            "testStrategy": ""
+          },
+          {
+            "id": 5,
+            "title": "반응형 디자인 적용",
+            "description": "모바일, 태블릿, 데스크탑 등 다양한 화면 크기에 대응하는 반응형 디자인 적용",
+            "status": "done",
+            "dependencies": [],
+            "details": "",
+            "testStrategy": ""
+          },
+          {
+            "id": 6,
+            "title": "S3 이미지 업로드 API 연동",
+            "description": "Task 5에서 구현된 S3 파일 업로드/다운로드 API와 연동하여 실제 이미지 업로드 기능 구현",
+            "status": "done",
+            "dependencies": [],
+            "details": "",
+            "testStrategy": ""
+          },
+          {
+            "id": 7,
+            "title": "지도 연동 기능 강화",
+            "description": "팝업스토어 위치 정보를 지도에 표시하고 관리할 수 있는 기능 강화",
+            "status": "done",
+            "dependencies": [],
+            "details": "",
+            "testStrategy": ""
+          },
+          {
+            "id": 8,
+            "title": "페이지네이션 구현",
+            "description": "팝업스토어 목록 화면에 페이지네이션 기능 추가",
+            "status": "done",
+            "dependencies": [],
+            "details": "",
+            "testStrategy": ""
+          },
+          {
+            "id": 9,
+            "title": "에러 처리 및 사용자 피드백 개선",
+            "description": "API 요청 실패, 유효성 검사 등에 대한 에러 처리 및 사용자 피드백 메커니즘 개선",
+            "status": "done",
+            "dependencies": [],
+            "details": "",
+            "testStrategy": ""
+          },
+          {
+            "id": 10,
+            "title": "접근성 개선",
+            "description": "ARIA 속성 추가, 키보드 네비게이션 지원 등 웹 접근성 표준을 준수하도록 개선",
+            "status": "done",
+            "dependencies": [],
+            "details": "",
+            "testStrategy": ""
+          }
+        ]
       },
       {
         "id": 9,
@@ -453,7 +543,7 @@
       "updatedAt": "2024-01-01T00:00:00Z",
       "created": "2025-08-03T23:49:27.405Z",
       "description": "Tasks for master context",
-      "updated": "2025-08-05T15:24:08.362Z"
+      "updated": "2025-08-06T03:19:13.941Z"
     }
   }
 }
