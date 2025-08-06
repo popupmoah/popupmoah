@@ -1,0 +1,22 @@
+dependencies {
+    // Module dependencies
+    implementation project(':popupmoah-core')
+    implementation project(':popupmoah-popupstore-domain')
+    
+    // Spring Boot Starters
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    
+    // Lombok
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+}
+
+// Disable bootJar for library modules
+bootJar {
+    enabled = false
+}
+
+jar {
+    enabled = true
+} 

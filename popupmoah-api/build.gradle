@@ -1,12 +1,19 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.5.0'
+    id 'io.spring.dependency-management' version '1.1.7'
+}
+
 dependencies {
-    // Module dependencies
-    implementation project(':popupmoah-core')
-    implementation project(':popupmoah-common')
-    implementation project(':popupmoah-domain')
-    implementation project(':popupmoah-application')
-    implementation project(':popupmoah-infrastructure')
-    implementation project(':popupmoah-adapter-web')
-    implementation project(':popupmoah-adapter-persistence')
+    // Shared and infrastructure modules
+    implementation project(':popupmoah-shared')
+    implementation project(':popupmoah-infrastructure-common')
+    
+    // Domain-specific modules
+    implementation project(':popupmoah-popupstore')
+    implementation project(':popupmoah-category')
+    implementation project(':popupmoah-file')
+    implementation project(':popupmoah-community')
     
     // Spring Boot Starters
     implementation 'org.springframework.boot:spring-boot-starter-web'

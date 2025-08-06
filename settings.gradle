@@ -1,1 +1,20 @@
 rootProject.name = 'popupmoah'
+
+include 'popupmoah-api'
+include 'popupmoah-core'
+include 'popupmoah-common'
+include 'popupmoah-domain'
+include 'popupmoah-application'
+include 'popupmoah-infrastructure'
+include 'popupmoah-adapter-web'
+include 'popupmoah-adapter-persistence'
+include 'popupmoah-shared'
+
+// Domain-specific modules
+include 'popupmoah-popupstore'
+include 'popupmoah-category'
+include 'popupmoah-file'
+include 'popupmoah-community'
+
+// Infrastructure modules
+include 'popupmoah-infrastructure-common'

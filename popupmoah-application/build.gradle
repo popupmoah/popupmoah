@@ -1,12 +1,23 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.5.0'
+    id 'io.spring.dependency-management' version '1.1.7'
+}
+
 dependencies {
-    // Module dependencies
-    implementation project(':popupmoah-core')
-    implementation project(':popupmoah-common')
-    implementation project(':popupmoah-domain')
+    // Shared module dependency
+    implementation project(':popupmoah-shared')
     
     // Spring Boot Starters
     implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+    
+    // Lombok
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    
+    // Testing
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
 // Disable bootJar for library modules

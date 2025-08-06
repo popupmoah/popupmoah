@@ -1,168 +1,190 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-
-export interface PopupStore {
-  id: number
-  name: string
-  description: string
-  location: string
-  period: string
-  rating: number
-  category: string
-  status: string
-  latitude?: number
-  longitude?: number
-  images?: string[]
-}
+import { apiClient, API_ENDPOINTS } from '@/config/api'
+import type {
+  PopupStore,
+  CreatePopupStoreRequest,
+  UpdatePopupStoreRequest,
+  ApiResponse,
+  PaginatedResponse,
+  SearchParams,
+  LoadingState,
+} from '@/types'
 
 export const usePopupStore = defineStore('popupStore', () => {
+  // State
   const stores = ref<PopupStore[]>([])
-  const loading = ref(false)
-  const error = ref<string | null>(null)
+  const currentStore = ref<PopupStore | null>(null)
+  const loading = ref<LoadingState>({
+    isLoading: false,
+    error: null,
+  })
 
   // Computed
-  const activeStores = computed(() => 
-    stores.value.filter(store => store.status === '진행중')
-  )
+  const activeStores = computed(() => stores.value.filter((store) => store.status === '진행중'))
 
-  const storesByCategory = computed(() => (category: string) =>
-    stores.value.filter(store => store.category === category)
+  const storesByCategory = computed(
+    () => (categoryId: number) => stores.value.filter((store) => store.categoryId === categoryId),
   )
 
   const topRatedStores = computed(() =>
-    stores.value
-      .sort((a, b) => b.rating - a.rating)
-      .slice(0, 5)
+    stores.value.sort((a, b) => b.rating - a.rating).slice(0, 5),
+  )
+
+  const storesByStatus = computed(
+    () => (status: string) => stores.value.filter((store) => store.status === status),
   )
 
   // Actions
-  async function fetchStores() {
-    loading.value = true
-    error.value = null
+  async function fetchStores(params?: SearchParams) {
+    loading.value.isLoading = true
+    loading.value.error = null
+
     try {
-      // 실제 API 호출 로직 (예: axios.get('/api/popupstores'))
-      // 현재는 더미 데이터 사용
-      const dummyData: PopupStore[] = [
-        {
-          id: 1,
-          name: '성수동 팝업스토어 1',
-          description: '힙한 성수동의 최신 팝업스토어입니다.',
-          location: '서울 성동구 성수동',
-          period: '2023.10.01 - 2023.10.31',
-          rating: 4.5,
-          category: '패션',
-          status: '진행중',
-          images: ['https://via.placeholder.com/300x200?text=PopupStore1']
-        },
-        {
-          id: 2,
-          name: '강남역 팝업스토어 2',
-          description: '강남역 근처에서 열리는 특별한 팝업스토어.',
-          location: '서울 강남구 역삼동',
-          period: '2023.11.01 - 2023.11.15',
-          rating: 4.8,
-          category: '식품',
-          status: '예정',
-          images: ['https://via.placeholder.com/300x200?text=PopupStore2']
-        },
-        {
-          id: 3,
-          name: '홍대 팝업스토어 3',
-          description: '젊음의 거리 홍대에서 만나는 새로운 경험.',
-          location: '서울 마포구 서교동',
-          period: '2023.09.15 - 2023.10.10',
-          rating: 4.2,
-          category: '뷰티',
-          status: '종료',
-          images: ['https://via.placeholder.com/300x200?text=PopupStore3']
-        },
-        {
-          id: 4,
-          name: '이태원 팝업스토어 4',
-          description: '다양한 문화가 공존하는 이태원의 팝업.',
-          location: '서울 용산구 이태원동',
-          period: '2023.10.20 - 2023.11.20',
-          rating: 4.7,
-          category: '라이프스타일',
-          status: '진행중',
-          images: ['https://via.placeholder.com/300x200?text=PopupStore4']
-        },
-        {
-          id: 5,
-          name: '명동 팝업스토어 5',
-          description: '쇼핑의 중심 명동에서 만나는 특별한 브랜드.',
-          location: '서울 중구 명동',
-          period: '2023.11.05 - 2023.11.30',
-          rating: 4.9,
-          category: '패션',
-          status: '예정',
-          images: ['https://via.placeholder.com/300x200?text=PopupStore5']
-        }
-      ]
-      stores.value = dummyData
-    } catch (err: any) {
-      error.value = err.message || 'Failed to fetch popup stores'
+      const response = await apiClient.get<ApiResponse<PaginatedResponse<PopupStore>>>(
+        API_ENDPOINTS.POPUPSTORES,
+        { params },
+      )
+      stores.value = response.data.data.content
+    } catch (error: any) {
+      loading.value.error =
+        error.response?.data?.message || '팝업스토어 목록을 불러오는데 실패했습니다.'
+      console.error('Error fetching stores:', error)
     } finally {
-      loading.value = false
+      loading.value.isLoading = false
     }
   }
 
-  async function addStore(newStore: PopupStore) {
-    loading.value = true
-    error.value = null
+  async function fetchStoreById(id: number) {
+    loading.value.isLoading = true
+    loading.value.error = null
+
     try {
-      // 실제 API 호출 로직 (예: axios.post('/api/popupstores', newStore))
-      // 현재는 클라이언트 측에서만 추가
-      newStore.id = stores.value.length > 0 ? Math.max(...stores.value.map(s => s.id)) + 1 : 1
+      const response = await apiClient.get<ApiResponse<PopupStore>>(
+        API_ENDPOINTS.POPUPSTORE_BY_ID(id),
+      )
+      currentStore.value = response.data.data
+      return response.data.data
+    } catch (error: any) {
+      loading.value.error =
+        error.response?.data?.message || '팝업스토어 정보를 불러오는데 실패했습니다.'
+      console.error('Error fetching store:', error)
+      throw error
+    } finally {
+      loading.value.isLoading = false
+    }
+  }
+
+  async function createStore(storeData: CreatePopupStoreRequest) {
+    loading.value.isLoading = true
+    loading.value.error = null
+
+    try {
+      const response = await apiClient.post<ApiResponse<PopupStore>>(
+        API_ENDPOINTS.POPUPSTORES,
+        storeData,
+      )
+      const newStore = response.data.data
       stores.value.push(newStore)
-    } catch (err: any) {
-      error.value = err.message || 'Failed to add popup store'
+      return newStore
+    } catch (error: any) {
+      loading.value.error = error.response?.data?.message || '팝업스토어 생성에 실패했습니다.'
+      console.error('Error creating store:', error)
+      throw error
     } finally {
-      loading.value = false
+      loading.value.isLoading = false
     }
   }
 
-  async function updateStore(id: number, updatedStore: Partial<PopupStore>) {
-    loading.value = true
-    error.value = null
+  async function updateStore(id: number, storeData: UpdatePopupStoreRequest) {
+    loading.value.isLoading = true
+    loading.value.error = null
+
     try {
-      // 실제 API 호출 로직 (예: axios.put(`/api/popupstores/${id}`, updatedStore))
-      const index = stores.value.findIndex(store => store.id === id)
+      const response = await apiClient.put<ApiResponse<PopupStore>>(
+        API_ENDPOINTS.POPUPSTORE_BY_ID(id),
+        storeData,
+      )
+      const updatedStore = response.data.data
+
+      // 목록에서 업데이트
+      const index = stores.value.findIndex((store) => store.id === id)
       if (index !== -1) {
-        stores.value[index] = { ...stores.value[index], ...updatedStore }
-      } else {
-        throw new Error('Store not found')
+        stores.value[index] = updatedStore
       }
-    } catch (err: any) {
-      error.value = err.message || 'Failed to update popup store'
+
+      // 현재 선택된 스토어가 업데이트된 스토어라면 업데이트
+      if (currentStore.value?.id === id) {
+        currentStore.value = updatedStore
+      }
+
+      return updatedStore
+    } catch (error: any) {
+      loading.value.error = error.response?.data?.message || '팝업스토어 수정에 실패했습니다.'
+      console.error('Error updating store:', error)
+      throw error
     } finally {
-      loading.value = false
+      loading.value.isLoading = false
     }
   }
 
   async function deleteStore(id: number) {
-    loading.value = true
-    error.value = null
+    loading.value.isLoading = true
+    loading.value.error = null
+
     try {
-      // 실제 API 호출 로직 (예: axios.delete(`/api/popupstores/${id}`))
-      stores.value = stores.value.filter(store => store.id !== id)
-    } catch (err: any) {
-      error.value = err.message || 'Failed to delete popup store'
+      await apiClient.delete(API_ENDPOINTS.POPUPSTORE_BY_ID(id))
+
+      // 목록에서 제거
+      stores.value = stores.value.filter((store) => store.id !== id)
+
+      // 현재 선택된 스토어가 삭제된 스토어라면 초기화
+      if (currentStore.value?.id === id) {
+        currentStore.value = null
+      }
+    } catch (error: any) {
+      loading.value.error = error.response?.data?.message || '팝업스토어 삭제에 실패했습니다.'
+      console.error('Error deleting store:', error)
+      throw error
     } finally {
-      loading.value = false
+      loading.value.isLoading = false
     }
   }
 
+  // 검색 기능
+  async function searchStores(searchParams: SearchParams) {
+    return await fetchStores(searchParams)
+  }
+
+  // 초기화
+  function clearError() {
+    loading.value.error = null
+  }
+
+  function clearCurrentStore() {
+    currentStore.value = null
+  }
+
   return {
+    // State
     stores,
+    currentStore,
     loading,
-    error,
+
+    // Computed
     activeStores,
     storesByCategory,
     topRatedStores,
+    storesByStatus,
+
+    // Actions
     fetchStores,
-    addStore,
+    fetchStoreById,
+    createStore,
     updateStore,
-    deleteStore
+    deleteStore,
+    searchStores,
+    clearError,
+    clearCurrentStore,
   }
-}) 
+})
