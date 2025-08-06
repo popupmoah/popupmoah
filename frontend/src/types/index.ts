@@ -1,3 +1,103 @@
+// Google Maps API 타입 정의
+declare global {
+  interface Window {
+    google: typeof google
+  }
+}
+
+declare namespace google {
+  namespace maps {
+    class Map {
+      constructor(element: HTMLElement, options?: MapOptions)
+      setCenter(latLng: LatLng | LatLngLiteral): void
+      addListener(eventName: string, handler: Function): void
+    }
+
+    class Marker {
+      constructor(options?: MarkerOptions)
+      setMap(map: Map | null): void
+      addListener(eventName: string, handler: Function): void
+    }
+
+    class InfoWindow {
+      constructor(options?: InfoWindowOptions)
+      open(map: Map, anchor?: Marker): void
+    }
+
+    class Geocoder {
+      geocode(
+        request: GeocoderRequest,
+        callback: (results: GeocoderResult[] | null, status: GeocoderStatus) => void,
+      ): void
+    }
+
+    interface MapOptions {
+      center?: LatLng | LatLngLiteral
+      zoom?: number
+      mapTypeId?: MapTypeId
+      mapTypeControl?: boolean
+      streetViewControl?: boolean
+      fullscreenControl?: boolean
+      zoomControl?: boolean
+      gestureHandling?: string
+      styles?: MapTypeStyle[]
+    }
+
+    interface MarkerOptions {
+      position?: LatLng | LatLngLiteral
+      map?: Map
+      title?: string
+      animation?: Animation
+    }
+
+    interface InfoWindowOptions {
+      content?: string
+    }
+
+    interface GeocoderRequest {
+      address?: string
+    }
+
+    interface GeocoderResult {
+      geometry: {
+        location: LatLng
+      }
+    }
+
+    interface LatLng {
+      lat(): number
+      lng(): number
+    }
+
+    interface LatLngLiteral {
+      lat: number
+      lng: number
+    }
+
+    interface MapMouseEvent {
+      latLng?: LatLng
+    }
+
+    enum MapTypeId {
+      ROADMAP = 'roadmap',
+    }
+
+    enum Animation {
+      DROP = 2,
+    }
+
+    enum GeocoderStatus {
+      OK = 'OK',
+    }
+
+    interface MapTypeStyle {
+      featureType?: string
+      elementType?: string
+      stylers?: Array<{ [key: string]: any }>
+    }
+  }
+}
+
 // 기본 API 응답 타입
 export interface ApiResponse<T = any> {
   success: boolean
@@ -54,6 +154,7 @@ export interface CreatePopupStoreRequest {
   categoryId: number
   latitude?: number
   longitude?: number
+  images?: string[]
 }
 
 export interface UpdatePopupStoreRequest extends Partial<CreatePopupStoreRequest> {
