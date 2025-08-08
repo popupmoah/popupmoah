@@ -23,22 +23,26 @@
         </div>
       </div>
 
-      <!-- Filters -->
-      <q-card class="mb-6">
-        <q-card-section>
-          <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <!-- Search and Filters -->
+      <div class="mb-6">
+        <div class="flex flex-col lg:flex-row gap-4">
+          <!-- Search Bar -->
+          <div class="flex-1">
             <q-input
               v-model="searchQuery"
-              label="검색"
+              placeholder="팝업스토어 검색..."
               outlined
               clearable
-              class="col-span-1 md:col-span-2"
+              @update:model-value="handleSearch"
             >
               <template v-slot:prepend>
                 <q-icon name="search" />
               </template>
             </q-input>
+          </div>
 
+          <!-- Category Filter -->
+          <div class="w-full lg:w-64">
             <q-select
               v-model="selectedCategory"
               :options="categoryOptions"
@@ -47,8 +51,12 @@
               clearable
               emit-value
               map-options
+              @update:model-value="handleCategoryChange"
             />
+          </div>
 
+          <!-- Status Filter -->
+          <div class="w-full lg:w-48">
             <q-select
               v-model="selectedStatus"
               :options="statusOptions"
@@ -57,10 +65,14 @@
               clearable
               emit-value
               map-options
+              @update:model-value="handleStatusChange"
             />
           </div>
-        </q-card-section>
-      </q-card>
+        </div>
+
+        <!-- Advanced Filters -->
+        <AdvancedFilters v-model="advancedFilters" @apply="handleAdvancedFilters" />
+      </div>
 
       <!-- Stores Grid -->
       <div class="grid-responsive">
@@ -88,11 +100,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { usePopupStore } from '@/stores/popupStore'
 import type { PopupStore } from '@/types'
 import PopupStoreCard from '@/components/popupstore/PopupStoreCard.vue'
+import AdvancedFilters from '@/components/popupstore/AdvancedFilters.vue'
 
 const router = useRouter()
 const popupStore = usePopupStore()
@@ -148,4 +161,35 @@ const viewStore = (id: number) => {
 onMounted(() => {
   fetchStores()
 })
+
+// Advanced filters
+const advancedFilters = ref({
+  startDate: '',
+  endDate: '',
+  minRating: 0,
+  regions: [],
+  sortBy: 'name',
+})
+
+const handleSearch = () => {
+  // 검색어 변경 시 필터 적용
+  fetchStores()
+}
+
+const handleCategoryChange = () => {
+  // 카테고리 변경 시 필터 적용
+  fetchStores()
+}
+
+const handleStatusChange = () => {
+  // 상태 변경 시 필터 적용
+  fetchStores()
+}
+
+const handleAdvancedFilters = (filters: any) => {
+  // 고급 필터 적용 로직
+  console.log('Advanced filters applied:', filters)
+  // TODO: API 호출 시 필터 파라미터 추가
+  fetchStores()
+}
 </script>

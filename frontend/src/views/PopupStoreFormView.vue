@@ -91,27 +91,16 @@
           <q-card class="bg-white">
             <q-card-section>
               <h2 class="text-xl font-semibold text-gray-900 mb-4">위치 좌표</h2>
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <q-input
-                  v-model.number="form.latitude"
-                  label="위도"
-                  outlined
-                  type="number"
-                  step="0.000001"
-                  placeholder="37.5665"
-                />
 
-                <q-input
-                  v-model.number="form.longitude"
-                  label="경도"
-                  outlined
-                  type="number"
-                  step="0.000001"
-                  placeholder="126.9780"
-                />
-              </div>
-              <p class="text-sm text-gray-500 mt-2">
-                위도와 경도는 선택사항입니다. Google Maps에서 좌표를 확인할 수 있습니다.
+              <!-- 위치 선택 컴포넌트 -->
+              <LocationPicker
+                v-model="locationCoordinates"
+                @update:model-value="updateLocationCoordinates"
+              />
+
+              <p class="text-sm text-gray-500 mt-4">
+                위도와 경도는 선택사항입니다. 지도에서 위치를 선택하거나 주소를 검색하여 좌표를
+                설정할 수 있습니다.
               </p>
             </q-card-section>
           </q-card>
@@ -181,12 +170,15 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useQuasar } from 'quasar'
 import { usePopupStore } from '@/stores/popupStore'
 import type { CreatePopupStoreRequest, UpdatePopupStoreRequest, PopupStore } from '@/types'
+import LocationPicker from '@/components/popupstore/LocationPicker.vue'
 
 const route = useRoute()
 const router = useRouter()
 const popupStore = usePopupStore()
+const $q = useQuasar()
 
 const isEdit = computed(() => route.name === 'popupstore-edit')
 const storeId = computed(() => (route.params.id ? parseInt(route.params.id as string) : null))
@@ -209,6 +201,12 @@ const form = ref<Partial<CreatePopupStoreRequest>>({
   longitude: undefined,
 })
 
+// 위치 좌표
+const locationCoordinates = ref<{ latitude?: number; longitude?: number }>({
+  latitude: undefined,
+  longitude: undefined,
+})
+
 // Image upload
 const uploadedImages = ref<Array<{ file: File; url: string }>>([])
 
@@ -218,6 +216,11 @@ const categoryOptions = [
   { label: '뷰티', value: 3 },
   { label: '라이프스타일', value: 4 },
 ]
+
+const updateLocationCoordinates = (coordinates: { latitude?: number; longitude?: number }) => {
+  form.value.latitude = coordinates.latitude
+  form.value.longitude = coordinates.longitude
+}
 
 const fetchStore = async () => {
   if (isEdit.value && storeId.value) {
@@ -236,9 +239,20 @@ const fetchStore = async () => {
           latitude: store.latitude,
           longitude: store.longitude,
         }
+
+        // 위치 좌표 설정
+        locationCoordinates.value = {
+          latitude: store.latitude,
+          longitude: store.longitude,
+        }
       }
     } catch (error) {
       console.error('Failed to fetch store:', error)
+      $q.notify({
+        type: 'negative',
+        message: '팝업스토어 정보를 불러오는데 실패했습니다.',
+        position: 'top',
+      })
     }
   }
 }
