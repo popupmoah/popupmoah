@@ -98,6 +98,15 @@
                     <span class="text-gray-700">{{ store.latitude }}, {{ store.longitude }}</span>
                   </div>
                 </div>
+
+                <!-- 지도 컴포넌트 추가 -->
+                <div v-if="store.latitude && store.longitude" class="mt-4">
+                  <PopupStoreMap :store="store" :height="300" :show-controls="true" :zoom="16" />
+                </div>
+                <div v-else class="mt-4 p-4 bg-gray-50 rounded-lg text-center">
+                  <q-icon name="map" size="2rem" color="grey-4" />
+                  <p class="text-gray-500 mt-2">위치 정보가 없습니다</p>
+                </div>
               </q-card-section>
             </q-card>
           </div>
@@ -222,8 +231,10 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useQuasar } from 'quasar'
 import { usePopupStore } from '@/stores/popupStore'
 import type { PopupStore } from '@/types'
+import PopupStoreMap from '@/components/popupstore/PopupStoreMap.vue'
 
 const route = useRoute()
 const router = useRouter()
