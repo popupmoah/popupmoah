@@ -19,11 +19,18 @@ public class ApiResponse<T> {
     public static <T> ApiResponse<T> success(T data) {
         return new ApiResponse<>(true, data, null, null);
     }
+    
     public static <T> ApiResponse<T> success(T data, String message) {
         return new ApiResponse<>(true, data, message, null);
     }
+    
     // 실패 응답 생성
     public static <T> ApiResponse<T> fail(String message, String errorCode) {
         return new ApiResponse<>(false, null, message, errorCode);
+    }
+    
+    // 에러 응답 생성 (간단한 버전)
+    public static <T> ApiResponse<T> error(String message) {
+        return new ApiResponse<>(false, null, message, null);
     }
 } 
