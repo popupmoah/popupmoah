@@ -36,6 +36,11 @@ const router = createRouter({
       component: () => import('../views/CategoriesView.vue'),
     },
     {
+      path: '/fileupload',
+      name: 'fileupload',
+      component: () => import('../views/FileUploadView.vue'),
+    },
+    {
       path: '/about',
       name: 'about',
       // route level code-splitting

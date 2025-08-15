@@ -4,161 +4,177 @@ import { apiClient, API_ENDPOINTS } from '@/config/api'
 import type { Category, CreateCategoryRequest, ApiResponse, LoadingState } from '@/types'
 
 export const useCategoryStore = defineStore('categoryStore', () => {
-  // State
   const categories = ref<Category[]>([])
-  const loading = ref<LoadingState>({
-    isLoading: false,
-    error: null,
-  })
+  const loading = ref<LoadingState>({ isLoading: false, error: null })
 
-  // Computed
+  // 루트 카테고리만 필터링
   const rootCategories = computed(() => {
-    return categories.value
-      .filter((cat) => !cat.parentId)
-      .sort((a, b) => a.orderIndex - b.orderIndex)
+    return categories.value.filter((category) => !category.parentId)
   })
 
+  // 활성 카테고리만 필터링
   const activeCategories = computed(() => {
-    return categories.value.filter((cat) => cat.isActive)
+    return categories.value.filter((category) => category.isActive)
   })
 
+  // ID로 카테고리 찾기
   const categoryById = computed(() => {
-    return (id: number) => categories.value.find((cat) => cat.id === id)
+    return (id: number) => categories.value.find((category) => category.id === id)
   })
 
-  // Actions
+  // 카테고리 목록 조회
   async function fetchCategories() {
-    loading.value.isLoading = true
-    loading.value.error = null
+    loading.value = { isLoading: true, error: null }
 
     try {
       const response = await apiClient.get<ApiResponse<Category[]>>(API_ENDPOINTS.CATEGORIES)
-      categories.value = response.data.data
+
+      if (response.data.success) {
+        categories.value = response.data.data
+      } else {
+        throw new Error(response.data.message || '카테고리 목록 조회에 실패했습니다.')
+      }
     } catch (error: any) {
-      loading.value.error =
-        error.response?.data?.message || '카테고리 목록을 불러오는데 실패했습니다.'
-      console.error('Error fetching categories:', error)
+      const errorMessage =
+        error.response?.data?.message || error.message || '카테고리 목록 조회에 실패했습니다.'
+      loading.value = { isLoading: false, error: errorMessage }
+      throw error
     } finally {
-      loading.value.isLoading = false
+      loading.value = { isLoading: false, error: null }
     }
   }
 
+  // 카테고리 생성
   async function createCategory(categoryData: CreateCategoryRequest) {
-    loading.value.isLoading = true
-    loading.value.error = null
+    loading.value = { isLoading: true, error: null }
 
     try {
       const response = await apiClient.post<ApiResponse<Category>>(
         API_ENDPOINTS.CATEGORIES,
         categoryData,
       )
-      const newCategory = response.data.data
-      categories.value.push(newCategory)
-      return newCategory
+
+      if (response.data.success) {
+        // 새로 생성된 카테고리를 목록에 추가
+        categories.value.push(response.data.data)
+        return response.data.data
+      } else {
+        throw new Error(response.data.message || '카테고리 생성에 실패했습니다.')
+      }
     } catch (error: any) {
-      loading.value.error = error.response?.data?.message || '카테고리 생성에 실패했습니다.'
-      console.error('Error creating category:', error)
+      const errorMessage =
+        error.response?.data?.message || error.message || '카테고리 생성에 실패했습니다.'
+      loading.value = { isLoading: false, error: errorMessage }
       throw error
     } finally {
-      loading.value.isLoading = false
+      loading.value = { isLoading: false, error: null }
     }
   }
 
+  // 카테고리 수정
   async function updateCategory(id: number, categoryData: Partial<CreateCategoryRequest>) {
-    loading.value.isLoading = true
-    loading.value.error = null
+    loading.value = { isLoading: true, error: null }
 
     try {
       const response = await apiClient.put<ApiResponse<Category>>(
         API_ENDPOINTS.CATEGORY_BY_ID(id),
         categoryData,
       )
-      const updatedCategory = response.data.data
 
-      // 목록에서 업데이트
-      const index = categories.value.findIndex((cat) => cat.id === id)
-      if (index !== -1) {
-        categories.value[index] = updatedCategory
+      if (response.data.success) {
+        // 목록에서 해당 카테고리 업데이트
+        const index = categories.value.findIndex((category) => category.id === id)
+        if (index !== -1) {
+          categories.value[index] = response.data.data
+        }
+        return response.data.data
+      } else {
+        throw new Error(response.data.message || '카테고리 수정에 실패했습니다.')
       }
-
-      return updatedCategory
     } catch (error: any) {
-      loading.value.error = error.response?.data?.message || '카테고리 수정에 실패했습니다.'
-      console.error('Error updating category:', error)
+      const errorMessage =
+        error.response?.data?.message || error.message || '카테고리 수정에 실패했습니다.'
+      loading.value = { isLoading: false, error: errorMessage }
       throw error
     } finally {
-      loading.value.isLoading = false
+      loading.value = { isLoading: false, error: null }
     }
   }
 
+  // 카테고리 삭제
   async function deleteCategory(id: number) {
-    loading.value.isLoading = true
-    loading.value.error = null
+    loading.value = { isLoading: true, error: null }
 
     try {
-      await apiClient.delete(API_ENDPOINTS.CATEGORY_BY_ID(id))
+      const response = await apiClient.delete<ApiResponse<void>>(API_ENDPOINTS.CATEGORY_BY_ID(id))
 
-      // 목록에서 제거 (하위 카테고리도 함께 제거)
-      categories.value = categories.value.filter((cat) => cat.id !== id && cat.parentId !== id)
+      if (response.data.success) {
+        // 목록에서 해당 카테고리 제거
+        categories.value = categories.value.filter((category) => category.id !== id)
+      } else {
+        throw new Error(response.data.message || '카테고리 삭제에 실패했습니다.')
+      }
     } catch (error: any) {
-      loading.value.error = error.response?.data?.message || '카테고리 삭제에 실패했습니다.'
-      console.error('Error deleting category:', error)
+      const errorMessage =
+        error.response?.data?.message || error.message || '카테고리 삭제에 실패했습니다.'
+      loading.value = { isLoading: false, error: errorMessage }
       throw error
     } finally {
-      loading.value.isLoading = false
+      loading.value = { isLoading: false, error: null }
     }
   }
 
+  // 카테고리 순서 변경
   async function reorderCategory(
     categoryId: number,
     newParentId: number | undefined,
     newOrderIndex: number,
   ) {
-    loading.value.isLoading = true
-    loading.value.error = null
+    loading.value = { isLoading: true, error: null }
 
     try {
       const response = await apiClient.put<ApiResponse<Category>>(
-        API_ENDPOINTS.CATEGORY_BY_ID(categoryId),
+        `${API_ENDPOINTS.CATEGORY_BY_ID(categoryId)}/reorder`,
+        null,
         {
-          parentId: newParentId,
-          orderIndex: newOrderIndex,
+          params: {
+            newParentId: newParentId || 0, // undefined인 경우 0으로 전송
+            newOrderIndex,
+          },
         },
       )
-      const updatedCategory = response.data.data
 
-      // 목록에서 업데이트
-      const index = categories.value.findIndex((cat) => cat.id === categoryId)
-      if (index !== -1) {
-        categories.value[index] = updatedCategory
+      if (response.data.success) {
+        // 목록에서 해당 카테고리 업데이트
+        const index = categories.value.findIndex((category) => category.id === categoryId)
+        if (index !== -1) {
+          categories.value[index] = response.data.data
+        }
+        return response.data.data
+      } else {
+        throw new Error(response.data.message || '카테고리 순서 변경에 실패했습니다.')
       }
-
-      return updatedCategory
     } catch (error: any) {
-      loading.value.error = error.response?.data?.message || '카테고리 순서 변경에 실패했습니다.'
-      console.error('Error reordering category:', error)
+      const errorMessage =
+        error.response?.data?.message || error.message || '카테고리 순서 변경에 실패했습니다.'
+      loading.value = { isLoading: false, error: errorMessage }
       throw error
     } finally {
-      loading.value.isLoading = false
+      loading.value = { isLoading: false, error: null }
     }
   }
 
-  // 초기화
+  // 에러 초기화
   function clearError() {
     loading.value.error = null
   }
 
   return {
-    // State
     categories,
     loading,
-
-    // Computed
     rootCategories,
     activeCategories,
     categoryById,
-
-    // Actions
     fetchCategories,
     createCategory,
     updateCategory,
