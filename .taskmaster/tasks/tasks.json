@@ -240,7 +240,7 @@
         "id": 10,
         "title": "파일 업로드 및 이미지 관리 화면 구현",
         "description": "파일 업로드, 이미지 미리보기, 썸네일 생성, 이미지 최적화 기능 UI",
-        "status": "pending",
+        "status": "done",
         "priority": "medium",
         "dependencies": [
           "5",
@@ -249,7 +249,62 @@
         "details": "드래그 앤 드롭 파일 업로드, 이미지 미리보기, 썸네일 표시, 이미지 최적화 옵션, 업로드 진행률 표시",
         "testStrategy": "파일 업로드 기능 테스트, 이미지 미리보기 테스트, 업로드 진행률 표시 검증",
         "createdAt": "2024-01-01T00:00:00Z",
-        "updatedAt": "2024-01-01T00:00:00Z"
+        "updatedAt": "2024-01-01T00:00:00Z",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Implement Drag-and-Drop File Upload UI",
+            "description": "Develop a user interface that allows users to upload image files via drag-and-drop as well as traditional file selection.",
+            "dependencies": [],
+            "details": "Design and implement a drag-and-drop area and file input component. Integrate with backend upload API to handle file transfer and error states.\n<info added on 2025-08-22T07:18:08.684Z>\n드래그 앤 드롭 파일 업로드 UI 컴포넌트 구현 완료:\n\n1. FileUploadZone.vue 컴포넌트 생성\n   - 드래그 앤 드롭 기능 구현\n   - 파일 검증 (크기, 타입)\n   - 업로드 상태 표시 (로딩, 에러, 성공)\n   - 재시도 기능\n   - 반응형 디자인\n\n2. 라우터 및 네비게이션 추가\n   - /fileupload 경로 추가\n   - 헤더에 파일업로드 메뉴 추가 (데스크톱/모바일)\n\n3. 주요 기능:\n   - 파일 크기 제한 (10MB)\n   - 지원 파일 타입: JPEG, PNG, GIF, WebP\n   - 드래그 앤 드롭 + 클릭으로 파일 선택\n   - 실시간 업로드 진행률 표시\n   - 에러 처리 및 재시도 기능\n   - 반응형 UI (모바일/데스크톱)\n\n컴포넌트가 성공적으로 생성되었고 라우터에 연결되었습니다.\n</info added on 2025-08-22T07:18:08.684Z>",
+            "status": "done",
+            "testStrategy": "Test file upload with various image formats and sizes. Verify drag-and-drop and manual selection both trigger uploads successfully."
+          },
+          {
+            "id": 2,
+            "title": "Develop Image Preview Feature",
+            "description": "Enable real-time preview of selected images before upload, displaying thumbnails and basic metadata.",
+            "dependencies": [
+              "10.1"
+            ],
+            "details": "Render image previews using client-side rendering (e.g., FileReader API) immediately after file selection. Show image name, size, and type.",
+            "status": "done",
+            "testStrategy": "Verify that previews appear instantly for all supported image types and that metadata is accurate."
+          },
+          {
+            "id": 3,
+            "title": "Integrate Thumbnail Generation and Display",
+            "description": "Generate and display image thumbnails for uploaded files within the management UI.",
+            "dependencies": [
+              "10.2"
+            ],
+            "details": "After upload, fetch or generate server-side thumbnails and display them in the image list. Ensure thumbnails are optimized for fast loading.",
+            "status": "done",
+            "testStrategy": "Check that thumbnails are generated for all uploads and displayed correctly in the UI."
+          },
+          {
+            "id": 4,
+            "title": "Implement Image Optimization Options",
+            "description": "Provide UI controls for users to select image optimization settings (e.g., compression, resizing) before upload.",
+            "dependencies": [
+              "10.2"
+            ],
+            "details": "Add selectable options for image quality, resolution, and format. Pass selected options to the backend during upload.",
+            "status": "done",
+            "testStrategy": "Test that selected optimization options are correctly applied and reflected in the uploaded images."
+          },
+          {
+            "id": 5,
+            "title": "Display Upload Progress Indicator",
+            "description": "Show real-time upload progress for each file, including percentage and status feedback.",
+            "dependencies": [
+              "10.1"
+            ],
+            "details": "Implement progress bars or indicators for each uploading file. Update UI based on upload status (in progress, success, error).",
+            "status": "done",
+            "testStrategy": "Simulate uploads of various sizes and network conditions to verify accurate and responsive progress feedback."
+          }
+        ]
       },
       {
         "id": 11,
@@ -453,7 +508,7 @@
       "updatedAt": "2024-01-01T00:00:00Z",
       "created": "2025-08-03T23:49:27.405Z",
       "description": "Tasks for master context",
-      "updated": "2025-08-11T11:50:04.941Z"
+      "updated": "2025-08-22T07:19:26.247Z"
     }
   }
 }
