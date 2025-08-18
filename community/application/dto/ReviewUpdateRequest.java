@@ -26,3 +26,6 @@ public class ReviewUpdateRequest {
     @Max(value = 5, message = "평점은 5점 이하여야 합니다.")
     private Integer rating;
 }
+
+
+

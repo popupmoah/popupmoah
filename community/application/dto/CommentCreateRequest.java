@@ -24,3 +24,6 @@ public class CommentCreateRequest {
 
     private Long parentId; // 부모 댓글 ID (대댓글인 경우)
 }
+
+
+

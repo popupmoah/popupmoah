@@ -34,3 +34,6 @@ public class MemberSignupRequest {
     @Size(max = 50, message = "닉네임은 50자 이하여야 합니다.")
     private String nickname;
 }
+
+
+
