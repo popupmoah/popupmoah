@@ -4,6 +4,12 @@ import com.sgyj.popupmoah.domain.community.application.dto.ReviewCreateRequest;
 import com.sgyj.popupmoah.domain.community.application.dto.ReviewResponse;
 import com.sgyj.popupmoah.domain.community.application.dto.ReviewUpdateRequest;
 import com.sgyj.popupmoah.domain.community.service.ReviewService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.responses.ApiResponse as SwaggerApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +29,8 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/reviews")
 @RequiredArgsConstructor
+@Tag(name = "리뷰 관리", description = "리뷰 CRUD 및 관련 기능 API")
+@SecurityRequirement(name = "Bearer Authentication")
 public class ReviewController {
 
     private final ReviewService reviewService;
@@ -30,6 +38,13 @@ public class ReviewController {
     /**
      * 리뷰 생성
      */
+    @Operation(summary = "리뷰 생성", description = "새로운 리뷰를 생성합니다.")
+    @ApiResponses(value = {
+            @SwaggerApiResponse(responseCode = "201", description = "리뷰 생성 성공"),
+            @SwaggerApiResponse(responseCode = "400", description = "잘못된 요청 데이터"),
+            @SwaggerApiResponse(responseCode = "401", description = "인증 필요"),
+            @SwaggerApiResponse(responseCode = "500", description = "서버 내부 오류")
+    })
     @PostMapping
     public ResponseEntity<ReviewResponse> createReview(@Valid @RequestBody ReviewCreateRequest request) {
         log.info("리뷰 생성 API 호출: popupStoreId={}", request.getPopupStoreId());
