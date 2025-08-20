@@ -29,6 +29,18 @@ aws:
     access-key: ${AWS_ACCESS_KEY_ID:}
     secret-key: ${AWS_SECRET_ACCESS_KEY:}
 
+# 지도 API 설정
+map:
+  kakao:
+    api-key: ${KAKAO_MAP_API_KEY:}
+    geocoding-url: https://dapi.kakao.com/v2/local/search/address.json
+    places-url: https://dapi.kakao.com/v2/local/search/keyword.json
+  naver:
+    client-id: ${NAVER_MAP_CLIENT_ID:}
+    client-secret: ${NAVER_MAP_CLIENT_SECRET:}
+    geocoding-url: https://naveropenapi.apigw.ntruss.com/map-geocode/v2/geocode
+    places-url: https://naveropenapi.apigw.ntruss.com/map-place/v1/search
+
 logging:
   level:
     org.flywaydb: DEBUG
