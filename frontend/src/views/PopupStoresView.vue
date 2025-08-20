@@ -23,6 +23,17 @@
         </div>
       </div>
 
+      <!-- View Toggle -->
+      <div class="mb-4">
+        <q-btn-toggle
+          v-model="viewMode"
+          :options="viewModeOptions"
+          color="primary"
+          toggle-color="primary"
+          @update:model-value="onViewModeChange"
+        />
+      </div>
+
       <!-- Search and Filters -->
       <div class="mb-6">
         <div class="flex flex-col lg:flex-row gap-4">
@@ -74,21 +85,40 @@
         <AdvancedFilters v-model="advancedFilters" @apply="handleAdvancedFilters" />
       </div>
 
-      <!-- Stores Grid -->
-      <div class="grid-responsive">
-        <PopupStoreCard
-          v-for="store in filteredStores"
-          :key="store.id"
-          :store="store"
-          @view="viewStore"
+      <!-- Map View -->
+      <div v-if="viewMode === 'map'" class="map-container">
+        <PopupStoreMap
+          ref="popupStoreMapRef"
+          :width="'100%'"
+          :height="'600px'"
+          :show-active-only="showActiveOnly"
+          :show-nearby-search="true"
+          :auto-load="true"
+          @popup-store-selected="onPopupStoreSelected"
+          @popup-store-detail="onPopupStoreDetail"
+          @place-selected="onPlaceSelected"
+          @location-found="onLocationFound"
         />
       </div>
 
-      <!-- Empty State -->
-      <div v-if="filteredStores.length === 0 && !loading.isLoading" class="text-center py-12">
-        <q-icon name="store" size="4rem" color="grey-4" />
-        <h3 class="text-xl font-semibold text-gray-600 mt-4">팝업스토어가 없습니다</h3>
-        <p class="text-gray-500 mt-2">조건을 변경해보세요</p>
+      <!-- List View -->
+      <div v-else>
+        <!-- Stores Grid -->
+        <div class="grid-responsive">
+          <PopupStoreCard
+            v-for="store in filteredStores"
+            :key="store.id"
+            :store="store"
+            @view="viewStore"
+          />
+        </div>
+
+        <!-- Empty State -->
+        <div v-if="filteredStores.length === 0 && !loading.isLoading" class="text-center py-12">
+          <q-icon name="store" size="4rem" color="grey-4" />
+          <h3 class="text-xl font-semibold text-gray-600 mt-4">팝업스토어가 없습니다</h3>
+          <p class="text-gray-500 mt-2">조건을 변경해보세요</p>
+        </div>
       </div>
 
       <!-- Loading State -->
@@ -103,19 +133,31 @@
 import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { usePopupStore } from '@/stores/popupStore'
-import type { PopupStore } from '@/types'
+import type { PopupStore, PopupStoreLocation, Coordinates, PlaceInfo } from '@/types'
 import PopupStoreCard from '@/components/popupstore/PopupStoreCard.vue'
 import AdvancedFilters from '@/components/popupstore/AdvancedFilters.vue'
+import PopupStoreMap from '@/components/maps/PopupStoreMap.vue'
 
 const router = useRouter()
 const popupStore = usePopupStore()
 
 const { stores, loading, fetchStores } = popupStore
 
+// View Mode
+const viewMode = ref<'list' | 'map'>('list')
+const viewModeOptions = [
+  { label: '목록 보기', value: 'list', icon: 'view_list' },
+  { label: '지도 보기', value: 'map', icon: 'map' },
+]
+
+// Map Reference
+const popupStoreMapRef = ref()
+
 // Filters
 const selectedCategory = ref('')
 const selectedStatus = ref('')
 const searchQuery = ref('')
+const showActiveOnly = ref(false)
 
 const categoryOptions = [
   { label: '패션', value: '패션' },
@@ -192,4 +234,62 @@ const handleAdvancedFilters = (filters: any) => {
   // TODO: API 호출 시 필터 파라미터 추가
   fetchStores()
 }
+
+// View Mode Methods
+const onViewModeChange = (mode: 'list' | 'map') => {
+  viewMode.value = mode
+  if (mode === 'map' && popupStoreMapRef.value) {
+    // 지도 뷰로 전환 시 지도 새로고침
+    popupStoreMapRef.value.loadPopupStoreLocations()
+  }
+}
+
+// Map Event Handlers
+const onPopupStoreSelected = (popupStore: PopupStoreLocation) => {
+  console.log('팝업스토어 선택됨:', popupStore)
+}
+
+const onPopupStoreDetail = (popupStore: PopupStoreLocation) => {
+  router.push(`/popupstores/${popupStore.id}`)
+}
+
+// Nearby Search Event Handlers
+const onPlaceSelected = (place: PlaceInfo) => {
+  console.log('장소 선택됨:', place)
+  // 선택된 장소 주변의 팝업스토어를 필터링할 수 있음
+}
+
+const onLocationFound = (coordinates: Coordinates) => {
+  console.log('현재 위치 발견:', coordinates)
+  // 현재 위치 기반으로 팝업스토어를 필터링할 수 있음
+}
 </script>
+
+<style scoped>
+.map-container {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.grid-responsive {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.container-responsive {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .grid-responsive {
+    grid-template-columns: 1fr;
+  }
+
+  .container-responsive {
+    padding: 0 1rem;
+  }
+}
+</style>
