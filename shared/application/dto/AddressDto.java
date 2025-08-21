@@ -27,3 +27,4 @@ public class AddressDto {
     private String zoneCode;         // 우편번호
     private CoordinatesDto coordinates; // 좌표 정보
 }
+
