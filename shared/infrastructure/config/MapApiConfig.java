@@ -34,3 +34,4 @@ public class MapApiConfig {
         private String placesUrl;
     }
 }
+
