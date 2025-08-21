@@ -44,3 +44,4 @@ public class PlaceSearchResponse {
         private String description;          // 설명
     }
 }
+
