@@ -28,6 +28,12 @@
         />
         <q-btn
           flat
+          :label="$route.name === 'fileupload' ? '파일업로드' : '파일업로드'"
+          :color="$route.name === 'fileupload' ? 'primary' : 'grey-7'"
+          @click="$router.push('/fileupload')"
+        />
+        <q-btn
+          flat
           :label="$route.name === 'about' ? '소개' : '소개'"
           :color="$route.name === 'about' ? 'primary' : 'grey-7'"
           @click="$router.push('/about')"
@@ -90,6 +96,23 @@
         </q-item-section>
         <q-item-section>
           <q-item-label>카테고리</q-item-label>
+        </q-item-section>
+      </q-item>
+
+      <q-item
+        clickable
+        v-ripple
+        :active="$route.name === 'fileupload'"
+        @click="navigateTo('/fileupload')"
+      >
+        <q-item-section avatar>
+          <q-icon
+            name="cloud_upload"
+            :color="$route.name === 'fileupload' ? 'primary' : 'grey-7'"
+          />
+        </q-item-section>
+        <q-item-section>
+          <q-item-label>파일업로드</q-item-label>
         </q-item-section>
       </q-item>
 
