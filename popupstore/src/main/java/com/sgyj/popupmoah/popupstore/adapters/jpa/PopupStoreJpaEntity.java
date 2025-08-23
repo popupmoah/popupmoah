@@ -47,6 +47,15 @@ public class PopupStoreJpaEntity extends UpdatedEntity {
     @Column(name = "location", length = 200)
     private String location;
 
+    @Column(name = "address", length = 500)
+    private String address;
+
+    @Column(name = "latitude")
+    private Double latitude;
+
+    @Column(name = "longitude")
+    private Double longitude;
+
     @Column(name = "active", nullable = false)
     @Builder.Default
     private Boolean active = true;
