@@ -5,14 +5,10 @@ import com.sgyj.popupmoah.popupstore.application.dto.PopupStoreCreateRequest;
 import com.sgyj.popupmoah.popupstore.application.dto.PopupStoreResponse;
 import com.sgyj.popupmoah.popupstore.application.dto.PopupStoreUpdateRequest;
 import com.sgyj.popupmoah.popupstore.application.dto.PopupStoreLocationResponse;
+import com.sgyj.popupmoah.popupstore.application.dto.PopupStoreSearchRequest;
+import com.sgyj.popupmoah.popupstore.application.dto.PopupStoreSearchResponse;
 import com.sgyj.popupmoah.popupstore.application.service.PopupStoreApplicationService;
 import com.sgyj.popupmoah.popupstore.domain.entity.PopupStore;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.responses.ApiResponse as SwaggerApiResponse;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +27,6 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/popupstores")
 @RequiredArgsConstructor
-@Tag(name = "팝업스토어 관리", description = "팝업스토어 CRUD 및 관련 기능 API")
 public class PopupStoreController {
     
     private final PopupStoreApplicationService applicationService;
@@ -39,12 +34,6 @@ public class PopupStoreController {
     /**
      * 팝업스토어를 생성합니다.
      */
-    @Operation(summary = "팝업스토어 생성", description = "새로운 팝업스토어를 생성합니다.")
-    @ApiResponses(value = {
-            @SwaggerApiResponse(responseCode = "201", description = "팝업스토어 생성 성공"),
-            @SwaggerApiResponse(responseCode = "400", description = "잘못된 요청 데이터"),
-            @SwaggerApiResponse(responseCode = "500", description = "서버 내부 오류")
-    })
     @PostMapping
     public ResponseEntity<ApiResponse<PopupStoreResponse>> createPopupStore(@Valid @RequestBody PopupStoreCreateRequest request) {
         log.info("팝업스토어 생성 API 호출: name={}", request.getName());
@@ -391,6 +380,107 @@ public class PopupStoreController {
             log.error("활성화된 팝업스토어 위치 정보 조회 중 오류 발생", e);
             ApiResponse<List<PopupStoreLocationResponse>> response = ApiResponse.error("위치 정보 조회에 실패했습니다.");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+
+    /**
+     * 팝업스토어를 검색합니다.
+     */
+    @PostMapping("/search")
+    public ResponseEntity<ApiResponse<PopupStoreSearchResponse>> searchPopupStores(@Valid @RequestBody PopupStoreSearchRequest request) {
+        log.info("팝업스토어 검색 API 호출: {}", request);
+        
+        try {
+            PopupStoreSearchResponse response = applicationService.searchPopupStores(request);
+            return ResponseEntity.ok(ApiResponse.success(response, "검색이 완료되었습니다."));
+        } catch (Exception e) {
+            log.error("팝업스토어 검색 중 오류 발생", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ApiResponse.error("검색 중 오류가 발생했습니다."));
+        }
+    }
+
+    /**
+     * 이름으로 팝업스토어를 검색합니다.
+     */
+    @GetMapping("/search/name")
+    public ResponseEntity<ApiResponse<List<PopupStoreResponse>>> searchByName(@RequestParam String name) {
+        log.info("이름으로 팝업스토어 검색 API 호출: name={}", name);
+        
+        try {
+            List<PopupStore> popupStores = applicationService.searchByName(name);
+            List<PopupStoreResponse> responses = popupStores.stream()
+                    .map(this::convertToResponse)
+                    .collect(Collectors.toList());
+            
+            return ResponseEntity.ok(ApiResponse.success(responses, "검색이 완료되었습니다."));
+        } catch (Exception e) {
+            log.error("이름으로 팝업스토어 검색 중 오류 발생", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ApiResponse.error("검색 중 오류가 발생했습니다."));
+        }
+    }
+
+    /**
+     * 카테고리로 팝업스토어를 조회합니다.
+     */
+    @GetMapping("/search/category")
+    public ResponseEntity<ApiResponse<List<PopupStoreResponse>>> findByCategory(@RequestParam String category) {
+        log.info("카테고리별 팝업스토어 조회 API 호출: category={}", category);
+        
+        try {
+            List<PopupStore> popupStores = applicationService.findByCategory(category);
+            List<PopupStoreResponse> responses = popupStores.stream()
+                    .map(this::convertToResponse)
+                    .collect(Collectors.toList());
+            
+            return ResponseEntity.ok(ApiResponse.success(responses, "조회가 완료되었습니다."));
+        } catch (Exception e) {
+            log.error("카테고리별 팝업스토어 조회 중 오류 발생", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ApiResponse.error("조회 중 오류가 발생했습니다."));
+        }
+    }
+
+    /**
+     * 위치로 팝업스토어를 조회합니다.
+     */
+    @GetMapping("/search/location")
+    public ResponseEntity<ApiResponse<List<PopupStoreResponse>>> findByLocation(@RequestParam String location) {
+        log.info("위치별 팝업스토어 조회 API 호출: location={}", location);
+        
+        try {
+            List<PopupStore> popupStores = applicationService.findByLocation(location);
+            List<PopupStoreResponse> responses = popupStores.stream()
+                    .map(this::convertToResponse)
+                    .collect(Collectors.toList());
+            
+            return ResponseEntity.ok(ApiResponse.success(responses, "조회가 완료되었습니다."));
+        } catch (Exception e) {
+            log.error("위치별 팝업스토어 조회 중 오류 발생", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ApiResponse.error("조회 중 오류가 발생했습니다."));
+        }
+    }
+
+    /**
+     * 현재 진행 중인 팝업스토어를 조회합니다.
+     */
+    @GetMapping("/search/currently-active")
+    public ResponseEntity<ApiResponse<List<PopupStoreResponse>>> findCurrentlyActive() {
+        log.info("현재 진행 중인 팝업스토어 조회 API 호출");
+        
+        try {
+            List<PopupStore> popupStores = applicationService.findCurrentlyActive();
+            List<PopupStoreResponse> responses = popupStores.stream()
+                    .map(this::convertToResponse)
+                    .collect(Collectors.toList());
+            
+            return ResponseEntity.ok(ApiResponse.success(responses, "조회가 완료되었습니다."));
+        } catch (Exception e) {
+            log.error("현재 진행 중인 팝업스토어 조회 중 오류 발생", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ApiResponse.error("조회 중 오류가 발생했습니다."));
         }
     }
 
