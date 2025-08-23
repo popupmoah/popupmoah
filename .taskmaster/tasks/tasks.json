@@ -482,16 +482,79 @@
         "id": 15,
         "title": "검색 및 필터링 기능 구현",
         "description": "팝업스토어 검색, 카테고리별 필터링, 날짜별 필터링 기능",
-        "status": "pending",
-        "priority": "medium",
+        "status": "done",
         "dependencies": [
           "8",
           "13"
         ],
-        "details": "검색 및 필터링 기능 구현",
-        "testStrategy": "검색 기능 테스트, 필터링 정확성 테스트",
-        "createdAt": "2024-01-01T00:00:00Z",
-        "updatedAt": "2024-01-01T00:00:00Z"
+        "priority": "medium",
+        "details": "검색 및 필터링 기능 구현을 위한 DTO, 리포지토리 포트, 애그리게이트, 애플리케이션 서비스, 컨트롤러, JPA 구현을 포함합니다. 키워드 검색, 카테고리/위치/날짜별 필터링, 활성화 상태 필터링, 페이징 및 정렬 지원 기능을 제공합니다.",
+        "testStrategy": "검색 기능 테스트, 필터링 정확성 테스트, 페이징 및 정렬 기능 테스트, 대소문자 구분 없는 검색 테스트, 복합 검색 조건 테스트",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "검색 및 필터링 DTO 구현",
+            "description": "PopupStoreSearchRequest와 PopupStoreSearchResponse DTO 구현",
+            "status": "done",
+            "dependencies": [],
+            "details": "",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "팝업스토어 리포지토리 포트 확장",
+            "description": "이름 검색, 위치 검색, 현재 활성화된 팝업스토어 조회, 복합 검색 조건 조회 및 카운트 메서드 구현",
+            "status": "done",
+            "dependencies": [],
+            "details": "",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "팝업스토어 애그리게이트 확장",
+            "description": "검색 및 필터링 메서드 추가, 도메인 로직으로 검색 기능 구현",
+            "status": "done",
+            "dependencies": [],
+            "details": "",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "팝업스토어 애플리케이션 서비스 확장",
+            "description": "복합 검색, 이름 검색, 카테고리 검색, 위치 검색, 현재 활성화된 팝업스토어 조회 서비스 구현",
+            "status": "done",
+            "dependencies": [],
+            "details": "",
+            "testStrategy": ""
+          },
+          {
+            "id": 5,
+            "title": "팝업스토어 컨트롤러 확장",
+            "description": "복합 검색, 이름 검색, 카테고리 검색, 위치 검색, 현재 활성화된 팝업스토어 조회 엔드포인트 구현",
+            "status": "done",
+            "dependencies": [],
+            "details": "",
+            "testStrategy": ""
+          },
+          {
+            "id": 6,
+            "title": "JPA 리포지토리 구현",
+            "description": "복합 검색 쿼리, 페이징 및 정렬, 대소문자 구분 없는 검색 구현",
+            "status": "done",
+            "dependencies": [],
+            "details": "",
+            "testStrategy": ""
+          },
+          {
+            "id": 7,
+            "title": "검색 기능 테스트",
+            "description": "키워드 검색, 카테고리/위치/날짜별 필터링, 활성화 상태 필터링, 페이징 및 정렬 기능 테스트",
+            "status": "done",
+            "dependencies": [],
+            "details": "",
+            "testStrategy": ""
+          }
+        ]
       },
       {
         "id": 16,
@@ -619,7 +682,7 @@
       "updatedAt": "2024-01-01T00:00:00Z",
       "created": "2025-08-03T23:49:27.405Z",
       "description": "Tasks for master context",
-      "updated": "2025-09-07T06:26:09.410Z"
+      "updated": "2025-09-08T01:27:06.838Z"
     }
   }
 }
