@@ -45,4 +45,37 @@ public interface PopupStoreRepositoryPort {
      * 팝업스토어가 존재하는지 확인합니다.
      */
     boolean existsById(Long id);
+
+    /**
+     * 이름으로 팝업스토어를 검색합니다.
+     */
+    List<PopupStore> findByNameContaining(String name);
+
+    /**
+     * 위치로 팝업스토어를 조회합니다.
+     */
+    List<PopupStore> findByLocation(String location);
+
+    /**
+     * 현재 진행 중인 팝업스토어를 조회합니다.
+     */
+    List<PopupStore> findCurrentlyActive();
+
+    /**
+     * 복합 검색 조건으로 팝업스토어를 조회합니다.
+     */
+    List<PopupStore> findBySearchConditions(String keyword, String category, String location, 
+                                           LocalDateTime startDateFrom, LocalDateTime startDateTo,
+                                           LocalDateTime endDateFrom, LocalDateTime endDateTo,
+                                           Boolean active, Boolean currentlyActive,
+                                           String sortBy, String sortDirection,
+                                           Integer page, Integer size);
+
+    /**
+     * 복합 검색 조건으로 팝업스토어 개수를 조회합니다.
+     */
+    Long countBySearchConditions(String keyword, String category, String location,
+                                LocalDateTime startDateFrom, LocalDateTime startDateTo,
+                                LocalDateTime endDateFrom, LocalDateTime endDateTo,
+                                Boolean active, Boolean currentlyActive);
 } 
