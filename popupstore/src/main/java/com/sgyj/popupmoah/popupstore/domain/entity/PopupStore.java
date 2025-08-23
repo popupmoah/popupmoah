@@ -86,7 +86,7 @@ public class PopupStore extends UpdatedEntity {
     }
 
     /**
-     * 좌표 정보가 있는지 확인합니다.
+     * 팝업스토어가 좌표 정보를 가지고 있는지 확인합니다.
      */
     public boolean hasCoordinates() {
         return latitude != null && longitude != null;
