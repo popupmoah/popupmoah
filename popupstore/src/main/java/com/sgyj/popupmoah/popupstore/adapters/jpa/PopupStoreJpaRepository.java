@@ -4,6 +4,7 @@ import com.sgyj.popupmoah.popupstore.domain.entity.PopupStore;
 import com.sgyj.popupmoah.popupstore.domain.port.PopupStoreRepositoryPort;
 import jakarta.persistence.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -122,6 +123,20 @@ public class PopupStoreJpaRepository implements PopupStoreRepositoryPort {
                 active, currentlyActive, now
         );
     }
+
+    // ========== 관리자 기능 ==========
+
+    @Override
+    public Page<PopupStore> findByStatus(String status, Pageable pageable) {
+        Page<PopupStoreJpaEntity> entities = repository.findByStatus(status, pageable);
+        return entities.map(this::toDomainEntity);
+    }
+
+    @Override
+    public Page<PopupStore> findAll(Pageable pageable) {
+        Page<PopupStoreJpaEntity> entities = repository.findAll(pageable);
+        return entities.map(this::toDomainEntity);
+    }
     
     /**
      * 도메인 엔티티를 JPA 엔티티로 변환
@@ -141,6 +156,8 @@ public class PopupStoreJpaRepository implements PopupStoreRepositoryPort {
                 .latitude(popupStore.getLatitude())
                 .longitude(popupStore.getLongitude())
                 .active(popupStore.getActive())
+                .status(popupStore.getStatus())
+                .rejectionReason(popupStore.getRejectionReason())
                 .viewCount(popupStore.getViewCount())
                 .likeCount(popupStore.getLikeCount())
                 .createdAt(popupStore.getCreatedAt())
@@ -166,6 +183,8 @@ public class PopupStoreJpaRepository implements PopupStoreRepositoryPort {
                 .latitude(entity.getLatitude())
                 .longitude(entity.getLongitude())
                 .active(entity.getActive())
+                .status(entity.getStatus())
+                .rejectionReason(entity.getRejectionReason())
                 .viewCount(entity.getViewCount())
                 .likeCount(entity.getLikeCount())
                 .createdAt(entity.getCreatedAt())
