@@ -100,8 +100,6 @@ public class ReservationAggregate {
                 .confirmedAt(reservation.getConfirmedAt())
                 .cancelledAt(reservation.getCancelledAt())
                 .cancellationReason(reservation.getCancellationReason())
-                .createdAt(updated.getCreatedAt())
-                .updatedAt(LocalDateTime.now())
                 .build();
         
         return repository.save(updated);
