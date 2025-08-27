@@ -1,7 +1,10 @@
 package com.sgyj.popupmoah.popupstore.domain.port;
 
 import com.sgyj.popupmoah.popupstore.domain.entity.PopupStore;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -78,4 +81,16 @@ public interface PopupStoreRepositoryPort {
                                 LocalDateTime startDateFrom, LocalDateTime startDateTo,
                                 LocalDateTime endDateFrom, LocalDateTime endDateTo,
                                 Boolean active, Boolean currentlyActive);
+
+    // ========== 관리자 기능 ==========
+
+    /**
+     * 상태별로 팝업스토어를 조회합니다 (페이징).
+     */
+    Page<PopupStore> findByStatus(String status, Pageable pageable);
+
+    /**
+     * 모든 팝업스토어를 조회합니다 (페이징).
+     */
+    Page<PopupStore> findAll(Pageable pageable);
 } 
