@@ -18,6 +18,18 @@ spring:
   redis:
     host: localhost
     port: 6379
+    timeout: 2000ms
+    lettuce:
+      pool:
+        max-active: 8
+        max-idle: 8
+        min-idle: 0
+        max-wait: -1ms
+  cache:
+    type: redis
+    redis:
+      time-to-live: 1800000 # 30분 (밀리초)
+      cache-null-values: false
 server:
   port: 5032
 jasypt:
@@ -34,6 +46,25 @@ management:
     health:
       show-details: always
 
+# CDN 설정
+app:
+  cdn:
+    base-url: https://cdn.popupmoah.com
+    image-path: /images
+    thumbnail-path: /thumbnails
+    default-image-url: /images/default-popup-store.jpg
+    max-image-size: 10
+    allowed-extensions:
+      - jpg
+      - jpeg
+      - png
+      - gif
+      - webp
+    thumbnail-size:
+      width: 300
+      height: 200
+      quality: "80"
+
 # 로그 설정
 logging:
   level:
@@ -43,4 +74,3 @@ logging:
     console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
   file:
     name: logs/popupmoah.log
-
