@@ -11,7 +11,18 @@ import java.time.LocalDateTime;
  * 데이터베이스 매핑을 위한 인프라스트럭처 엔티티
  */
 @Entity
-@Table(name = "popup_stores")
+@Table(name = "popup_stores", indexes = {
+    @Index(name = "idx_popup_stores_active", columnList = "active"),
+    @Index(name = "idx_popup_stores_category", columnList = "category"),
+    @Index(name = "idx_popup_stores_status", columnList = "status"),
+    @Index(name = "idx_popup_stores_start_date", columnList = "start_date"),
+    @Index(name = "idx_popup_stores_end_date", columnList = "end_date"),
+    @Index(name = "idx_popup_stores_location", columnList = "location"),
+    @Index(name = "idx_popup_stores_created_at", columnList = "created_at"),
+    @Index(name = "idx_popup_stores_active_dates", columnList = "active, start_date, end_date"),
+    @Index(name = "idx_popup_stores_category_active", columnList = "category, active"),
+    @Index(name = "idx_popup_stores_status_created", columnList = "status, created_at")
+})
 @Getter
 @Setter
 @NoArgsConstructor
