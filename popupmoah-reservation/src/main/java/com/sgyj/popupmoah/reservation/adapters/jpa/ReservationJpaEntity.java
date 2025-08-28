@@ -12,7 +12,16 @@ import java.time.LocalDateTime;
  * 예약 JPA 엔티티
  */
 @Entity
-@Table(name = "reservations")
+@Table(name = "reservations", indexes = {
+    @Index(name = "idx_reservations_member_id", columnList = "member_id"),
+    @Index(name = "idx_reservations_popup_store_id", columnList = "popup_store_id"),
+    @Index(name = "idx_reservations_status", columnList = "status"),
+    @Index(name = "idx_reservations_date_time", columnList = "reservation_date_time"),
+    @Index(name = "idx_reservations_created_at", columnList = "created_at"),
+    @Index(name = "idx_reservations_member_status", columnList = "member_id, status"),
+    @Index(name = "idx_reservations_popupstore_status", columnList = "popup_store_id, status"),
+    @Index(name = "idx_reservations_date_status", columnList = "reservation_date_time, status")
+})
 @Data
 @Builder
 @NoArgsConstructor
