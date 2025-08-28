@@ -46,10 +46,11 @@ public interface PopupStoreJpaEntityRepository extends JpaRepository<PopupStoreJ
     List<PopupStoreJpaEntity> findCurrentlyActive(@Param("now") LocalDateTime now);
 
     /**
-     * 복합 검색 조건으로 팝업스토어를 조회합니다.
+     * 복합 검색 조건으로 팝업스토어를 조회합니다. (최적화된 쿼리)
      */
     @Query("SELECT p FROM PopupStoreJpaEntity p WHERE " +
-           "(:keyword IS NULL OR LOWER(p.name) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+           "(:keyword IS NULL OR " +
+           "LOWER(p.name) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
            "LOWER(p.description) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
            "LOWER(p.location) LIKE LOWER(CONCAT('%', :keyword, '%'))) AND " +
            "(:category IS NULL OR p.category = :category) AND " +
@@ -64,7 +65,8 @@ public interface PopupStoreJpaEntityRepository extends JpaRepository<PopupStoreJ
            "(p.startDate IS NULL OR p.startDate <= :now) AND " +
            "(p.endDate IS NULL OR p.endDate >= :now)) OR " +
            "(:currentlyActive = false AND (p.active = false OR " +
-           "p.startDate > :now OR p.endDate < :now)))")
+           "p.startDate > :now OR p.endDate < :now))) " +
+           "ORDER BY p.createdAt DESC")
     Page<PopupStoreJpaEntity> findBySearchConditions(
             @Param("keyword") String keyword,
             @Param("category") String category,
