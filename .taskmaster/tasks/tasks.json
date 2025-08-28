@@ -716,7 +716,7 @@
         "id": 18,
         "title": "성능 최적화 및 캐싱 구현",
         "description": "Redis 캐싱, 쿼리 최적화, 이미지 CDN 연동",
-        "status": "pending",
+        "status": "done",
         "priority": "low",
         "dependencies": [
           "8",
@@ -725,7 +725,62 @@
         "details": "성능 최적화 및 캐싱 구현",
         "testStrategy": "성능 테스트, 캐싱 효과 검증",
         "createdAt": "2024-01-01T00:00:00Z",
-        "updatedAt": "2024-01-01T00:00:00Z"
+        "updatedAt": "2024-01-01T00:00:00Z",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Configure and Integrate Redis for Caching",
+            "description": "Set up Redis server, add necessary dependencies, and configure Redis integration in the Spring Boot application for caching.",
+            "dependencies": [],
+            "details": "Install Redis, add 'spring-boot-starter-data-redis' dependency, configure Redis connection settings, and create RedisConfig class using Lettuce for thread safety.",
+            "status": "done",
+            "testStrategy": "Verify Redis connection and ensure RedisTemplate is properly initialized."
+          },
+          {
+            "id": 2,
+            "title": "Implement Spring Cache Annotations and Cache Strategy",
+            "description": "Enable caching in the application and apply @Cacheable, @CachePut, and @CacheEvict annotations to appropriate service methods.",
+            "dependencies": [
+              "18.1"
+            ],
+            "details": "Add @EnableCaching to the main application class, identify cacheable methods, and define cache names and keys for efficient data retrieval.",
+            "status": "done",
+            "testStrategy": "Test cache hits and misses by monitoring method invocations and Redis cache entries."
+          },
+          {
+            "id": 3,
+            "title": "Optimize Database Queries for Performance",
+            "description": "Analyze and refactor slow or inefficient database queries to reduce latency and improve overall system performance.",
+            "dependencies": [
+              "18.2"
+            ],
+            "details": "Profile query execution, add necessary indexes, rewrite complex queries, and minimize N+1 query issues using JPA best practices.",
+            "status": "done",
+            "testStrategy": "Benchmark query performance before and after optimization; validate correctness of results."
+          },
+          {
+            "id": 4,
+            "title": "Integrate Image CDN for Static Asset Delivery",
+            "description": "Configure and connect an image CDN to serve static image assets, reducing server load and improving response times.",
+            "dependencies": [
+              "18.3"
+            ],
+            "details": "Select a suitable CDN provider, update image URLs to use CDN endpoints, and ensure cache headers are set for optimal delivery.",
+            "status": "done",
+            "testStrategy": "Verify image loading speed and CDN cache effectiveness using browser developer tools and CDN analytics."
+          },
+          {
+            "id": 5,
+            "title": "Conduct Performance Testing and Cache Effectiveness Validation",
+            "description": "Perform comprehensive performance tests to measure the impact of caching and CDN integration, and validate cache hit ratios.",
+            "dependencies": [
+              "18.4"
+            ],
+            "details": "Use tools like JMeter or Gatling to simulate load, monitor Redis and CDN metrics, and analyze system throughput and latency.",
+            "status": "done",
+            "testStrategy": "Compare performance metrics before and after optimization; ensure cache and CDN are functioning as intended."
+          }
+        ]
       },
       {
         "id": 19,
@@ -808,7 +863,7 @@
       "updatedAt": "2024-01-01T00:00:00Z",
       "created": "2025-08-03T23:49:27.405Z",
       "description": "Tasks for master context",
-      "updated": "2025-09-08T05:14:12.285Z"
+      "updated": "2025-09-08T05:39:47.852Z"
     }
   }
 }
