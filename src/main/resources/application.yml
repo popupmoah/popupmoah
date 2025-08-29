@@ -46,6 +46,24 @@ management:
     health:
       show-details: always
 
+# JWT 설정
+jwt:
+  secret: ${JWT_SECRET:mySecretKey123456789012345678901234567890}
+  expiration: 86400000 # 24시간 (밀리초)
+  refresh-expiration: 604800000 # 7일 (밀리초)
+  header: Authorization
+  prefix: Bearer
+
+# 보안 설정
+security:
+  headers:
+    content-security-policy: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'"
+    x-frame-options: DENY
+    x-content-type-options: nosniff
+    x-xss-protection: "1; mode=block"
+    referrer-policy: strict-origin-when-cross-origin
+    permissions-policy: "geolocation=(), microphone=(), camera=(), payment=(), usb=(), magnetometer=(), gyroscope=(), speaker=(), vibrate=(), fullscreen=(self), sync-xhr=()"
+
 # CDN 설정
 app:
   cdn:
