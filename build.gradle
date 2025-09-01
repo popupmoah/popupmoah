@@ -2,6 +2,10 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.5.0'
     id 'io.spring.dependency-management' version '1.1.7'
+    id 'jacoco'
+    id 'checkstyle'
+    id 'com.github.spotbugs' version '6.0.7'
+    id 'org.owasp.dependencycheck' version '8.4.3'
 }
 
 group = 'com.sgyj'
@@ -66,4 +70,116 @@ dependencies {
 
 tasks.named('test') {
     useJUnitPlatform()
+    finalizedBy jacocoTestReport
+}
+
+// JaCoCo 설정
+jacoco {
+    toolVersion = "0.8.8"
+}
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        xml.required = true
+        html.required = true
+        csv.required = false
+    }
+    finalizedBy jacocoTestCoverageVerification
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            limit {
+                minimum = 0.70 // 70% 커버리지 요구
+            }
+        }
+    }
+}
+
+// Checkstyle 설정
+checkstyle {
+    toolVersion = '10.12.4'
+    configFile = file('config/checkstyle/checkstyle.xml')
+    ignoreFailures = false
+    maxWarnings = 0
+}
+
+// SpotBugs 설정
+spotbugs {
+    toolVersion = '4.7.3'
+    effort = 'max'
+    reportLevel = 'low'
+    ignoreFailures = false
+}
+
+spotbugsMain {
+    reports {
+        html {
+            required = true
+            outputLocation = file("$buildDir/reports/spotbugs/main/spotbugs.html")
+            stylesheet = 'fancy-hist.xsl'
+        }
+    }
+}
+
+spotbugsTest {
+    reports {
+        html {
+            required = true
+            outputLocation = file("$buildDir/reports/spotbugs/test/spotbugs.html")
+            stylesheet = 'fancy-hist.xsl'
+        }
+    }
+}
+
+// OWASP Dependency Check 설정
+dependencyCheck {
+    format = 'ALL'
+    suppressionFile = 'config/dependency-check/suppressions.xml'
+    failBuildOnCVSS = 7
+    analyzers {
+        assemblyEnabled = false
+        nugetconfEnabled = false
+        nodeEnabled = false
+    }
+}
+
+// 성능 테스트 설정
+task performanceTest(type: Test) {
+    group = 'verification'
+    description = 'Runs performance tests'
+    
+    useJUnitPlatform()
+    testClassesDirs = sourceSets.test.output.classesDirs
+    classpath = sourceSets.test.runtimeClasspath
+    
+    include '**/*PerformanceTest.class'
+    include '**/*Performance*.class'
+    
+    systemProperty 'spring.profiles.active', 'performance'
+    
+    reports {
+        html.required = true
+        junitXml.required = true
+    }
+    
+    outputs.upToDateWhen { false }
+}
+
+// 전체 품질 검사 태스크
+task qualityCheck {
+    group = 'verification'
+    description = 'Runs all quality checks'
+    
+    dependsOn checkstyleMain, checkstyleTest
+    dependsOn spotbugsMain, spotbugsTest
+    dependsOn dependencyCheckAnalyze
+    dependsOn jacocoTestCoverageVerification
+    dependsOn performanceTest
+    
+    doLast {
+        println 'All quality checks completed successfully!'
+    }
 }
