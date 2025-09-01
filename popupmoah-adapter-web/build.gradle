@@ -5,7 +5,8 @@ plugins {
 }
 
 dependencies {
-    // Shared module dependency
+    // Domain module dependencies
+    implementation project(':popupmoah-domain')
     implementation project(':popupmoah-shared')
     
     // Spring Boot Starters
@@ -29,4 +30,4 @@ bootJar {
 
 jar {
     enabled = true
-} 
+}
