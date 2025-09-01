@@ -1,0 +1,49 @@
+# Grafana 대시보드 프로비저닝 설정
+# 팝업모아 모니터링 대시보드 자동 로드 설정
+
+apiVersion: 1
+
+providers:
+  # 팝업모아 시스템 대시보드
+  - name: 'popupmoah-system'
+    orgId: 1
+    folder: 'PopupMoah'
+    type: file
+    disableDeletion: false
+    updateIntervalSeconds: 10
+    allowUiUpdates: true
+    options:
+      path: /var/lib/grafana/dashboards/system
+
+  # 팝업모아 애플리케이션 대시보드
+  - name: 'popupmoah-application'
+    orgId: 1
+    folder: 'PopupMoah'
+    type: file
+    disableDeletion: false
+    updateIntervalSeconds: 10
+    allowUiUpdates: true
+    options:
+      path: /var/lib/grafana/dashboards/application
+
+  # 팝업모아 비즈니스 대시보드
+  - name: 'popupmoah-business'
+    orgId: 1
+    folder: 'PopupMoah'
+    type: file
+    disableDeletion: false
+    updateIntervalSeconds: 10
+    allowUiUpdates: true
+    options:
+      path: /var/lib/grafana/dashboards/business
+
+  # 팝업모아 보안 대시보드
+  - name: 'popupmoah-security'
+    orgId: 1
+    folder: 'PopupMoah'
+    type: file
+    disableDeletion: false
+    updateIntervalSeconds: 10
+    allowUiUpdates: true
+    options:
+      path: /var/lib/grafana/dashboards/security
