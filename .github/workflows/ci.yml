@@ -50,7 +50,7 @@ jobs:
           distribution: "temurin"
 
       - name: Cache Gradle packages
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             ~/.gradle/caches
@@ -73,7 +73,7 @@ jobs:
           REDIS_PORT: 6379
 
       - name: Generate test report
-        uses: dorny/test-reporter@v1
+        uses: dorny/test-reporter@v2
         if: success() || failure()
         with:
           name: Gradle Tests
@@ -81,14 +81,14 @@ jobs:
           reporter: java-junit
 
       - name: Upload test results
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: test-results
           path: build/test-results/test/
 
       - name: Upload test reports
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: test-reports
@@ -134,7 +134,7 @@ jobs:
           distribution: "temurin"
 
       - name: Cache Gradle packages
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             ~/.gradle/caches
@@ -172,7 +172,7 @@ jobs:
           distribution: "temurin"
 
       - name: Cache Gradle packages
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             ~/.gradle/caches
@@ -188,7 +188,7 @@ jobs:
         run: ./gradlew build -x test
 
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: build-artifacts
           path: |
@@ -211,7 +211,7 @@ jobs:
           distribution: "temurin"
 
       - name: Cache Gradle packages
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             ~/.gradle/caches
@@ -227,7 +227,7 @@ jobs:
         run: ./gradlew dependencyCheckAnalyze
 
       - name: Upload security report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: security-report
@@ -251,7 +251,7 @@ jobs:
           distribution: "temurin"
 
       - name: Cache Gradle packages
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             ~/.gradle/caches
@@ -267,7 +267,7 @@ jobs:
         run: ./gradlew checkstyleMain checkstyleTest spotbugsMain spotbugsTest
 
       - name: Upload code quality reports
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: code-quality-reports
@@ -291,7 +291,7 @@ jobs:
           distribution: "temurin"
 
       - name: Cache Gradle packages
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             ~/.gradle/caches
@@ -309,7 +309,7 @@ jobs:
           SPRING_PROFILES_ACTIVE: test
 
       - name: Upload coverage reports
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: coverage-reports
           path: build/reports/jacoco/test/html/
@@ -321,3 +321,5 @@ jobs:
           lcov-file: build/reports/jacoco/test/jacocoTestReport.xml
           github-token: ${{ secrets.GITHUB_TOKEN }}
           delete-old-comments: true
+
+
