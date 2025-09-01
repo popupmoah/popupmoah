@@ -21,6 +21,22 @@ spring:
 server:
   port: 8080
 
+# Actuator 설정 (Prometheus 메트릭 활성화)
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: always
+    prometheus:
+      enabled: true
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+
 # AWS S3 설정
 aws:
   s3:
@@ -46,6 +62,14 @@ logging:
     org.flywaydb: DEBUG
     org.hibernate.SQL: DEBUG
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    com.sgyj.popupmoah: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+  file:
+    name: logs/popupmoah.log
+    max-size: 10MB
+    max-history: 30
 
 # Swagger/OpenAPI 설정
 springdoc:

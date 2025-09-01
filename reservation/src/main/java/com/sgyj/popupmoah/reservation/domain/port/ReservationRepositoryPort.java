@@ -77,3 +77,5 @@ public interface ReservationRepositoryPort {
      */
     List<Reservation> findExpiredReservations(LocalDateTime now);
 }
+
+

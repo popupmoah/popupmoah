@@ -83,3 +83,5 @@ class SecurityConfigurationTest {
         assertThat(securityHeadersFilter.getClass().getSimpleName()).isEqualTo("SecurityHeadersFilter");
     }
 }
+
+

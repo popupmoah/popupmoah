@@ -79,3 +79,5 @@ public class ReservationCreateRequest {
     @Size(max = 1000, message = "메모는 1000자를 초과할 수 없습니다")
     private String notes;
 }
+
+

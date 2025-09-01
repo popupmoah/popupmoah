@@ -2,24 +2,24 @@
 # 팝업모아 애플리케이션 로그 수집을 위한 설정
 
 filebeat.inputs:
-- type: log
-  enabled: true
-  paths:
-    - /var/log/popupmoah/*.log
-    - /var/log/popupmoah/*.log.*
-  fields:
-    service: popupmoah
-    environment: production
-  fields_under_root: true
-  multiline.pattern: '^\d{4}-\d{2}-\d{2}'
-  multiline.negate: true
-  multiline.match: after
-  processors:
-    - add_host_metadata:
-        when.not.contains.tags: forwarded
-    - add_cloud_metadata: ~
-    - add_docker_metadata: ~
-    - add_kubernetes_metadata: ~
+  - type: log
+    enabled: true
+    paths:
+      - /var/log/popupmoah/*.log
+      - /var/log/popupmoah/*.log.*
+    fields:
+      service: popupmoah
+      environment: production
+    fields_under_root: true
+    multiline.pattern: '^\d{4}-\d{2}-\d{2}'
+    multiline.negate: true
+    multiline.match: after
+    processors:
+      - add_host_metadata:
+          when.not.contains.tags: forwarded
+      - add_cloud_metadata: ~
+      - add_docker_metadata: ~
+      - add_kubernetes_metadata: ~
 
 # 로그 파싱 및 필터링
 processors:
@@ -30,10 +30,10 @@ processors:
   - timestamp:
       field: timestamp
       layouts:
-        - '2006-01-02T15:04:05.000Z'
-        - '2006-01-02 15:04:05'
+        - "2006-01-02T15:04:05.000Z"
+        - "2006-01-02 15:04:05"
       test:
-        - '2025-09-01T12:15:23.123Z'
+        - "2025-09-01T12:15:23.123Z"
 
 # Elasticsearch 출력 설정
 output.elasticsearch:

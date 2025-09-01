@@ -114,3 +114,5 @@ class SecurityIntegrationTest {
                 .andExpect(cookie().doesNotExist("JSESSIONID"));
     }
 }
+
+

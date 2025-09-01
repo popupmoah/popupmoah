@@ -321,3 +321,5 @@ class PopupStoreAggregateTest {
         verify(repository).findByLocation("서울시 강남구");
     }
 }
+
+

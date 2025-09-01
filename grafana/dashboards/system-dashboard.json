@@ -23,15 +23,15 @@
             },
             "thresholds": {
               "steps": [
-                {"color": "green", "value": null},
-                {"color": "yellow", "value": 70},
-                {"color": "red", "value": 90}
+                { "color": "green", "value": null },
+                { "color": "yellow", "value": 70 },
+                { "color": "red", "value": 90 }
               ]
             },
             "unit": "percent"
           }
         },
-        "gridPos": {"h": 8, "w": 6, "x": 0, "y": 0}
+        "gridPos": { "h": 8, "w": 6, "x": 0, "y": 0 }
       },
       {
         "id": 2,
@@ -50,15 +50,15 @@
             },
             "thresholds": {
               "steps": [
-                {"color": "green", "value": null},
-                {"color": "yellow", "value": 80},
-                {"color": "red", "value": 95}
+                { "color": "green", "value": null },
+                { "color": "yellow", "value": 80 },
+                { "color": "red", "value": 95 }
               ]
             },
             "unit": "percent"
           }
         },
-        "gridPos": {"h": 8, "w": 6, "x": 6, "y": 0}
+        "gridPos": { "h": 8, "w": 6, "x": 6, "y": 0 }
       },
       {
         "id": 3,
@@ -77,15 +77,15 @@
             },
             "thresholds": {
               "steps": [
-                {"color": "green", "value": null},
-                {"color": "yellow", "value": 80},
-                {"color": "red", "value": 90}
+                { "color": "green", "value": null },
+                { "color": "yellow", "value": 80 },
+                { "color": "red", "value": 90 }
               ]
             },
             "unit": "percent"
           }
         },
-        "gridPos": {"h": 8, "w": 6, "x": 12, "y": 0}
+        "gridPos": { "h": 8, "w": 6, "x": 12, "y": 0 }
       },
       {
         "id": 4,
@@ -109,7 +109,7 @@
             "unit": "Bps"
           }
         ],
-        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8}
+        "gridPos": { "h": 8, "w": 12, "x": 0, "y": 8 }
       },
       {
         "id": 5,
@@ -133,7 +133,7 @@
             "unit": "bytes"
           }
         ],
-        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 8}
+        "gridPos": { "h": 8, "w": 12, "x": 12, "y": 8 }
       }
     ],
     "time": {

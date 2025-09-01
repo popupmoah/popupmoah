@@ -38,3 +38,5 @@ CREATE INDEX IF NOT EXISTS idx_reservations_date_status ON reservations(reservat
 -- 카테고리 테이블 인덱스 (기존 테이블이 있다면)
 -- CREATE INDEX IF NOT EXISTS idx_categories_name ON categories(name);
 -- CREATE INDEX IF NOT EXISTS idx_categories_active ON categories(active);
+
+

@@ -89,3 +89,5 @@ app:
     base-url: http://localhost:8080
     upload-path: /uploads
     max-file-size: 10MB
+
+

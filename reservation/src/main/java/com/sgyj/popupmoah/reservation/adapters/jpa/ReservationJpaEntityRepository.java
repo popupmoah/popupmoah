@@ -64,3 +64,5 @@ public interface ReservationJpaEntityRepository extends JpaRepository<Reservatio
     @Query("SELECT r FROM ReservationJpaEntity r WHERE r.reservationDateTime < :now AND r.status = 'PENDING'")
     List<ReservationJpaEntity> findExpiredReservations(@Param("now") LocalDateTime now);
 }
+
+
