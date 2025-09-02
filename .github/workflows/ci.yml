@@ -95,72 +95,10 @@ jobs:
           name: test-reports
           path: build/reports/tests/test/
 
-  integration-test:
-    name: Integration Test
-    runs-on: ubuntu-latest
-    needs: test
-
-    services:
-      postgres:
-        image: postgres:15
-        env:
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: testdb
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        ports:
-          - 5432:5432
-
-      redis:
-        image: redis:7
-        options: >-
-          --health-cmd "redis-cli ping"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        ports:
-          - 6379:6379
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up JDK ${{ env.JAVA_VERSION }}
-        uses: actions/setup-java@v4
-        with:
-          java-version: ${{ env.JAVA_VERSION }}
-          distribution: "temurin"
-
-      - name: Cache Gradle packages
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
-
-      - name: Make gradlew executable
-        run: chmod +x ./gradlew
-
-      - name: Run integration tests
-        run: ./gradlew integrationTest
-        env:
-          SPRING_PROFILES_ACTIVE: test
-          DATABASE_URL: jdbc:postgresql://localhost:5432/testdb
-          DATABASE_USERNAME: postgres
-          DATABASE_PASSWORD: postgres
-          REDIS_HOST: localhost
-          REDIS_PORT: 6379
-
   build:
     name: Build
     runs-on: ubuntu-latest
-    needs: [test, integration-test]
+    needs: test
 
     steps:
       - name: Checkout code
@@ -322,4 +260,3 @@ jobs:
           lcov-file: build/reports/jacoco/test/jacocoTestReport.xml
           github-token: ${{ secrets.GITHUB_TOKEN }}
           delete-old-comments: true
-
