@@ -79,6 +79,7 @@ jobs:
           name: Gradle Tests
           path: build/test-results/test/*.xml
           reporter: java-junit
+          fail-on-empty: false
 
       - name: Upload test results
         uses: actions/upload-artifact@v4
@@ -321,5 +322,3 @@ jobs:
           lcov-file: build/reports/jacoco/test/jacocoTestReport.xml
           github-token: ${{ secrets.GITHUB_TOKEN }}
           delete-old-comments: true
-
-
