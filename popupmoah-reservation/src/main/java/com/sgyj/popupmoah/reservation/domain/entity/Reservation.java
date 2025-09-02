@@ -1,6 +1,5 @@
 package com.sgyj.popupmoah.reservation.domain.entity;
 
-import com.sgyj.popupmoah.core.entity.UpdatedEntity;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -13,7 +12,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Reservation extends UpdatedEntity {
+public class Reservation extends Object {
 
     private Long id;
     private Long memberId;

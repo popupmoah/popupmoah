@@ -1,14 +1,24 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.5.0'
+    id 'io.spring.dependency-management' version '1.1.7'
+}
+
+repositories {
+    mavenCentral()
+}
+
 dependencies {
-    // Module dependencies
-    implementation project(':popupmoah-core')
-    implementation project(':popupmoah-popupstore-domain')
-    implementation project(':popupmoah-popupstore-application')
+    // Domain module dependencies
+    implementation project(':popupmoah-domain')
+    implementation project(':popupmoah-shared')
     
     // Spring Boot Starters
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
     
     // Database
     implementation 'org.postgresql:postgresql'
@@ -20,6 +30,7 @@ dependencies {
     
     // Testing
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
     testImplementation 'com.h2database:h2'
     testImplementation 'org.testcontainers:junit-jupiter'
     testImplementation 'org.testcontainers:postgresql'
@@ -32,4 +43,4 @@ bootJar {
 
 jar {
     enabled = true
-} 
+}

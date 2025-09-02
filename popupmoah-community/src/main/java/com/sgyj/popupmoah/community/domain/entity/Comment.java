@@ -1,6 +1,5 @@
 package com.sgyj.popupmoah.domain.community.entity;
 
-import com.sgyj.popupmoah.domain.common.UpdatedEntity;
 import com.sgyj.popupmoah.domain.popupstore.entity.PopupStore;
 import lombok.*;
 import jakarta.persistence.*;
@@ -11,7 +10,7 @@ import jakarta.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-public class Comment extends UpdatedEntity {
+public class Comment extends Object {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

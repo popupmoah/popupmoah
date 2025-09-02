@@ -1,7 +1,5 @@
 package com.sgyj.popupmoah.domain.file.entity;
 
-import com.sgyj.popupmoah.shared.entity.CreatedEntity;
-import com.sgyj.popupmoah.domain.common.UpdatedEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -17,7 +15,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-public class FileUpload extends CreatedEntity {
+public class FileUpload extends Object {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

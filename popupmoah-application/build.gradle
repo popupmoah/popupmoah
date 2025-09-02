@@ -4,8 +4,13 @@ plugins {
     id 'io.spring.dependency-management' version '1.1.7'
 }
 
+repositories {
+    mavenCentral()
+}
+
 dependencies {
-    // Shared module dependency
+    // Domain module dependencies
+    implementation project(':popupmoah-domain')
     implementation project(':popupmoah-shared')
     
     // Spring Boot Starters
@@ -27,4 +32,4 @@ bootJar {
 
 jar {
     enabled = true
-} 
+}
