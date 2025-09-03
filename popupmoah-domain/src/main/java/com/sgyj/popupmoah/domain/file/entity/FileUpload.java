@@ -3,8 +3,6 @@ package com.sgyj.popupmoah.domain.file.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
-
 /**
  * 파일 업로드 엔티티
  * S3에 업로드된 파일의 메타데이터를 관리합니다.

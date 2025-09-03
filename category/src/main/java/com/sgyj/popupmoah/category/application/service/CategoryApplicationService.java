@@ -20,7 +20,6 @@ import java.util.Optional;
 @Transactional
 public class CategoryApplicationService implements CategoryServicePort {
     
-    private final CategoryRepositoryPort repository;
     private final CategoryAggregate aggregate;
     
     @Override
