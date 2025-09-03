@@ -1,4 +1,4 @@
-package com.sgyj.popupmoah.domain.community.entity;
+package com.sgyj.popupmoah.community.domain.entity;
 
 /**
  * 회원 권한을 정의하는 enum
