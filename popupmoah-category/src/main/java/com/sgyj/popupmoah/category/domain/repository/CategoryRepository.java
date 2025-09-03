@@ -1,6 +1,6 @@
-package com.sgyj.popupmoah.domain.category.repository;
+package com.sgyj.popupmoah.category.domain.repository;
 
-import com.sgyj.popupmoah.domain.category.entity.Category;
+import com.sgyj.popupmoah.category.domain.entity.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

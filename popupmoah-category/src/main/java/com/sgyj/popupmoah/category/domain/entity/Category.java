@@ -1,4 +1,4 @@
-package com.sgyj.popupmoah.domain.category.entity;
+package com.sgyj.popupmoah.category.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
