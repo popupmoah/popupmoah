@@ -31,10 +31,10 @@ management:
     health:
       show-details: always
     prometheus:
-      enabled: true
-  metrics:
-    export:
-      prometheus:
+      access: public
+  prometheus:
+    metrics:
+      export:
         enabled: true
 
 # AWS S3 설정

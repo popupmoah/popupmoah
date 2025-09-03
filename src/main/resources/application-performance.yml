@@ -29,16 +29,17 @@ spring:
         order_updates: true
 
   # Redis 설정 (성능 테스트용)
-  redis:
-    host: localhost
-    port: 6379
-    timeout: 2000ms
-    lettuce:
-      pool:
-        max-active: 20
-        max-idle: 10
-        min-idle: 5
-        max-wait: 2000ms
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      timeout: 2000ms
+      lettuce:
+        pool:
+          max-active: 20
+          max-idle: 10
+          min-idle: 5
+          max-wait: 2000ms
 
 # 로깅 설정 (성능 테스트 시 최소화)
 logging:
@@ -89,5 +90,6 @@ app:
     base-url: http://localhost:8080
     upload-path: /uploads
     max-file-size: 10MB
+
 
 
