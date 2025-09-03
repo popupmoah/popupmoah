@@ -31,7 +31,7 @@ management:
     health:
       show-details: always
     prometheus:
-      access: public
+      access: unrestricted
   prometheus:
     metrics:
       export:

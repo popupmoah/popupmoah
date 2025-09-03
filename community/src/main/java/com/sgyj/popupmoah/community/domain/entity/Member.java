@@ -1,7 +1,6 @@
 package com.sgyj.popupmoah.community.domain.entity;
 
 import com.sgyj.popupmoah.core.entity.UpdatedEntity;
-import com.sgyj.popupmoah.community.domain.entity.MemberRole;
 import lombok.*;
 
 /**

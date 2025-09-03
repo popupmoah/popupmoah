@@ -61,9 +61,9 @@ management:
   endpoint:
     health:
       show-details: when-authorized
-  metrics:
-    export:
-      prometheus:
+  prometheus:
+    metrics:
+      export:
         enabled: true
 
 # 성능 테스트를 위한 JWT 설정
@@ -90,6 +90,3 @@ app:
     base-url: http://localhost:8080
     upload-path: /uploads
     max-file-size: 10MB
-
-
-
