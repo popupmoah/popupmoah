@@ -66,11 +66,10 @@ public class PopupStoreController {
             popupStoreCreateCounter.increment();
             
             return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(response, "팝업스토어가 성공적으로 생성되었습니다."));
-            } catch (IllegalArgumentException e) {
-                log.warn("팝업스토어 생성 실패: {}", e.getMessage());
-                throw e;
-            }
-        });
+        } catch (IllegalArgumentException e) {
+            log.warn("팝업스토어 생성 실패: {}", e.getMessage());
+            throw e;
+        }
     }
     
     /**

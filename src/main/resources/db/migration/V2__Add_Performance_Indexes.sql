@@ -40,3 +40,4 @@ CREATE INDEX IF NOT EXISTS idx_reservations_date_status ON reservations(reservat
 -- CREATE INDEX IF NOT EXISTS idx_categories_active ON categories(active);
 
 
+

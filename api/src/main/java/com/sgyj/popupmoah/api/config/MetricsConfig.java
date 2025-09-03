@@ -63,3 +63,4 @@ public class MetricsConfig {
                 .register(meterRegistry);
     }
 }
+
