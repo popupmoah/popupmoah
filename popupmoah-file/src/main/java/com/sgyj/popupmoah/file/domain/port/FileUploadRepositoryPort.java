@@ -1,6 +1,6 @@
-package com.sgyj.popupmoah.domain.file.port;
+package com.sgyj.popupmoah.file.domain.port;
 
-import com.sgyj.popupmoah.domain.file.entity.FileUpload;
+import com.sgyj.popupmoah.file.domain.entity.FileUpload;
 
 import java.util.List;
 import java.util.Optional;

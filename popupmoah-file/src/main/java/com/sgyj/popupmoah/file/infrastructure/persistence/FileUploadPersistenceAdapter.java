@@ -1,7 +1,7 @@
-package com.sgyj.popupmoah.adapter.persistence.file;
+package com.sgyj.popupmoah.file.infrastructure.persistence;
 
-import com.sgyj.popupmoah.domain.file.entity.FileUpload;
-import com.sgyj.popupmoah.domain.file.port.FileUploadRepositoryPort;
+import com.sgyj.popupmoah.file.domain.entity.FileUpload;
+import com.sgyj.popupmoah.file.domain.port.FileUploadRepositoryPort;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
