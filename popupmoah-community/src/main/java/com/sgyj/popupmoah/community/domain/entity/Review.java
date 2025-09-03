@@ -1,4 +1,4 @@
-package com.sgyj.popupmoah.domain.community.entity;
+package com.sgyj.popupmoah.community.domain.entity;
 
 import com.sgyj.popupmoah.domain.popupstore.entity.PopupStore;
 import lombok.*;
