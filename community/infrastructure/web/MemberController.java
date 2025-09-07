@@ -6,6 +6,12 @@ import com.sgyj.popupmoah.domain.community.application.dto.PasswordChangeRequest
 import com.sgyj.popupmoah.domain.community.application.dto.ProfileResponse;
 import com.sgyj.popupmoah.domain.community.application.dto.ProfileUpdateRequest;
 import com.sgyj.popupmoah.domain.community.service.MemberService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.responses.ApiResponse as SwaggerApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +29,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/members")
 @RequiredArgsConstructor
+@Tag(name = "회원 관리", description = "회원 가입, 프로필 관리 API")
 public class MemberController {
 
     private final MemberService memberService;
@@ -30,6 +37,12 @@ public class MemberController {
     /**
      * 회원 가입
      */
+    @Operation(summary = "회원 가입", description = "새로운 회원을 등록합니다.")
+    @ApiResponses(value = {
+            @SwaggerApiResponse(responseCode = "201", description = "회원 가입 성공"),
+            @SwaggerApiResponse(responseCode = "400", description = "잘못된 요청 데이터 또는 중복된 사용자명/이메일"),
+            @SwaggerApiResponse(responseCode = "500", description = "서버 내부 오류")
+    })
     @PostMapping("/signup")
     public ResponseEntity<MemberSignupResponse> signup(@Valid @RequestBody MemberSignupRequest request) {
         log.info("회원 가입 API 호출: username={}", request.getUsername());

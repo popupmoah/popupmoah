@@ -5,6 +5,11 @@ import com.sgyj.popupmoah.domain.category.application.dto.CategoryResponse;
 import com.sgyj.popupmoah.domain.category.application.dto.CategoryUpdateRequest;
 import com.sgyj.popupmoah.domain.category.entity.Category;
 import com.sgyj.popupmoah.domain.category.port.CategoryServicePort;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.responses.ApiResponse as SwaggerApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +28,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/categories")
 @RequiredArgsConstructor
+@Tag(name = "카테고리 관리", description = "카테고리 CRUD 및 계층 구조 관리 API")
 public class CategoryController {
 
     private final CategoryServicePort categoryServicePort;
@@ -30,6 +36,12 @@ public class CategoryController {
     /**
      * 카테고리 생성
      */
+    @Operation(summary = "카테고리 생성", description = "새로운 카테고리를 생성합니다.")
+    @ApiResponses(value = {
+            @SwaggerApiResponse(responseCode = "201", description = "카테고리 생성 성공"),
+            @SwaggerApiResponse(responseCode = "400", description = "잘못된 요청 데이터"),
+            @SwaggerApiResponse(responseCode = "500", description = "서버 내부 오류")
+    })
     @PostMapping
     public ResponseEntity<CategoryResponse> createCategory(@Valid @RequestBody CategoryCreateRequest request) {
         log.info("카테고리 생성 API 호출: name={}, parentId={}", request.getName(), request.getParentId());

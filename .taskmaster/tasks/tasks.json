@@ -339,7 +339,7 @@
         "id": 13,
         "title": "REST API 엔드포인트 구현",
         "description": "팝업스토어, 카테고리, 회원, 리뷰 관련 REST API 구현",
-        "status": "pending",
+        "status": "done",
         "priority": "high",
         "dependencies": [
           "3",
@@ -388,8 +388,8 @@
               "13.2",
               "13.3"
             ],
-            "details": "Create DTO classes for category, member, and review entities. Implement @ControllerAdvice for global exception handling and standardized error responses.",
-            "status": "in-progress",
+            "details": "Create DTO classes for category, member, and review entities. Implement @ControllerAdvice for global exception handling and standardized error responses.\n<info added on 2025-09-07T05:52:32.529Z>\n팝업스토어 도메인 DTO 구현 완료:\n\n1. 팝업스토어 DTO 클래스 생성\n   - PopupStoreCreateRequest: 팝업스토어 생성 요청 DTO (입력값 검증 포함)\n   - PopupStoreUpdateRequest: 팝업스토어 수정 요청 DTO\n   - PopupStoreResponse: 팝업스토어 응답 DTO\n\n2. PopupStoreController 업데이트\n   - DTO를 사용하도록 모든 엔드포인트 수정\n   - @Valid 어노테이션으로 입력값 검증\n   - 로깅 추가\n   - 예외 처리 개선\n   - convertToResponse() 메서드로 엔티티-DTO 변환\n\n3. 완료된 DTO 및 예외 처리 구조\n   - 전역 예외 처리기 (GlobalExceptionHandler)\n   - 표준화된 에러 응답 DTO (ErrorResponse)\n   - 카테고리 도메인 DTO들\n   - 회원 도메인 DTO들\n   - 리뷰 도메인 DTO들\n   - 팝업스토어 도메인 DTO들\n</info added on 2025-09-07T05:52:32.529Z>",
+            "status": "done",
             "testStrategy": "Unit tests for DTO mapping; simulate error scenarios to verify exception handling and error response formats."
           },
           {
@@ -402,8 +402,8 @@
               "13.3",
               "13.4"
             ],
-            "details": "Integrate Swagger/OpenAPI for automatic documentation. Ensure all endpoints, request/response models, and error codes are documented.",
-            "status": "pending",
+            "details": "Integrate Swagger/OpenAPI for automatic documentation. Ensure all endpoints, request/response models, and error codes are documented.\n<info added on 2025-09-07T05:55:24.194Z>\nREST API 문서화 구현 완료:\n\n1. Swagger/OpenAPI 의존성 추가\n   - build.gradle에 springdoc-openapi-starter-webmvc-ui 의존성 추가\n\n2. OpenAPI 설정 클래스 생성\n   - OpenApiConfig.java: API 정보, 서버 정보, JWT 인증 스키마 설정\n   - API 제목: \"PopupMoah API\"\n   - 버전: \"1.0.0\"\n   - JWT Bearer 인증 지원\n\n3. 컨트롤러별 Swagger 어노테이션 추가\n   - PopupStoreController: 팝업스토어 관리 API 문서화\n   - CategoryController: 카테고리 관리 API 문서화  \n   - MemberController: 회원 관리 API 문서화\n   - ReviewController: 리뷰 관리 API 문서화 (JWT 인증 필요)\n\n4. 각 엔드포인트별 상세 문서화\n   - @Operation: 요약 및 설명\n   - @ApiResponses: HTTP 상태 코드별 응답 설명\n   - @Parameter: 파라미터 설명\n   - @Tag: 컨트롤러별 태그 분류\n   - @SecurityRequirement: 인증이 필요한 API 표시\n\n5. application.yml 설정\n   - Swagger UI 경로: /swagger-ui.html\n   - API 문서 경로: /api-docs\n   - UI 설정: 정렬, 표시 옵션 등\n\n모든 REST API 엔드포인트가 완전히 문서화되었습니다.\n</info added on 2025-09-07T05:55:24.194Z>",
+            "status": "done",
             "testStrategy": "Review generated API docs for completeness and accuracy; validate documentation against actual API behavior."
           }
         ]
@@ -564,7 +564,7 @@
       "updatedAt": "2024-01-01T00:00:00Z",
       "created": "2025-08-03T23:49:27.405Z",
       "description": "Tasks for master context",
-      "updated": "2025-08-27T11:58:42.588Z"
+      "updated": "2025-09-07T05:55:30.056Z"
     }
   }
 }
