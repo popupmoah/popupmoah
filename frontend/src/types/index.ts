@@ -181,6 +181,70 @@ export interface Location {
   address: string
 }
 
+export interface Coordinates {
+  lat: number
+  lng: number
+}
+
+export type MapProvider = 'kakao' | 'naver'
+
+export interface MapMarker {
+  position: Coordinates
+  title?: string
+  content?: string
+  clickable?: boolean
+  icon?: string
+  size?: { width: number; height: number }
+}
+
+export interface MapEvent {
+  type: 'click' | 'dragend' | 'zoom_changed'
+  coordinates?: Coordinates
+  zoom?: number
+}
+
+export interface PopupStoreLocation {
+  id: number
+  name: string
+  address: string
+  coordinates: Coordinates
+  category?: string
+  active?: boolean
+}
+
+export interface PlaceSearchRequest {
+  query: string
+  center?: Coordinates
+  radius?: number
+  category?: string
+  page?: number
+  size?: number
+  sort?: 'distance' | 'accuracy'
+}
+
+export interface PlaceSearchResponse {
+  places: PlaceInfo[]
+  totalCount: number
+  page: number
+  size: number
+  hasNext: boolean
+  searchProvider: MapProvider
+}
+
+export interface PlaceInfo {
+  id: string
+  name: string
+  category: string
+  phone?: string
+  address: string
+  roadAddress?: string
+  coordinates: Coordinates
+  url?: string
+  imageUrl?: string
+  distance?: number
+  description?: string
+}
+
 // UI 관련 타입
 export interface LoadingState {
   isLoading: boolean

@@ -24,6 +24,9 @@ public class PopupStore extends UpdatedEntity {
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     private String location;
+    private String address;
+    private Double latitude;
+    private Double longitude;
     private Boolean active;
     private Long viewCount;
     private Long likeCount;
@@ -80,5 +83,27 @@ public class PopupStore extends UpdatedEntity {
      */
     public void activate() {
         this.active = true;
+    }
+
+    /**
+     * 좌표 정보가 있는지 확인합니다.
+     */
+    public boolean hasCoordinates() {
+        return latitude != null && longitude != null;
+    }
+
+    /**
+     * 좌표 정보를 설정합니다.
+     */
+    public void setCoordinates(Double latitude, Double longitude) {
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
+
+    /**
+     * 주소 정보를 설정합니다.
+     */
+    public void setAddress(String address) {
+        this.address = address;
     }
 } 

@@ -4,6 +4,7 @@ import com.sgyj.popupmoah.common.response.ApiResponse;
 import com.sgyj.popupmoah.popupstore.application.dto.PopupStoreCreateRequest;
 import com.sgyj.popupmoah.popupstore.application.dto.PopupStoreResponse;
 import com.sgyj.popupmoah.popupstore.application.dto.PopupStoreUpdateRequest;
+import com.sgyj.popupmoah.popupstore.application.dto.PopupStoreLocationResponse;
 import com.sgyj.popupmoah.popupstore.application.service.PopupStoreApplicationService;
 import com.sgyj.popupmoah.popupstore.domain.entity.PopupStore;
 import io.swagger.v3.oas.annotations.Operation;
@@ -326,11 +327,86 @@ public class PopupStoreController {
                 .startDate(popupStore.getStartDate())
                 .endDate(popupStore.getEndDate())
                 .location(popupStore.getLocation())
+                .address(popupStore.getAddress())
+                .latitude(popupStore.getLatitude())
+                .longitude(popupStore.getLongitude())
                 .active(popupStore.getActive())
                 .viewCount(popupStore.getViewCount())
                 .likeCount(popupStore.getLikeCount())
                 .createdAt(popupStore.getCreatedAt())
                 .updatedAt(popupStore.getUpdatedAt())
+                .build();
+    }
+
+    /**
+     * 팝업스토어 위치 정보를 조회합니다.
+     */
+    @Operation(summary = "팝업스토어 위치 정보 조회", description = "지도에 표시할 팝업스토어 위치 정보를 조회합니다.")
+    @ApiResponses(value = {
+            @SwaggerApiResponse(responseCode = "200", description = "위치 정보 조회 성공"),
+            @SwaggerApiResponse(responseCode = "500", description = "서버 내부 오류")
+    })
+    @GetMapping("/locations")
+    public ResponseEntity<ApiResponse<List<PopupStoreLocationResponse>>> getPopupStoreLocations() {
+        log.info("팝업스토어 위치 정보 조회 API 호출");
+        
+        try {
+            List<PopupStore> popupStores = applicationService.getAllPopupStores();
+            List<PopupStoreLocationResponse> locations = popupStores.stream()
+                    .filter(PopupStore::hasCoordinates)
+                    .map(this::convertToLocationResponse)
+                    .collect(Collectors.toList());
+            
+            ApiResponse<List<PopupStoreLocationResponse>> response = ApiResponse.success(locations);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            log.error("팝업스토어 위치 정보 조회 중 오류 발생", e);
+            ApiResponse<List<PopupStoreLocationResponse>> response = ApiResponse.error("위치 정보 조회에 실패했습니다.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+
+    /**
+     * 활성화된 팝업스토어 위치 정보를 조회합니다.
+     */
+    @Operation(summary = "활성화된 팝업스토어 위치 정보 조회", description = "현재 활성화된 팝업스토어의 위치 정보를 조회합니다.")
+    @ApiResponses(value = {
+            @SwaggerApiResponse(responseCode = "200", description = "위치 정보 조회 성공"),
+            @SwaggerApiResponse(responseCode = "500", description = "서버 내부 오류")
+    })
+    @GetMapping("/locations/active")
+    public ResponseEntity<ApiResponse<List<PopupStoreLocationResponse>>> getActivePopupStoreLocations() {
+        log.info("활성화된 팝업스토어 위치 정보 조회 API 호출");
+        
+        try {
+            List<PopupStore> popupStores = applicationService.getActivePopupStores();
+            List<PopupStoreLocationResponse> locations = popupStores.stream()
+                    .filter(PopupStore::hasCoordinates)
+                    .map(this::convertToLocationResponse)
+                    .collect(Collectors.toList());
+            
+            ApiResponse<List<PopupStoreLocationResponse>> response = ApiResponse.success(locations);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            log.error("활성화된 팝업스토어 위치 정보 조회 중 오류 발생", e);
+            ApiResponse<List<PopupStoreLocationResponse>> response = ApiResponse.error("위치 정보 조회에 실패했습니다.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+
+    /**
+     * PopupStore 엔티티를 PopupStoreLocationResponse로 변환합니다.
+     */
+    private PopupStoreLocationResponse convertToLocationResponse(PopupStore popupStore) {
+        return PopupStoreLocationResponse.builder()
+                .id(popupStore.getId())
+                .name(popupStore.getName())
+                .address(popupStore.getAddress())
+                .latitude(popupStore.getLatitude())
+                .longitude(popupStore.getLongitude())
+                .category(popupStore.getCategory())
+                .active(popupStore.getActive())
+                .imageUrl(popupStore.getImageUrl())
                 .build();
     }
 } 

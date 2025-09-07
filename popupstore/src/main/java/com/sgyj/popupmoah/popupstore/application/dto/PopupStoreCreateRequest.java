@@ -40,4 +40,10 @@ public class PopupStoreCreateRequest {
 
     @Size(max = 200, message = "위치는 200자 이하여야 합니다.")
     private String location;
+
+    @Size(max = 500, message = "주소는 500자 이하여야 합니다.")
+    private String address;
+
+    private Double latitude;
+    private Double longitude;
 }

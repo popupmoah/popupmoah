@@ -25,6 +25,9 @@ public class PopupStoreResponse {
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     private String location;
+    private String address;
+    private Double latitude;
+    private Double longitude;
     private Boolean active;
     private Long viewCount;
     private Long likeCount;

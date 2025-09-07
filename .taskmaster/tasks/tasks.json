@@ -412,7 +412,7 @@
         "id": 14,
         "title": "지도 API 연동 및 위치 기반 서비스 구현",
         "description": "카카오맵/네이버맵 API 연동, 팝업스토어 위치 표시, 주변 검색 기능",
-        "status": "pending",
+        "status": "done",
         "priority": "medium",
         "dependencies": [
           "8",
@@ -421,7 +421,62 @@
         "details": "지도 API 연동 및 위치 기반 서비스 구현",
         "testStrategy": "지도 표시 테스트, 위치 검색 기능 테스트",
         "createdAt": "2024-01-01T00:00:00Z",
-        "updatedAt": "2024-01-01T00:00:00Z"
+        "updatedAt": "2024-01-01T00:00:00Z",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Obtain and Configure Map API Keys",
+            "description": "Register applications on Kakao and Naver developer portals, obtain API keys, and configure them securely in the project.",
+            "dependencies": [],
+            "details": "Follow official guides to register for Kakao and Naver Maps APIs, generate JavaScript keys, and securely store them for use in the frontend and backend environments.\n<info added on 2025-09-07T06:06:10.292Z>\n지도 API 키 설정 및 구성 완료:\n\n1. 프론트엔드 설정\n   - maps.ts: 카카오맵/네이버맵 API 설정 파일 생성\n   - 환경 변수 기반 API 키 관리\n   - 지도 타입 정의 및 공통 설정\n   - 마커 클러스터링 설정\n\n2. 백엔드 설정\n   - application.yml: 지도 API 관련 설정 추가\n   - MapApiConfig.java: 지도 API 설정 Properties 클래스\n   - 환경 변수 기반 API 키 관리\n\n3. DTO 클래스 생성\n   - CoordinatesDto: 좌표 정보 및 거리 계산 기능\n   - AddressDto: 주소 정보 관리\n   - PlaceSearchRequest: 장소 검색 요청\n   - PlaceSearchResponse: 장소 검색 응답\n\n4. 문서화\n   - README.md: 지도 API 키 발급 방법 및 설정 가이드 추가\n   - 카카오맵/네이버맵 API 키 발급 절차 상세 설명\n</info added on 2025-09-07T06:06:10.292Z>",
+            "status": "done",
+            "testStrategy": "Verify API key validity by attempting a basic map load in a test environment."
+          },
+          {
+            "id": 2,
+            "title": "Integrate KakaoMap and NaverMap APIs into Frontend",
+            "description": "Embed KakaoMap and NaverMap JavaScript SDKs into the Vue.js frontend and implement basic map rendering components.",
+            "dependencies": [
+              "14.1"
+            ],
+            "details": "Add script tags or npm packages for both APIs, create reusable Vue components for each map provider, and ensure maps render correctly with default settings.\n<info added on 2025-09-07T06:09:30.840Z>\n카카오맵과 네이버맵 API 프론트엔드 통합 완료:\n\n1. 지도 컴포넌트 구현\n   - KakaoMap.vue: 카카오맵 전용 컴포넌트\n   - NaverMap.vue: 네이버맵 전용 컴포넌트  \n   - MapViewer.vue: 통합 지도 뷰어 컴포넌트\n\n2. 주요 기능\n   - 지도 제공자 선택 (카카오맵/네이버맵)\n   - 마커 표시 및 클릭 이벤트\n   - 지도 컨트롤 (현재 위치, 줌 인/아웃)\n   - 반응형 디자인\n   - 로딩 및 에러 상태 처리\n\n3. 타입 정의 확장\n   - 지도 관련 타입 추가 (Coordinates, MapProvider, MapMarker 등)\n   - 장소 검색 관련 타입 정의\n   - 팝업스토어 위치 정보 타입\n\n4. 지도 스토어 구현\n   - Pinia 기반 상태 관리\n   - 팝업스토어 위치 정보 관리\n   - 장소 검색 기능\n   - 좌표 변환 (주소 ↔ 좌표)\n   - 거리 계산 및 주변 검색\n\n5. API 통합 준비\n   - 백엔드 API 호출을 위한 메서드 구현\n   - 에러 처리 및 로딩 상태 관리\n   - 브라우저 Geolocation API 활용\n</info added on 2025-09-07T06:09:30.840Z>",
+            "status": "done",
+            "testStrategy": "Check that both maps display on the designated pages without errors using test API keys."
+          },
+          {
+            "id": 3,
+            "title": "Implement Popup Store Location Markers",
+            "description": "Display popup store locations as markers on the integrated maps using data from the backend.",
+            "dependencies": [
+              "14.2"
+            ],
+            "details": "Fetch popup store coordinates from the backend, plot them as markers on both KakaoMap and NaverMap, and ensure marker info windows show relevant store details.\n<info added on 2025-09-07T06:12:42.312Z>\n# Popup Store Location Marker Implementation Completed\n\n## Backend Implementation\n- Added coordinate information to PopupStore entity (latitude, longitude, address)\n- Implemented coordinate-related methods (hasCoordinates, setCoordinates, setAddress)\n- Updated DTO classes (CreateRequest, UpdateRequest, Response)\n- Created PopupStoreLocationResponse DTO optimized for map display\n- Added location API endpoints to PopupStoreController:\n  - GET /api/popupstores/locations: All popup store locations\n  - GET /api/popupstores/locations/active: Active popup store locations only\n\n## Frontend Implementation\n- Created PopupStoreMap.vue component\n  - Integrated MapViewer\n  - Implemented popup store marker display\n  - Added info panel on marker click\n  - Implemented detail view and directions functionality\n- Integrated map view into popup store listing page\n  - Added list/map view toggle\n  - Implemented store selection and detail view from map\n  - Applied responsive design\n\n## Key Features\n- Popup store location markers display\n- Store information display on marker click\n- Toggle between map and list views\n- Option to show only active popup stores\n- Current location-based map centering\n- Directions functionality (KakaoMap integration)\n</info added on 2025-09-07T06:12:42.312Z>",
+            "status": "done",
+            "testStrategy": "Verify that all popup stores appear as markers and info windows display correct information."
+          },
+          {
+            "id": 4,
+            "title": "Develop Nearby Search Functionality",
+            "description": "Enable users to search for popup stores and other points of interest near a selected location on the map.",
+            "dependencies": [
+              "14.3"
+            ],
+            "details": "Implement geolocation-based search using the map APIs, filter results by distance, and update the map view and marker list dynamically.\n<info added on 2025-09-07T06:16:16.199Z>\n주변 검색 기능 구현 완료:\n\n1. 백엔드 구현\n   - MapApiService: 카카오맵/네이버맵 API 통합 서비스\n     - Geocoding (주소 → 좌표 변환)\n     - Reverse Geocoding (좌표 → 주소 변환)\n     - 장소 검색 기능\n     - API 키 관리 및 에러 처리\n   - MapApiController: 지도 API REST 엔드포인트\n     - GET /api/maps/geocode: 주소 좌표 변환\n     - GET /api/maps/reverse-geocode: 좌표 주소 변환\n     - POST /api/maps/places/search: 장소 검색\n     - GET /api/maps/popupstores/nearby: 주변 팝업스토어 검색\n\n2. 프론트엔드 구현\n   - NearbySearch.vue 컴포넌트 생성\n     - 장소/주소 검색 입력\n     - 카테고리 및 반경 필터\n     - 현재 위치 기반 검색\n     - 검색 결과 목록 표시\n     - 길찾기 기능\n   - PopupStoreMap.vue에 주변 검색 통합\n     - 주변 검색 패널 표시 옵션\n     - 검색 결과 기반 지도 중심 이동\n     - 장소 선택 시 지도 업데이트\n\n3. 주요 기능\n   - 키워드 기반 장소 검색\n   - 현재 위치 기반 주변 검색\n   - 카테고리별 필터링 (팝업스토어, 카페, 식당 등)\n   - 반경 설정 (500m ~ 10km)\n   - 검색 결과 거리 표시\n   - 길찾기 연동 (카카오맵)\n   - 지도와 검색 결과 연동\n\n4. API 통합\n   - 카카오맵 API 우선 사용, 실패 시 네이버맵 API 사용\n   - 에러 처리 및 폴백 메커니즘\n   - 검색 결과 표준화\n</info added on 2025-09-07T06:16:16.199Z>",
+            "status": "done",
+            "testStrategy": "Test search accuracy by querying various locations and confirming relevant results are displayed."
+          },
+          {
+            "id": 5,
+            "title": "Integrate Map Interactions and UI Enhancements",
+            "description": "Enhance user experience with interactive map features such as marker clustering, custom popups, and responsive design.",
+            "dependencies": [
+              "14.4"
+            ],
+            "details": "Add features like marker clustering for dense areas, custom popup designs for store details, and ensure the map UI is responsive across devices.",
+            "status": "done",
+            "testStrategy": "Validate interactive features on multiple devices and browsers, ensuring smooth user interactions and correct display."
+          }
+        ]
       },
       {
         "id": 15,
@@ -564,7 +619,7 @@
       "updatedAt": "2024-01-01T00:00:00Z",
       "created": "2025-08-03T23:49:27.405Z",
       "description": "Tasks for master context",
-      "updated": "2025-09-07T05:55:30.056Z"
+      "updated": "2025-09-07T06:26:09.410Z"
     }
   }
 }
