@@ -16,7 +16,7 @@ public class LoginResponse {
 
     private String accessToken;
     private String refreshToken;
-    private String tokenType = "Bearer";
+    private final String tokenType = "Bearer";
     private Long expiresIn;
     private Long memberId;
     private String username;
@@ -24,3 +24,6 @@ public class LoginResponse {
     private String role;
     private String message;
 }
+
+
+

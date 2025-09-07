@@ -174,3 +174,6 @@ public class RatingCalculationService {
         public void setHasRating(boolean hasRating) { this.hasRating = hasRating; }
     }
 }
+
+
+

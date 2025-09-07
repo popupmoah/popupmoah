@@ -23,3 +23,6 @@ public class MemberSignupResponse {
     private LocalDateTime createdAt;
     private String message;
 }
+
+
+

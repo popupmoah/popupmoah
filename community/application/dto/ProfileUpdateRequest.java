@@ -25,3 +25,6 @@ public class ProfileUpdateRequest {
     @Size(max = 500, message = "프로필 이미지 URL은 500자 이하여야 합니다.")
     private String profileImageUrl;
 }
+
+
+
