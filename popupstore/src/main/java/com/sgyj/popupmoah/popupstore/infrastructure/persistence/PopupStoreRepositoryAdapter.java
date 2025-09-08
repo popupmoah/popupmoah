@@ -5,6 +5,7 @@ import com.sgyj.popupmoah.popupstore.domain.port.PopupStoreRepositoryPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -61,5 +62,47 @@ public class PopupStoreRepositoryAdapter implements PopupStoreRepositoryPort {
     public boolean existsById(Long id) {
         return jpaRepository.existsById(id);
         // return r2dbcRepository.existsById(id); // R2DBC 사용 시
+    }
+
+    @Override
+    public List<PopupStore> findByNameContaining(String name) {
+        return jpaRepository.findByNameContaining(name);
+        // return r2dbcRepository.findByNameContaining(name); // R2DBC 사용 시
+    }
+
+    @Override
+    public List<PopupStore> findByLocation(String location) {
+        return jpaRepository.findByLocation(location);
+        // return r2dbcRepository.findByLocation(location); // R2DBC 사용 시
+    }
+
+    @Override
+    public List<PopupStore> findCurrentlyActive() {
+        return jpaRepository.findCurrentlyActive();
+        // return r2dbcRepository.findCurrentlyActive(); // R2DBC 사용 시
+    }
+
+    @Override
+    public List<PopupStore> findBySearchConditions(String keyword, String category, String location,
+                                                   LocalDateTime startDateFrom, LocalDateTime startDateTo,
+                                                   LocalDateTime endDateFrom, LocalDateTime endDateTo,
+                                                   Boolean active, Boolean currentlyActive,
+                                                   String sortBy, String sortDirection,
+                                                   Integer page, Integer size) {
+        return jpaRepository.findBySearchConditions(keyword, category, location,
+                startDateFrom, startDateTo, endDateFrom, endDateTo,
+                active, currentlyActive, sortBy, sortDirection, page, size);
+        // return r2dbcRepository.findBySearchConditions(...); // R2DBC 사용 시
+    }
+
+    @Override
+    public Long countBySearchConditions(String keyword, String category, String location,
+                                       LocalDateTime startDateFrom, LocalDateTime startDateTo,
+                                       LocalDateTime endDateFrom, LocalDateTime endDateTo,
+                                       Boolean active, Boolean currentlyActive) {
+        return jpaRepository.countBySearchConditions(keyword, category, location,
+                startDateFrom, startDateTo, endDateFrom, endDateTo,
+                active, currentlyActive);
+        // return r2dbcRepository.countBySearchConditions(...); // R2DBC 사용 시
     }
 } 

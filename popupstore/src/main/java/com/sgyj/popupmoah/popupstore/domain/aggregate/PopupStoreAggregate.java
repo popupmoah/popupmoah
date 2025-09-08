@@ -151,6 +151,60 @@ public class PopupStoreAggregate {
     }
     
     /**
+     * 이름으로 팝업스토어를 검색합니다.
+     */
+    public List<PopupStore> searchByName(String name) {
+        return repository.findByNameContaining(name);
+    }
+
+    /**
+     * 카테고리로 팝업스토어를 조회합니다.
+     */
+    public List<PopupStore> findByCategory(String category) {
+        return repository.findByCategory(category);
+    }
+
+    /**
+     * 위치로 팝업스토어를 조회합니다.
+     */
+    public List<PopupStore> findByLocation(String location) {
+        return repository.findByLocation(location);
+    }
+
+    /**
+     * 현재 진행 중인 팝업스토어를 조회합니다.
+     */
+    public List<PopupStore> findCurrentlyActive() {
+        return repository.findCurrentlyActive();
+    }
+
+    /**
+     * 복합 검색 조건으로 팝업스토어를 조회합니다.
+     */
+    public List<PopupStore> searchByConditions(String keyword, String category, String location,
+                                               LocalDateTime startDateFrom, LocalDateTime startDateTo,
+                                               LocalDateTime endDateFrom, LocalDateTime endDateTo,
+                                               Boolean active, Boolean currentlyActive,
+                                               String sortBy, String sortDirection,
+                                               Integer page, Integer size) {
+        return repository.findBySearchConditions(keyword, category, location,
+                startDateFrom, startDateTo, endDateFrom, endDateTo,
+                active, currentlyActive, sortBy, sortDirection, page, size);
+    }
+
+    /**
+     * 복합 검색 조건으로 팝업스토어 개수를 조회합니다.
+     */
+    public Long countByConditions(String keyword, String category, String location,
+                                 LocalDateTime startDateFrom, LocalDateTime startDateTo,
+                                 LocalDateTime endDateFrom, LocalDateTime endDateTo,
+                                 Boolean active, Boolean currentlyActive) {
+        return repository.countBySearchConditions(keyword, category, location,
+                startDateFrom, startDateTo, endDateFrom, endDateTo,
+                active, currentlyActive);
+    }
+
+    /**
      * 팝업스토어 도메인 규칙을 검증합니다.
      */
     private void validatePopupStore(PopupStore popupStore) {

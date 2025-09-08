@@ -4,8 +4,12 @@ import com.sgyj.popupmoah.popupstore.domain.entity.PopupStore;
 import com.sgyj.popupmoah.popupstore.domain.port.PopupStoreRepositoryPort;
 import jakarta.persistence.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -62,6 +66,62 @@ public class PopupStoreJpaRepository implements PopupStoreRepositoryPort {
     public boolean existsById(Long id) {
         return repository.existsById(id);
     }
+
+    @Override
+    public List<PopupStore> findByNameContaining(String name) {
+        return repository.findByNameContainingIgnoreCase(name).stream()
+                .map(this::toDomainEntity)
+                .toList();
+    }
+
+    @Override
+    public List<PopupStore> findByLocation(String location) {
+        return repository.findByLocationContainingIgnoreCase(location).stream()
+                .map(this::toDomainEntity)
+                .toList();
+    }
+
+    @Override
+    public List<PopupStore> findCurrentlyActive() {
+        LocalDateTime now = LocalDateTime.now();
+        return repository.findCurrentlyActive(now).stream()
+                .map(this::toDomainEntity)
+                .toList();
+    }
+
+    @Override
+    public List<PopupStore> findBySearchConditions(String keyword, String category, String location,
+                                                   LocalDateTime startDateFrom, LocalDateTime startDateTo,
+                                                   LocalDateTime endDateFrom, LocalDateTime endDateTo,
+                                                   Boolean active, Boolean currentlyActive,
+                                                   String sortBy, String sortDirection,
+                                                   Integer page, Integer size) {
+        // 정렬 설정
+        Sort sort = Sort.by(Sort.Direction.fromString(sortDirection), sortBy);
+        Pageable pageable = PageRequest.of(page, size, sort);
+        
+        LocalDateTime now = LocalDateTime.now();
+        return repository.findBySearchConditions(
+                keyword, category, location,
+                startDateFrom, startDateTo, endDateFrom, endDateTo,
+                active, currentlyActive, now, pageable
+        ).getContent().stream()
+                .map(this::toDomainEntity)
+                .toList();
+    }
+
+    @Override
+    public Long countBySearchConditions(String keyword, String category, String location,
+                                       LocalDateTime startDateFrom, LocalDateTime startDateTo,
+                                       LocalDateTime endDateFrom, LocalDateTime endDateTo,
+                                       Boolean active, Boolean currentlyActive) {
+        LocalDateTime now = LocalDateTime.now();
+        return repository.countBySearchConditions(
+                keyword, category, location,
+                startDateFrom, startDateTo, endDateFrom, endDateTo,
+                active, currentlyActive, now
+        );
+    }
     
     /**
      * 도메인 엔티티를 JPA 엔티티로 변환
@@ -77,9 +137,14 @@ public class PopupStoreJpaRepository implements PopupStoreRepositoryPort {
                 .startDate(popupStore.getStartDate())
                 .endDate(popupStore.getEndDate())
                 .location(popupStore.getLocation())
+                .address(popupStore.getAddress())
+                .latitude(popupStore.getLatitude())
+                .longitude(popupStore.getLongitude())
                 .active(popupStore.getActive())
                 .viewCount(popupStore.getViewCount())
                 .likeCount(popupStore.getLikeCount())
+                .createdAt(popupStore.getCreatedAt())
+                .updatedAt(popupStore.getUpdatedAt())
                 .build();
     }
     
@@ -97,9 +162,14 @@ public class PopupStoreJpaRepository implements PopupStoreRepositoryPort {
                 .startDate(entity.getStartDate())
                 .endDate(entity.getEndDate())
                 .location(entity.getLocation())
+                .address(entity.getAddress())
+                .latitude(entity.getLatitude())
+                .longitude(entity.getLongitude())
                 .active(entity.getActive())
                 .viewCount(entity.getViewCount())
                 .likeCount(entity.getLikeCount())
+                .createdAt(entity.getCreatedAt())
+                .updatedAt(entity.getUpdatedAt())
                 .build();
     }
 } 
