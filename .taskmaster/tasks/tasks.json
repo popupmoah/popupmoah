@@ -560,16 +560,106 @@
         "id": 16,
         "title": "예약 시스템 구현",
         "description": "팝업스토어 예약 기능, 예약 관리, 알림 시스템",
-        "status": "pending",
-        "priority": "medium",
+        "status": "done",
         "dependencies": [
           "11",
           "13"
         ],
-        "details": "예약 시스템 구현",
-        "testStrategy": "예약 생성/수정/취소 테스트, 알림 기능 테스트",
-        "createdAt": "2024-01-01T00:00:00Z",
-        "updatedAt": "2024-01-01T00:00:00Z"
+        "priority": "medium",
+        "details": "헥사고날 아키텍처 원칙에 따라 예약 시스템 구현. 도메인 엔티티, 리포지토리 포트, 서비스 포트, 애그리게이트, 애플리케이션 서비스, DTO, 컨트롤러, JPA 구현체 등 모든 컴포넌트 구현 완료.",
+        "testStrategy": "예약 생성/수정/취소 테스트, 알림 기능 테스트, 예약 상태 변경 검증, 다양한 검색 조건 테스트",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "예약 도메인 엔티티 구현",
+            "description": "Reservation.java - 팝업스토어 예약 정보를 관리하는 도메인 객체, 예약 상태 관리(PENDING, CONFIRMED, CANCELLED, COMPLETED), 예약 유효성 검증 및 상태 변경 메서드",
+            "status": "done",
+            "dependencies": [],
+            "details": "",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "예약 리포지토리 포트 구현",
+            "description": "ReservationRepositoryPort.java - 도메인이 정의하는 인터페이스, 다양한 검색 조건 지원(회원별, 팝업스토어별, 날짜별, 상태별)",
+            "status": "done",
+            "dependencies": [],
+            "details": "",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "예약 서비스 포트 구현",
+            "description": "ReservationServicePort.java - 도메인 비즈니스 로직을 위한 인터페이스, 예약 생성, 수정, 취소, 확인, 완료 기능",
+            "status": "done",
+            "dependencies": [],
+            "details": "",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "예약 애그리게이트 구현",
+            "description": "ReservationAggregate.java - 예약 도메인에 대한 접근을 제어하는 루트 엔티티, 도메인 규칙 검증 및 비즈니스 로직 구현",
+            "status": "done",
+            "dependencies": [],
+            "details": "",
+            "testStrategy": ""
+          },
+          {
+            "id": 5,
+            "title": "예약 애플리케이션 서비스 구현",
+            "description": "ReservationApplicationService.java - 유스케이스를 구현하는 애플리케이션 레이어, DTO 변환 및 트랜잭션 관리",
+            "status": "done",
+            "dependencies": [],
+            "details": "",
+            "testStrategy": ""
+          },
+          {
+            "id": 6,
+            "title": "예약 DTO 구현",
+            "description": "ReservationCreateRequest, ReservationUpdateRequest, ReservationResponse, ReservationCancelRequest 등 예약 관련 DTO 구현",
+            "status": "done",
+            "dependencies": [],
+            "details": "",
+            "testStrategy": ""
+          },
+          {
+            "id": 7,
+            "title": "예약 컨트롤러 구현",
+            "description": "ReservationController.java - REST API 엔드포인트 구현, 예약 CRUD, 상태 변경, 검색 기능",
+            "status": "done",
+            "dependencies": [],
+            "details": "",
+            "testStrategy": ""
+          },
+          {
+            "id": 8,
+            "title": "JPA 구현체 개발",
+            "description": "ReservationJpaEntity, ReservationJpaEntityRepository, ReservationJpaRepository, ReservationRepositoryAdapter 등 JPA 관련 구현체 개발",
+            "status": "done",
+            "dependencies": [],
+            "details": "",
+            "testStrategy": ""
+          },
+          {
+            "id": 9,
+            "title": "예약 모듈 설정",
+            "description": "popupmoah-reservation 모듈 생성, build.gradle 설정, settings.gradle에 모듈 추가",
+            "status": "done",
+            "dependencies": [],
+            "details": "",
+            "testStrategy": ""
+          },
+          {
+            "id": 10,
+            "title": "알림 시스템 구현",
+            "description": "예약 상태 변경 시 알림 발송 기능 구현",
+            "status": "done",
+            "dependencies": [],
+            "details": "",
+            "testStrategy": ""
+          }
+        ]
       },
       {
         "id": 17,
@@ -682,7 +772,7 @@
       "updatedAt": "2024-01-01T00:00:00Z",
       "created": "2025-08-03T23:49:27.405Z",
       "description": "Tasks for master context",
-      "updated": "2025-09-08T01:27:06.838Z"
+      "updated": "2025-09-08T02:08:08.384Z"
     }
   }
 }

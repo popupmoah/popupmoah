@@ -15,6 +15,7 @@ include 'popupmoah-popupstore'
 include 'popupmoah-category'
 include 'popupmoah-file'
 include 'popupmoah-community'
+include 'popupmoah-reservation'
 
 // Infrastructure modules
 include 'popupmoah-infrastructure-common'
