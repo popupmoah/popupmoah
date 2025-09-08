@@ -9,6 +9,9 @@ import com.sgyj.popupmoah.reservation.domain.port.ReservationRepositoryPort;
 import com.sgyj.popupmoah.reservation.domain.port.ReservationServicePort;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,6 +34,10 @@ public class ReservationApplicationService implements ReservationServicePort {
     private final ReservationAggregate aggregate;
     
     @Override
+    @Caching(evict = {
+        @CacheEvict(value = "reservations", key = "'member:' + #reservation.memberId"),
+        @CacheEvict(value = "reservations", key = "'popupstore:' + #reservation.popupStoreId")
+    })
     public Reservation createReservation(Reservation reservation) {
         log.info("예약 생성 요청: memberId={}, popupStoreId={}, dateTime={}", 
                 reservation.getMemberId(), reservation.getPopupStoreId(), reservation.getReservationDateTime());
@@ -38,20 +45,23 @@ public class ReservationApplicationService implements ReservationServicePort {
     }
     
     @Override
+    @Cacheable(value = "reservations", key = "#id")
     public Optional<Reservation> getReservation(Long id) {
-        log.info("예약 조회 요청: id={}", id);
+        log.debug("예약 조회 (캐시 미스): id={}", id);
         return aggregate.findById(id);
     }
     
     @Override
+    @Cacheable(value = "reservations", key = "'member:' + #memberId")
     public List<Reservation> getReservationsByMember(Long memberId) {
-        log.info("회원별 예약 조회 요청: memberId={}", memberId);
+        log.debug("회원별 예약 조회 (캐시 미스): memberId={}", memberId);
         return aggregate.findByMemberId(memberId);
     }
     
     @Override
+    @Cacheable(value = "reservations", key = "'popupstore:' + #popupStoreId")
     public List<Reservation> getReservationsByPopupStore(Long popupStoreId) {
-        log.info("팝업스토어별 예약 조회 요청: popupStoreId={}", popupStoreId);
+        log.debug("팝업스토어별 예약 조회 (캐시 미스): popupStoreId={}", popupStoreId);
         return aggregate.findByPopupStoreId(popupStoreId);
     }
     

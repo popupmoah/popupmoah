@@ -9,6 +9,10 @@ import com.sgyj.popupmoah.popupstore.domain.port.PopupStoreRepositoryPort;
 import com.sgyj.popupmoah.popupstore.domain.port.PopupStoreServicePort;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import io.micrometer.core.annotation.Timed;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,49 +38,71 @@ public class PopupStoreApplicationService implements PopupStoreServicePort {
     private final PopupStoreAggregate aggregate;
     
     @Override
+    @CacheEvict(value = "popupstores", allEntries = true)
     public PopupStore createPopupStore(PopupStore popupStore) {
+        log.debug("팝업스토어 생성 - 캐시 무효화");
         return aggregate.create(popupStore);
     }
     
     @Override
+    @Cacheable(value = "popupstores", key = "#id")
+    @Timed(name = "popupstore.get.by.id", description = "팝업스토어 ID로 조회 시간")
     public Optional<PopupStore> getPopupStore(Long id) {
+        log.debug("팝업스토어 조회 (캐시 미스): id={}", id);
         return aggregate.findById(id);
     }
     
     @Override
+    @Cacheable(value = "popupstores", key = "'all'")
+    @Timed(name = "popupstore.get.all", description = "전체 팝업스토어 조회 시간")
     public List<PopupStore> getAllPopupStores() {
+        log.debug("전체 팝업스토어 조회 (캐시 미스)");
         return aggregate.findAll();
     }
     
     @Override
+    @Cacheable(value = "popupstores", key = "'active'")
+    @Timed(name = "popupstore.get.active", description = "활성 팝업스토어 조회 시간")
     public List<PopupStore> getActivePopupStores() {
+        log.debug("활성 팝업스토어 조회 (캐시 미스)");
         return aggregate.findActive();
     }
     
     @Override
+    @Caching(evict = {
+        @CacheEvict(value = "popupstores", key = "#id"),
+        @CacheEvict(value = "popupstores", key = "'all'"),
+        @CacheEvict(value = "popupstores", key = "'active'")
+    })
+    @Timed(name = "popupstore.update", description = "팝업스토어 수정 시간")
     public PopupStore updatePopupStore(Long id, PopupStore popupStore) {
+        log.debug("팝업스토어 수정 - 캐시 무효화: id={}", id);
         return aggregate.update(id, popupStore);
     }
     
     @Override
+    @Timed(name = "popupstore.increment.view", description = "팝업스토어 조회수 증가 시간")
     public void incrementViewCount(Long id) {
         aggregate.incrementViewCount(id);
     }
     
     @Override
+    @Timed(name = "popupstore.increment.like", description = "팝업스토어 좋아요 증가 시간")
     public void incrementLikeCount(Long id) {
         aggregate.incrementLikeCount(id);
     }
     
     @Override
+    @Timed(name = "popupstore.decrement.like", description = "팝업스토어 좋아요 감소 시간")
     public void decrementLikeCount(Long id) {
         aggregate.decrementLikeCount(id);
     }
-
+    
     /**
      * 팝업스토어를 검색합니다.
      */
     @Transactional(readOnly = true)
+    @Timed(name = "popupstore.search", description = "팝업스토어 검색 시간")
     public PopupStoreSearchResponse searchPopupStores(PopupStoreSearchRequest request) {
         log.info("팝업스토어 검색 요청: {}", request);
 
@@ -232,6 +258,11 @@ public class PopupStoreApplicationService implements PopupStoreServicePort {
     /**
      * 팝업스토어 승인
      */
+    @Caching(evict = {
+        @CacheEvict(value = "popupstores", key = "#popupStoreId"),
+        @CacheEvict(value = "popupstores", key = "'all'"),
+        @CacheEvict(value = "popupstores", key = "'active'")
+    })
     public void approvePopupStore(Long popupStoreId) {
         log.info("팝업스토어 승인 요청: popupStoreId={}", popupStoreId);
         
@@ -254,6 +285,11 @@ public class PopupStoreApplicationService implements PopupStoreServicePort {
     /**
      * 팝업스토어 거부
      */
+    @Caching(evict = {
+        @CacheEvict(value = "popupstores", key = "#popupStoreId"),
+        @CacheEvict(value = "popupstores", key = "'all'"),
+        @CacheEvict(value = "popupstores", key = "'active'")
+    })
     public void rejectPopupStore(Long popupStoreId, String reason) {
         log.info("팝업스토어 거부 요청: popupStoreId={}, reason={}", popupStoreId, reason);
         
