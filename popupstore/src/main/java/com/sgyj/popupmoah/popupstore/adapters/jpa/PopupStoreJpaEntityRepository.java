@@ -109,4 +109,16 @@ public interface PopupStoreJpaEntityRepository extends JpaRepository<PopupStoreJ
             @Param("active") Boolean active,
             @Param("currentlyActive") Boolean currentlyActive,
             @Param("now") LocalDateTime now);
+
+    // ========== 관리자 기능 ==========
+
+    /**
+     * 상태별로 팝업스토어를 조회합니다 (페이징).
+     */
+    Page<PopupStoreJpaEntity> findByStatus(String status, Pageable pageable);
+
+    /**
+     * 모든 팝업스토어를 조회합니다 (페이징).
+     */
+    Page<PopupStoreJpaEntity> findAll(Pageable pageable);
 } 

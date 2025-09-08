@@ -60,6 +60,13 @@ public class PopupStoreJpaEntity extends UpdatedEntity {
     @Builder.Default
     private Boolean active = true;
 
+    @Column(name = "status", length = 20)
+    @Builder.Default
+    private String status = "PENDING";
+
+    @Column(name = "rejection_reason", columnDefinition = "TEXT")
+    private String rejectionReason;
+
     @Column(name = "view_count")
     @Builder.Default
     private Long viewCount = 0L;

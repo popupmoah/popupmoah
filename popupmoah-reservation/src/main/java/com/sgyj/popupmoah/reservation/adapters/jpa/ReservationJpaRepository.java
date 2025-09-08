@@ -155,8 +155,6 @@ public class ReservationJpaRepository implements ReservationRepositoryPort {
                 .confirmedAt(jpaEntity.getConfirmedAt())
                 .cancelledAt(jpaEntity.getCancelledAt())
                 .cancellationReason(jpaEntity.getCancellationReason())
-                .createdAt(jpaEntity.getCreatedAt())
-                .updatedAt(jpaEntity.getUpdatedAt())
                 .build();
     }
 }

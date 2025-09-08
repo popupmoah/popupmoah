@@ -28,6 +28,8 @@ public class PopupStore extends UpdatedEntity {
     private Double latitude;
     private Double longitude;
     private Boolean active;
+    private String status; // PENDING, APPROVED, REJECTED, ACTIVE, INACTIVE
+    private String rejectionReason; // 거부 사유
     private Long viewCount;
     private Long likeCount;
 
@@ -71,19 +73,6 @@ public class PopupStore extends UpdatedEntity {
         }
     }
 
-    /**
-     * 팝업스토어를 비활성화합니다.
-     */
-    public void deactivate() {
-        this.active = false;
-    }
-
-    /**
-     * 팝업스토어를 활성화합니다.
-     */
-    public void activate() {
-        this.active = true;
-    }
 
     /**
      * 팝업스토어가 좌표 정보를 가지고 있는지 확인합니다.
@@ -105,5 +94,64 @@ public class PopupStore extends UpdatedEntity {
      */
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    // ========== 관리자 기능 ==========
+
+    /**
+     * 팝업스토어를 승인합니다.
+     */
+    public void approve() {
+        if (!"PENDING".equals(this.status)) {
+            throw new IllegalStateException("승인 대기 상태가 아닌 팝업스토어입니다.");
+        }
+        this.status = "APPROVED";
+        this.active = true;
+    }
+
+    /**
+     * 팝업스토어를 거부합니다.
+     */
+    public void reject(String reason) {
+        if (!"PENDING".equals(this.status)) {
+            throw new IllegalStateException("승인 대기 상태가 아닌 팝업스토어입니다.");
+        }
+        this.status = "REJECTED";
+        this.rejectionReason = reason;
+        this.active = false;
+    }
+
+    /**
+     * 팝업스토어를 비활성화합니다 (관리자용).
+     */
+    public void deactivate() {
+        this.status = "INACTIVE";
+        this.active = false;
+    }
+
+    /**
+     * 팝업스토어를 재활성화합니다 (관리자용).
+     */
+    public void activate() {
+        if ("APPROVED".equals(this.status) || "ACTIVE".equals(this.status)) {
+            this.status = "ACTIVE";
+            this.active = true;
+        } else {
+            throw new IllegalStateException("승인된 팝업스토어만 활성화할 수 있습니다.");
+        }
+    }
+
+    /**
+     * 팝업스토어 상태를 가져옵니다.
+     */
+    public String getStatus() {
+        return this.status;
+    }
+
+    /**
+     * 거부 사유를 가져옵니다.
+     */
+    public String getRejectionReason() {
+        return this.rejectionReason;
     }
 } 

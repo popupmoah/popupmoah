@@ -12,6 +12,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -56,11 +59,6 @@ public class PopupStoreApplicationService implements PopupStoreServicePort {
     }
     
     @Override
-    public void deletePopupStore(Long id) {
-        aggregate.delete(id);
-    }
-    
-    @Override
     public void incrementViewCount(Long id) {
         aggregate.incrementViewCount(id);
     }
@@ -73,16 +71,6 @@ public class PopupStoreApplicationService implements PopupStoreServicePort {
     @Override
     public void decrementLikeCount(Long id) {
         aggregate.decrementLikeCount(id);
-    }
-    
-    @Override
-    public void activatePopupStore(Long id) {
-        aggregate.activate(id);
-    }
-    
-    @Override
-    public void deactivatePopupStore(Long id) {
-        aggregate.deactivate(id);
     }
 
     /**
@@ -219,10 +207,152 @@ public class PopupStoreApplicationService implements PopupStoreServicePort {
                 .latitude(popupStore.getLatitude())
                 .longitude(popupStore.getLongitude())
                 .active(popupStore.getActive())
+                .status(popupStore.getStatus())
+                .rejectionReason(popupStore.getRejectionReason())
                 .viewCount(popupStore.getViewCount())
                 .likeCount(popupStore.getLikeCount())
                 .createdAt(popupStore.getCreatedAt())
                 .updatedAt(popupStore.getUpdatedAt())
                 .build();
+    }
+
+    // ========== 관리자 기능 ==========
+
+    /**
+     * 승인 대기 중인 팝업스토어 목록 조회
+     */
+    @Transactional(readOnly = true)
+    public Page<PopupStoreResponse> getPendingPopupStores(Pageable pageable) {
+        log.info("승인 대기 팝업스토어 목록 조회 요청");
+        
+        Page<PopupStore> pendingStores = repository.findByStatus("PENDING", pageable);
+        return pendingStores.map(this::convertToResponse);
+    }
+
+    /**
+     * 팝업스토어 승인
+     */
+    public void approvePopupStore(Long popupStoreId) {
+        log.info("팝업스토어 승인 요청: popupStoreId={}", popupStoreId);
+        
+        Optional<PopupStore> popupStoreOpt = aggregate.findById(popupStoreId);
+        if (popupStoreOpt.isEmpty()) {
+            throw new IllegalArgumentException("팝업스토어를 찾을 수 없습니다: " + popupStoreId);
+        }
+        
+        PopupStore popupStore = popupStoreOpt.get();
+        if (!"PENDING".equals(popupStore.getStatus())) {
+            throw new IllegalArgumentException("승인 대기 상태가 아닌 팝업스토어입니다: " + popupStoreId);
+        }
+        
+        popupStore.approve();
+        repository.save(popupStore);
+        
+        log.info("팝업스토어 승인 완료: popupStoreId={}", popupStoreId);
+    }
+
+    /**
+     * 팝업스토어 거부
+     */
+    public void rejectPopupStore(Long popupStoreId, String reason) {
+        log.info("팝업스토어 거부 요청: popupStoreId={}, reason={}", popupStoreId, reason);
+        
+        Optional<PopupStore> popupStoreOpt = aggregate.findById(popupStoreId);
+        if (popupStoreOpt.isEmpty()) {
+            throw new IllegalArgumentException("팝업스토어를 찾을 수 없습니다: " + popupStoreId);
+        }
+        
+        PopupStore popupStore = popupStoreOpt.get();
+        if (!"PENDING".equals(popupStore.getStatus())) {
+            throw new IllegalArgumentException("승인 대기 상태가 아닌 팝업스토어입니다: " + popupStoreId);
+        }
+        
+        popupStore.reject(reason);
+        repository.save(popupStore);
+        
+        log.info("팝업스토어 거부 완료: popupStoreId={}, reason={}", popupStoreId, reason);
+    }
+
+    /**
+     * 팝업스토어 비활성화
+     */
+    public void deactivatePopupStore(Long popupStoreId) {
+        log.info("팝업스토어 비활성화 요청: popupStoreId={}", popupStoreId);
+        
+        Optional<PopupStore> popupStoreOpt = aggregate.findById(popupStoreId);
+        if (popupStoreOpt.isEmpty()) {
+            throw new IllegalArgumentException("팝업스토어를 찾을 수 없습니다: " + popupStoreId);
+        }
+        
+        PopupStore popupStore = popupStoreOpt.get();
+        popupStore.deactivate();
+        repository.save(popupStore);
+        
+        log.info("팝업스토어 비활성화 완료: popupStoreId={}", popupStoreId);
+    }
+
+    /**
+     * 팝업스토어 재활성화
+     */
+    public void activatePopupStore(Long popupStoreId) {
+        log.info("팝업스토어 재활성화 요청: popupStoreId={}", popupStoreId);
+        
+        Optional<PopupStore> popupStoreOpt = aggregate.findById(popupStoreId);
+        if (popupStoreOpt.isEmpty()) {
+            throw new IllegalArgumentException("팝업스토어를 찾을 수 없습니다: " + popupStoreId);
+        }
+        
+        PopupStore popupStore = popupStoreOpt.get();
+        popupStore.activate();
+        repository.save(popupStore);
+        
+        log.info("팝업스토어 재활성화 완료: popupStoreId={}", popupStoreId);
+    }
+
+    /**
+     * 전체 팝업스토어 목록 조회 (관리자용)
+     */
+    @Transactional(readOnly = true)
+    public Page<PopupStoreResponse> getAllPopupStoresForAdmin(Pageable pageable, String status) {
+        log.info("전체 팝업스토어 목록 조회 (관리자용): status={}", status);
+        
+        Page<PopupStore> popupStores;
+        if (status != null && !status.isEmpty()) {
+            popupStores = repository.findByStatus(status, pageable);
+        } else {
+            popupStores = repository.findAll(pageable);
+        }
+        
+        return popupStores.map(this::convertToResponse);
+    }
+
+    /**
+     * 팝업스토어 상세 정보 조회 (관리자용)
+     */
+    @Transactional(readOnly = true)
+    public PopupStoreResponse getPopupStoreById(Long popupStoreId) {
+        log.info("팝업스토어 상세 정보 조회 (관리자용): popupStoreId={}", popupStoreId);
+        
+        Optional<PopupStore> popupStoreOpt = aggregate.findById(popupStoreId);
+        if (popupStoreOpt.isEmpty()) {
+            throw new IllegalArgumentException("팝업스토어를 찾을 수 없습니다: " + popupStoreId);
+        }
+        
+        return convertToResponse(popupStoreOpt.get());
+    }
+
+    /**
+     * 팝업스토어 삭제 (관리자용)
+     */
+    public void deletePopupStore(Long popupStoreId) {
+        log.info("팝업스토어 삭제 요청 (관리자용): popupStoreId={}", popupStoreId);
+        
+        if (!repository.existsById(popupStoreId)) {
+            throw new IllegalArgumentException("팝업스토어를 찾을 수 없습니다: " + popupStoreId);
+        }
+        
+        repository.deleteById(popupStoreId);
+        
+        log.info("팝업스토어 삭제 완료: popupStoreId={}", popupStoreId);
     }
 } 
