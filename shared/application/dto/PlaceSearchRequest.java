@@ -37,3 +37,4 @@ public class PlaceSearchRequest {
                 .build();
     }
 }
+

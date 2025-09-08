@@ -69,3 +69,4 @@ public class PlaceInfo {
      */
     private String description;
 }
+

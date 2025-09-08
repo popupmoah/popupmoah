@@ -31,3 +31,4 @@ public class PopupStoreLocationResponse {
         return latitude != null && longitude != null;
     }
 }
+

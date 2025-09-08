@@ -274,3 +274,4 @@ export const useMapStore = defineStore('map', () => {
     getNearbyPopupStores,
   }
 })
+

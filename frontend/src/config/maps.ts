@@ -106,3 +106,4 @@ export const CLUSTER_CONFIG = {
 } as const
 
 export default MAP_CONFIG
+
