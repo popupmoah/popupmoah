@@ -857,7 +857,7 @@
         "id": 20,
         "title": "테스트 코드 작성 및 CI/CD 파이프라인 구축",
         "description": "단위 테스트, 통합 테스트, E2E 테스트 작성, GitHub Actions CI/CD 구축",
-        "status": "pending",
+        "status": "done",
         "priority": "medium",
         "dependencies": [
           "8",
@@ -866,7 +866,64 @@
         "details": "테스트 코드 작성 및 CI/CD 파이프라인 구축",
         "testStrategy": "테스트 커버리지 검증, CI/CD 파이프라인 테스트",
         "createdAt": "2024-01-01T00:00:00Z",
-        "updatedAt": "2024-01-01T00:00:00Z"
+        "updatedAt": "2024-01-01T00:00:00Z",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Write Unit Tests for Core Modules",
+            "description": "Develop comprehensive unit tests for all critical modules and services to ensure individual components function as expected.",
+            "dependencies": [],
+            "details": "Identify core modules, select appropriate testing frameworks (e.g., JUnit for Java), and implement unit tests covering key logic and edge cases.",
+            "status": "done",
+            "testStrategy": "Verify test coverage meets project standards and all unit tests pass in isolation."
+          },
+          {
+            "id": 2,
+            "title": "Implement Integration Tests",
+            "description": "Create integration tests to validate interactions between multiple modules and external dependencies such as databases or APIs.",
+            "dependencies": [
+              "20.1"
+            ],
+            "details": "Design test cases that simulate real-world data flows and module interactions, ensuring correct integration and data consistency.",
+            "status": "done",
+            "testStrategy": "Run integration tests in a controlled environment and confirm successful data exchange and error handling."
+          },
+          {
+            "id": 3,
+            "title": "Develop End-to-End (E2E) Tests",
+            "description": "Write E2E tests to simulate user workflows and verify the system operates correctly from the user's perspective.",
+            "dependencies": [
+              "20.2"
+            ],
+            "details": "Utilize tools like Selenium or Cypress to automate user scenarios, covering critical paths and edge cases across the application.",
+            "status": "done",
+            "testStrategy": "Execute E2E tests in a staging environment and ensure all user journeys complete without errors."
+          },
+          {
+            "id": 4,
+            "title": "Configure GitHub Actions for CI Pipeline",
+            "description": "Set up GitHub Actions workflows to automate building, testing, and validating code on each push or pull request.",
+            "dependencies": [
+              "20.1",
+              "20.2",
+              "20.3"
+            ],
+            "details": "Create workflow YAML files to define jobs for code checkout, dependency installation, build, and running all test suites.",
+            "status": "done",
+            "testStrategy": "Confirm that CI workflows trigger on code changes and all automated tests pass before merging."
+          },
+          {
+            "id": 5,
+            "title": "Establish CD Pipeline with GitHub Actions",
+            "description": "Extend GitHub Actions workflows to automate deployment to the target environment upon successful CI completion.",
+            "dependencies": [
+              "20.4"
+            ],
+            "details": "Integrate deployment steps (e.g., Docker build/push, server deployment) and manage secrets for secure deployments.",
+            "status": "done",
+            "testStrategy": "Validate that deployments occur automatically after successful CI runs and the application is accessible in the target environment."
+          }
+        ]
       },
       {
         "id": 21,
@@ -919,7 +976,7 @@
       "updatedAt": "2024-01-01T00:00:00Z",
       "created": "2025-08-03T23:49:27.405Z",
       "description": "Tasks for master context",
-      "updated": "2025-09-08T09:00:08.771Z"
+      "updated": "2025-09-09T08:03:41.066Z"
     }
   }
 }

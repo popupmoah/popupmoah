@@ -1,0 +1,91 @@
+spring:
+  profiles:
+    active: performance
+
+  # 성능 테스트를 위한 데이터베이스 설정
+  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 5
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+
+  # JPA 설정
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: false
+        jdbc:
+          batch_size: 50
+        order_inserts: true
+        order_updates: true
+
+  # Redis 설정 (성능 테스트용)
+  redis:
+    host: localhost
+    port: 6379
+    timeout: 2000ms
+    lettuce:
+      pool:
+        max-active: 20
+        max-idle: 10
+        min-idle: 5
+        max-wait: 2000ms
+
+# 로깅 설정 (성능 테스트 시 최소화)
+logging:
+  level:
+    root: WARN
+    com.sgyj.popupmoah: INFO
+    org.springframework: WARN
+    org.hibernate: WARN
+    org.springframework.security: WARN
+  pattern:
+    console: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+
+# 성능 모니터링 설정
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: when-authorized
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+
+# 성능 테스트를 위한 JWT 설정
+jwt:
+  secret: performance-test-secret-key-123456789012345678901234567890
+  expiration: 3600000 # 1시간
+  refresh-expiration: 86400000 # 24시간
+  header: Authorization
+  prefix: Bearer
+
+# 성능 테스트를 위한 보안 설정
+security:
+  headers:
+    content-security-policy: "default-src 'self'"
+    x-frame-options: DENY
+    x-content-type-options: nosniff
+    x-xss-protection: "1; mode=block"
+    referrer-policy: strict-origin-when-cross-origin
+    permissions-policy: "geolocation=(), microphone=(), camera=()"
+
+# 성능 테스트를 위한 CDN 설정
+app:
+  cdn:
+    base-url: http://localhost:8080
+    upload-path: /uploads
+    max-file-size: 10MB
