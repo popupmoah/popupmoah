@@ -1,6 +1,7 @@
 package com.sgyj.popupmoah.community.domain.entity;
 
 import com.sgyj.popupmoah.core.entity.UpdatedEntity;
+import com.sgyj.popupmoah.domain.community.entity.MemberRole;
 import lombok.*;
 
 /**
@@ -18,6 +19,7 @@ public class Member extends UpdatedEntity {
     private String email;
     private String nickname;
     private String profileImageUrl;
+    private MemberRole role;
 
     public void updateProfile(String nickname, String email, String profileImageUrl) {
         this.nickname = nickname;
@@ -27,5 +29,9 @@ public class Member extends UpdatedEntity {
 
     public void changePassword(String newPassword) {
         this.password = newPassword;
+    }
+    
+    public void updateRole(MemberRole role) {
+        this.role = role;
     }
 } 
