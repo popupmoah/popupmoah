@@ -67,3 +67,6 @@ public interface ReservationServicePort {
      */
     void sendReservationNotification(Reservation reservation, String notificationType);
 }
+
+
+

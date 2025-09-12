@@ -1,6 +1,6 @@
-package com.sgyj.popupmoah.adapter.persistence.file;
+package com.sgyj.popupmoah.file.infrastructure.persistence;
 
-import com.sgyj.popupmoah.domain.file.entity.FileUpload;
+import com.sgyj.popupmoah.file.domain.entity.FileUpload;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

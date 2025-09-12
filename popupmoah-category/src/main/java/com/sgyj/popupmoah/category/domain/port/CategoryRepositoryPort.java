@@ -1,6 +1,6 @@
-package com.sgyj.popupmoah.domain.category.port;
+package com.sgyj.popupmoah.category.domain.port;
 
-import com.sgyj.popupmoah.domain.category.entity.Category;
+import com.sgyj.popupmoah.category.domain.entity.Category;
 
 import java.util.List;
 import java.util.Optional;

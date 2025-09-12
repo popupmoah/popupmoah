@@ -9,6 +9,8 @@ import com.sgyj.popupmoah.popupstore.application.dto.PopupStoreSearchRequest;
 import com.sgyj.popupmoah.popupstore.application.dto.PopupStoreSearchResponse;
 import com.sgyj.popupmoah.popupstore.application.service.PopupStoreApplicationService;
 import com.sgyj.popupmoah.popupstore.domain.entity.PopupStore;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.Timer;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +32,9 @@ import java.util.stream.Collectors;
 public class PopupStoreController {
     
     private final PopupStoreApplicationService applicationService;
+    private final Counter popupStoreViewCounter;
+    private final Counter popupStoreCreateCounter;
+    private final Timer apiResponseTimer;
     
     /**
      * 팝업스토어를 생성합니다.
@@ -38,7 +43,8 @@ public class PopupStoreController {
     public ResponseEntity<ApiResponse<PopupStoreResponse>> createPopupStore(@Valid @RequestBody PopupStoreCreateRequest request) {
         log.info("팝업스토어 생성 API 호출: name={}", request.getName());
         
-        try {
+        return Timer.Sample.start(apiResponseTimer).stop(() -> {
+            try {
             PopupStore popupStore = PopupStore.builder()
                     .name(request.getName())
                     .description(request.getDescription())
@@ -55,6 +61,9 @@ public class PopupStoreController {
             
             PopupStore created = applicationService.createPopupStore(popupStore);
             PopupStoreResponse response = convertToResponse(created);
+            
+            // 팝업스토어 생성 메트릭 증가
+            popupStoreCreateCounter.increment();
             
             return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(response, "팝업스토어가 성공적으로 생성되었습니다."));
         } catch (IllegalArgumentException e) {
@@ -80,6 +89,10 @@ public class PopupStoreController {
         return applicationService.getPopupStore(id)
                 .map(popupStore -> {
                     PopupStoreResponse response = convertToResponse(popupStore);
+                    
+                    // 팝업스토어 조회 메트릭 증가
+                    popupStoreViewCounter.increment();
+                    
                     return ResponseEntity.ok(ApiResponse.success(response));
                 })
                 .orElse(ResponseEntity.notFound().build());

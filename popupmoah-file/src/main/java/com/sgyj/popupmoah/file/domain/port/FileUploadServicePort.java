@@ -1,6 +1,6 @@
-package com.sgyj.popupmoah.domain.file.port;
+package com.sgyj.popupmoah.file.domain.port;
 
-import com.sgyj.popupmoah.domain.file.entity.FileUpload;
+import com.sgyj.popupmoah.file.domain.entity.FileUpload;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;

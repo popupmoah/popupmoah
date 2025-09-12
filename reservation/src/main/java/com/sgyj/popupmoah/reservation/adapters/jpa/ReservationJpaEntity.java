@@ -80,3 +80,6 @@ public class ReservationJpaEntity {
         updatedAt = LocalDateTime.now();
     }
 }
+
+
+

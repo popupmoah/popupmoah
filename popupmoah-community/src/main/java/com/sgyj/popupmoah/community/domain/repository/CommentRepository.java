@@ -1,4 +1,4 @@
-package com.sgyj.popupmoah.domain.community.repository;
+package com.sgyj.popupmoah.community.domain.repository;
 
 import com.sgyj.popupmoah.domain.community.entity.Comment;
 import org.springframework.data.jpa.repository.JpaRepository;

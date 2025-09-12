@@ -1,0 +1,78 @@
+# Filebeat 설정 파일
+# 팝업모아 애플리케이션 로그 수집을 위한 설정
+
+filebeat.inputs:
+  - type: log
+    enabled: true
+    paths:
+      - /var/log/popupmoah/*.log
+      - /var/log/popupmoah/*.log.*
+    fields:
+      service: popupmoah
+      environment: production
+    fields_under_root: true
+    multiline.pattern: '^\d{4}-\d{2}-\d{2}'
+    multiline.negate: true
+    multiline.match: after
+    processors:
+      - add_host_metadata:
+          when.not.contains.tags: forwarded
+      - add_cloud_metadata: ~
+      - add_docker_metadata: ~
+      - add_kubernetes_metadata: ~
+
+# 로그 파싱 및 필터링
+processors:
+  - decode_json_fields:
+      fields: ["message"]
+      target: ""
+      overwrite_keys: true
+  - timestamp:
+      field: timestamp
+      layouts:
+        - "2006-01-02T15:04:05.000Z"
+        - "2006-01-02 15:04:05"
+      test:
+        - "2025-09-01T12:15:23.123Z"
+
+# Elasticsearch 출력 설정
+output.elasticsearch:
+  hosts: ["elasticsearch:9200"]
+  index: "popupmoah-logs-%{+yyyy.MM.dd}"
+  template.name: "popupmoah-logs"
+  template.pattern: "popupmoah-logs-*"
+  template.settings:
+    index.number_of_shards: 1
+    index.number_of_replicas: 1
+    index.refresh_interval: 5s
+
+# 로그스태시 출력 설정 (대안)
+# output.logstash:
+#   hosts: ["logstash:5044"]
+
+# 콘솔 출력 (개발용)
+# output.console:
+#   pretty: true
+
+# 모니터링 설정
+monitoring.enabled: true
+monitoring.elasticsearch:
+  hosts: ["elasticsearch:9200"]
+
+# 로깅 설정
+logging.level: info
+logging.to_files: true
+logging.files:
+  path: /var/log/filebeat
+  name: filebeat
+  keepfiles: 7
+  permissions: 0644
+
+# 성능 최적화
+queue.mem:
+  events: 4096
+  flush.min_events: 2048
+  flush.timeout: 1s
+
+# 보안 설정
+ssl.verification_mode: none

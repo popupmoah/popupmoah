@@ -5,6 +5,9 @@ import com.sgyj.popupmoah.popupstore.domain.port.PopupStoreRepositoryPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -104,5 +107,17 @@ public class PopupStoreRepositoryAdapter implements PopupStoreRepositoryPort {
                 startDateFrom, startDateTo, endDateFrom, endDateTo,
                 active, currentlyActive);
         // return r2dbcRepository.countBySearchConditions(...); // R2DBC 사용 시
+    }
+
+    @Override
+    public Page<PopupStore> findByStatus(String status, Pageable pageable) {
+        return jpaRepository.findByStatus(status, pageable);
+        // return r2dbcRepository.findByStatus(status, pageable); // R2DBC 사용 시
+    }
+
+    @Override
+    public Page<PopupStore> findAll(Pageable pageable) {
+        return jpaRepository.findAll(pageable);
+        // return r2dbcRepository.findAll(pageable); // R2DBC 사용 시
     }
 } 
