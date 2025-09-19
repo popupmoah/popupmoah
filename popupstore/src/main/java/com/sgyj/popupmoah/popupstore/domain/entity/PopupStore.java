@@ -32,6 +32,12 @@ public class PopupStore extends UpdatedEntity {
     private String rejectionReason; // 거부 사유
     private Long viewCount;
     private Long likeCount;
+    
+    // 감사 필드들 (UpdatedEntity에서 상속받지만 Builder에서 사용하기 위해 명시적으로 선언)
+    @Builder.Default
+    private LocalDateTime createdAt = LocalDateTime.now();
+    
+    private LocalDateTime updatedAt;
 
     /**
      * 팝업스토어가 활성화되어 있는지 확인합니다.

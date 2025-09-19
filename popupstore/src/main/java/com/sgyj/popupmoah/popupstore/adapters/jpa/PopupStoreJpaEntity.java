@@ -85,4 +85,12 @@ public class PopupStoreJpaEntity extends UpdatedEntity {
     @Column(name = "like_count")
     @Builder.Default
     private Long likeCount = 0L;
+    
+    // 감사 필드들 (UpdatedEntity에서 상속받지만 Builder에서 사용하기 위해 명시적으로 선언)
+    @Column(name = "created_at", nullable = false, updatable = false)
+    @Builder.Default
+    private LocalDateTime createdAt = LocalDateTime.now();
+    
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 } 

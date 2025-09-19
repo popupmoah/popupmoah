@@ -1,0 +1,177 @@
+{
+  "index-patterns": [
+    {
+      "title": "popupmoah-logs-*",
+      "timeFieldName": "@timestamp",
+      "fields": {
+        "@timestamp": {
+          "type": "date",
+          "searchable": true,
+          "aggregatable": true
+        },
+        "level": {
+          "type": "keyword",
+          "searchable": true,
+          "aggregatable": true
+        },
+        "message": {
+          "type": "text",
+          "searchable": true,
+          "aggregatable": false
+        },
+        "service": {
+          "type": "keyword",
+          "searchable": true,
+          "aggregatable": true
+        },
+        "environment": {
+          "type": "keyword",
+          "searchable": true,
+          "aggregatable": true
+        },
+        "user_id": {
+          "type": "keyword",
+          "searchable": true,
+          "aggregatable": true
+        },
+        "request_id": {
+          "type": "keyword",
+          "searchable": true,
+          "aggregatable": true
+        },
+        "client_ip": {
+          "type": "ip",
+          "searchable": true,
+          "aggregatable": true
+        },
+        "method": {
+          "type": "keyword",
+          "searchable": true,
+          "aggregatable": true
+        },
+        "path": {
+          "type": "keyword",
+          "searchable": true,
+          "aggregatable": true
+        },
+        "status_code": {
+          "type": "number",
+          "searchable": true,
+          "aggregatable": true
+        },
+        "response_time": {
+          "type": "number",
+          "searchable": true,
+          "aggregatable": true
+        },
+        "geoip.country_name": {
+          "type": "keyword",
+          "searchable": true,
+          "aggregatable": true
+        },
+        "geoip.city_name": {
+          "type": "keyword",
+          "searchable": true,
+          "aggregatable": true
+        }
+      }
+    },
+    {
+      "title": "popupmoah-errors-*",
+      "timeFieldName": "@timestamp",
+      "fields": {
+        "@timestamp": {
+          "type": "date",
+          "searchable": true,
+          "aggregatable": true
+        },
+        "level": {
+          "type": "keyword",
+          "searchable": true,
+          "aggregatable": true
+        },
+        "message": {
+          "type": "text",
+          "searchable": true,
+          "aggregatable": false
+        },
+        "exception": {
+          "type": "text",
+          "searchable": true,
+          "aggregatable": false
+        },
+        "stack_trace": {
+          "type": "text",
+          "searchable": true,
+          "aggregatable": false
+        },
+        "service": {
+          "type": "keyword",
+          "searchable": true,
+          "aggregatable": true
+        },
+        "user_id": {
+          "type": "keyword",
+          "searchable": true,
+          "aggregatable": true
+        },
+        "request_id": {
+          "type": "keyword",
+          "searchable": true,
+          "aggregatable": true
+        }
+      }
+    },
+    {
+      "title": "popupmoah-security-*",
+      "timeFieldName": "@timestamp",
+      "fields": {
+        "@timestamp": {
+          "type": "date",
+          "searchable": true,
+          "aggregatable": true
+        },
+        "level": {
+          "type": "keyword",
+          "searchable": true,
+          "aggregatable": true
+        },
+        "message": {
+          "type": "text",
+          "searchable": true,
+          "aggregatable": false
+        },
+        "event_type": {
+          "type": "keyword",
+          "searchable": true,
+          "aggregatable": true
+        },
+        "user_id": {
+          "type": "keyword",
+          "searchable": true,
+          "aggregatable": true
+        },
+        "client_ip": {
+          "type": "ip",
+          "searchable": true,
+          "aggregatable": true
+        },
+        "geoip.country_name": {
+          "type": "keyword",
+          "searchable": true,
+          "aggregatable": true
+        },
+        "geoip.city_name": {
+          "type": "keyword",
+          "searchable": true,
+          "aggregatable": true
+        },
+        "risk_score": {
+          "type": "number",
+          "searchable": true,
+          "aggregatable": true
+        }
+      }
+    }
+  ]
+}

@@ -2,7 +2,6 @@ package com.sgyj.popupmoah.popupstore.adapters.jpa;
 
 import com.sgyj.popupmoah.popupstore.domain.entity.PopupStore;
 import com.sgyj.popupmoah.popupstore.domain.port.PopupStoreRepositoryPort;
-import jakarta.persistence.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

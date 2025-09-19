@@ -1,16 +1,161 @@
 services:
+  # Prometheus 메트릭 수집 서비스
   prometheus:
     image: prom/prometheus:latest
-    container_name: prometheus
+    container_name: popupmoah-prometheus
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus-data:/prometheus
     ports:
       - "9090:9090"
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--web.console.libraries=/etc/prometheus/console_libraries"
+      - "--web.console.templates=/etc/prometheus/consoles"
+      - "--storage.tsdb.retention.time=200h"
+      - "--web.enable-lifecycle"
+    networks:
+      - monitoring
+    restart: unless-stopped
 
+  # Grafana 시각화 서비스
   grafana:
     image: grafana/grafana:latest
-    container_name: grafana
+    container_name: popupmoah-grafana
     ports:
       - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_INSTALL_PLUGINS=grafana-clock-panel,grafana-simple-json-datasource
+    volumes:
+      - grafana-storage:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning
+      - ./grafana/dashboards:/var/lib/grafana/dashboards
     depends_on:
-      - prometheus 
+      - prometheus
+    networks:
+      - monitoring
+    restart: unless-stopped
+
+  # Elasticsearch 로그 저장소
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.11.0
+    container_name: popupmoah-elasticsearch
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+      - bootstrap.memory_lock=true
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - "9200:9200"
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data
+    networks:
+      - logging
+    restart: unless-stopped
+
+  # Logstash 로그 처리 서비스
+  logstash:
+    image: docker.elastic.co/logstash/logstash:8.11.0
+    container_name: popupmoah-logstash
+    volumes:
+      - ./logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+      - ./kibana/index-patterns.json:/usr/share/logstash/index-patterns.json
+    ports:
+      - "5044:5044"
+    depends_on:
+      - elasticsearch
+    networks:
+      - logging
+    restart: unless-stopped
+
+  # Kibana 로그 시각화 서비스
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.11.0
+    container_name: popupmoah-kibana
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      - ELASTICSEARCH_USERNAME=elastic
+      - ELASTICSEARCH_PASSWORD=changeme
+    volumes:
+      - ./kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch
+    networks:
+      - logging
+    restart: unless-stopped
+
+  # Filebeat 로그 수집 서비스
+  filebeat:
+    image: docker.elastic.co/beats/filebeat:8.11.0
+    container_name: popupmoah-filebeat
+    user: root
+    volumes:
+      - ./filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./logs:/var/log/popupmoah:ro
+      - filebeat-data:/usr/share/filebeat/data
+    depends_on:
+      - elasticsearch
+    networks:
+      - logging
+    restart: unless-stopped
+
+  # Node Exporter 시스템 메트릭 수집
+  node-exporter:
+    image: prom/node-exporter:latest
+    container_name: popupmoah-node-exporter
+    ports:
+      - "9100:9100"
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - "--path.procfs=/host/proc"
+      - "--path.rootfs=/rootfs"
+      - "--path.sysfs=/host/sys"
+      - "--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)"
+    networks:
+      - monitoring
+    restart: unless-stopped
+
+  # cAdvisor 컨테이너 메트릭 수집
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    container_name: popupmoah-cadvisor
+    ports:
+      - "8080:8080"
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+    privileged: true
+    devices:
+      - /dev/kmsg
+    networks:
+      - monitoring
+    restart: unless-stopped
+
+volumes:
+  grafana-storage:
+  elasticsearch-data:
+  prometheus-data:
+  filebeat-data:
+
+networks:
+  monitoring:
+    driver: bridge
+  logging:
+    driver: bridge

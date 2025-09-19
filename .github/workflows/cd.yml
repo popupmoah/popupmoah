@@ -40,7 +40,7 @@ jobs:
         run: ./gradlew test
 
       - name: Generate test report
-        uses: dorny/test-reporter@v1
+        uses: dorny/test-reporter@v2
         if: success() || failure()
         with:
           name: Gradle Tests
@@ -167,3 +167,6 @@ jobs:
         with:
           name: performance-test-results
           path: build/reports/performance/
+
+
+

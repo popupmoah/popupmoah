@@ -1,51 +1,37 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '3.5.0'
+    id 'org.springframework.boot' version '3.5.5'
     id 'io.spring.dependency-management' version '1.1.7'
 }
 
+repositories {
+    mavenCentral()
+}
+
 dependencies {
-    // Shared and infrastructure modules
+    // Application module dependencies
+    implementation project(':popupmoah-application')
     implementation project(':popupmoah-shared')
-    implementation project(':popupmoah-infrastructure-common')
-    
-    // Domain-specific modules
-    implementation project(':popupmoah-popupstore')
-    implementation project(':popupmoah-category')
-    implementation project(':popupmoah-file')
-    implementation project(':popupmoah-community')
     
     // Spring Boot Starters
+    implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
-    implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-    implementation 'org.springframework.boot:spring-boot-starter-webflux'
-    implementation 'org.springframework.boot:spring-boot-starter-actuator'
     
-    // Database
-    implementation 'org.postgresql:postgresql'
-    implementation 'org.flywaydb:flyway-core'
-    
-    // JWT
-    implementation 'io.jsonwebtoken:jjwt-api:0.12.5'
-    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.5'
-    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.5'
-    
-    // AWS S3
-    implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
-    
-    // Monitoring
-    implementation 'io.micrometer:micrometer-registry-prometheus'
-    
-    // Utilities
-    implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.5'
+    // Lombok
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
     
     // Testing
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.springframework.security:spring-security-test'
-    runtimeOnly 'com.h2database:h2'
-    testImplementation 'org.testcontainers:junit-jupiter'
-    testImplementation 'org.testcontainers:postgresql'
-} 
+}
+
+// Disable bootJar for library modules
+bootJar {
+    enabled = false
+}
+
+jar {
+    enabled = true
+}

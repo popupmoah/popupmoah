@@ -1,0 +1,64 @@
+# Grafana 데이터소스 설정
+# Prometheus, Elasticsearch, InfluxDB 등 모니터링 데이터소스 구성
+
+apiVersion: 1
+
+datasources:
+  # Prometheus 데이터소스
+  - name: Prometheus
+    type: prometheus
+    access: proxy
+    url: http://prometheus:9090
+    isDefault: true
+    editable: true
+    jsonData:
+      httpMethod: POST
+      queryTimeout: 60s
+      timeInterval: 5s
+    secureJsonData: {}
+
+  # Elasticsearch 데이터소스
+  - name: Elasticsearch
+    type: elasticsearch
+    access: proxy
+    url: http://elasticsearch:9200
+    database: "popupmoah-logs-*"
+    isDefault: false
+    editable: true
+    jsonData:
+      index: "popupmoah-logs-*"
+      timeField: "@timestamp"
+      esVersion: "8.0.0"
+      maxConcurrentShardRequests: 5
+      logMessageField: "message"
+      logLevelField: "level"
+    secureJsonData: {}
+
+  # InfluxDB 데이터소스 (선택사항)
+  - name: InfluxDB
+    type: influxdb
+    access: proxy
+    url: http://influxdb:8086
+    database: popupmoah_metrics
+    isDefault: false
+    editable: true
+    jsonData:
+      httpMode: POST
+      timeInterval: 10s
+    secureJsonData:
+      password: admin
+
+  # MySQL 데이터소스 (애플리케이션 메트릭용)
+  - name: MySQL
+    type: mysql
+    access: proxy
+    url: popupmoah-mysql:3306
+    database: popupmoah
+    isDefault: false
+    editable: true
+    jsonData:
+      maxOpenConns: 100
+      maxIdleConns: 100
+      connMaxLifetime: 14400
+    secureJsonData:
+      password: password

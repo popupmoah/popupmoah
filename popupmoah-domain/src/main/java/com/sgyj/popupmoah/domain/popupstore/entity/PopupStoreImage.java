@@ -1,6 +1,5 @@
 package com.sgyj.popupmoah.domain.popupstore.entity;
 
-import com.sgyj.popupmoah.domain.common.UpdatedEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -10,7 +9,7 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-public class PopupStoreImage extends UpdatedEntity {
+public class PopupStoreImage extends Object {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

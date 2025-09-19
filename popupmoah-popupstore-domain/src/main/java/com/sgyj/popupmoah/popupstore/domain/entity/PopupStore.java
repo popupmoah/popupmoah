@@ -1,6 +1,5 @@
 package com.sgyj.popupmoah.popupstore.domain.entity;
 
-import com.sgyj.popupmoah.shared.entity.UpdatedEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -17,7 +16,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PopupStore extends UpdatedEntity {
+public class PopupStore extends Object {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

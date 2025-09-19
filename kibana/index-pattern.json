@@ -1,0 +1,8 @@
+{
+  "attributes": {
+    "title": "popupmoah-logs-*",
+    "timeFieldName": "@timestamp",
+    "fields": "[]"
+  }
+}
+

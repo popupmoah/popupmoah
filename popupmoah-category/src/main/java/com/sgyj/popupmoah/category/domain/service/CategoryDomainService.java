@@ -1,8 +1,8 @@
-package com.sgyj.popupmoah.domain.category.service;
+package com.sgyj.popupmoah.category.domain.service;
 
-import com.sgyj.popupmoah.domain.category.entity.Category;
-import com.sgyj.popupmoah.domain.category.port.CategoryRepositoryPort;
-import com.sgyj.popupmoah.domain.category.port.CategoryServicePort;
+import com.sgyj.popupmoah.category.domain.entity.Category;
+import com.sgyj.popupmoah.category.domain.port.CategoryRepositoryPort;
+import com.sgyj.popupmoah.category.domain.port.CategoryServicePort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

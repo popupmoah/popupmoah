@@ -1,0 +1,91 @@
+# Kibana 설정 파일
+# 팝업모아 로그 분석 및 시각화를 위한 설정
+
+# 서버 설정
+server.name: kibana
+server.host: "0.0.0.0"
+server.port: 5601
+server.maxPayloadBytes: 1048576
+server.shutdownTimeout: "5s"
+
+# Elasticsearch 연결 설정
+elasticsearch.hosts: ["http://elasticsearch:9200"]
+elasticsearch.username: elastic
+elasticsearch.password: changeme
+elasticsearch.requestTimeout: 30000
+elasticsearch.shardTimeout: 30000
+elasticsearch.maxSockets: 1
+elasticsearch.compression: false
+
+# 보안 설정
+xpack.security.enabled: true
+xpack.security.encryptionKey: "popupmoah-encryption-key-32-chars"
+xpack.encryptedSavedObjects.encryptionKey: "popupmoah-encryption-key-32-chars"
+
+# 모니터링 설정
+xpack.monitoring.enabled: true
+xpack.monitoring.collection.enabled: true
+xpack.monitoring.elasticsearch.hosts: ["http://elasticsearch:9200"]
+
+# 로깅 설정
+logging.appenders:
+  file:
+    type: file
+    fileName: /var/log/kibana/kibana.log
+    layout:
+      type: json
+logging.loggers:
+  - name: http.server.response
+    appenders: [default]
+    level: error
+  - name: security
+    appenders: [default]
+    level: info
+
+# 인덱스 패턴 설정
+kibana.defaultAppId: "discover"
+kibana.index: ".kibana"
+
+# 데이터 시각화 설정
+visualization:defaultAppId: "visualize"
+dashboard:defaultAppId: "dashboards"
+
+# 검색 설정
+search:defaultAppId: "discover"
+
+# 개발자 도구 설정
+dev:false
+
+# 성능 최적화
+optimize.bundleFilter: "!tests"
+optimize.useBundleCache: true
+optimize.bundleDir: /var/lib/kibana/optimize/bundles
+
+# 플러그인 설정
+plugins.scanDirs: ["/usr/share/kibana/plugins"]
+plugins.initialize: true
+
+# 지역화 설정
+i18n.locale: "ko"
+
+# 사용자 인터페이스 설정
+uiSettings.overrides:
+  "discover:sampleSize": 1000
+  "discover:aggs:terms:size": 100
+  "histogram:barTarget": 50
+  "histogram:maxBars": 100
+
+# 인덱스 패턴 자동 생성
+kibana.indexPatterns:
+  - "popupmoah-logs-*"
+  - "popupmoah-errors-*"
+  - "popupmoah-security-*"
+
+# 대시보드 설정
+kibana.dashboards:
+  - name: "팝업모아 시스템 로그"
+    indexPattern: "popupmoah-logs-*"
+  - name: "팝업모아 에러 로그"
+    indexPattern: "popupmoah-errors-*"
+  - name: "팝업모아 보안 로그"
+    indexPattern: "popupmoah-security-*"

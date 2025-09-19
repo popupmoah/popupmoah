@@ -2,7 +2,6 @@ package com.sgyj.popupmoah.category.application.service;
 
 import com.sgyj.popupmoah.category.domain.aggregate.CategoryAggregate;
 import com.sgyj.popupmoah.category.domain.entity.Category;
-import com.sgyj.popupmoah.category.domain.port.CategoryRepositoryPort;
 import com.sgyj.popupmoah.category.domain.port.CategoryServicePort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,7 +19,6 @@ import java.util.Optional;
 @Transactional
 public class CategoryApplicationService implements CategoryServicePort {
     
-    private final CategoryRepositoryPort repository;
     private final CategoryAggregate aggregate;
     
     @Override
